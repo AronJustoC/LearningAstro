@@ -1,5 +1,6 @@
 ---
 import MiComponente from "../components/MiComponente.astro"
+const name = "Astro";
 ---
 <html lang="en">
   <head>
@@ -9,7 +10,9 @@ import MiComponente from "../components/MiComponente.astro"
     <link href="css/style.css" rel="stylesheet">
   </head>
   <body>
-    <h1>Este es mi primera pagina en astro</h1>
-    <MiComponente/>
+    <h1>Hola soy una pagina de {name}!</h1>
+    <MiComponente title="Titulo de mi componente" counter={1}/>
+    <hr>
+    <MiComponente title="Titulo de mi componente" counter={2}/>
   </body>
 </html>

@@ -1,5 +1,22 @@
 ---
-// TS
+//Definimos props con una interfaz
+interface Props {
+  title: string;
+  counter: number;
+}
+//Tipamos las pros de astro 'Astro.props'
+const {title, counter} = Astro.props;
 ---
-<h2>Hola este es mi primer componente Astro</h2>
+
+<h2>{title}</h2>
+<p>Este comentario se renderizo {counter} veces</p>
+
+<style>
+h2{
+  color: purple;
+}
+p {
+  font-style: italic;
+}
+</style>
 
