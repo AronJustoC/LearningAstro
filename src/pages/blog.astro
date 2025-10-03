@@ -1,0 +1,18 @@
+---
+import {getCollection} from 'astro:content'
+import LayoutBase from '../layouts/LayoutBase.astro'
+
+const todasLasEntradas = await getCollection('blog');
+---
+
+<LayoutBase title='Mi blog'>
+  <h1>Mi blog</h1>
+  <p>Aqui estan todas las entradas de mi blog</p>
+  <ul>{
+    todasLasEntradas.map( entrada => (
+    <li>
+      <a href={`/blog/${entrada.slug}`}>{entrada.data.title}</a>
+      <p>Publicado el: {entrada.data.fecha.toDateString()}</p>
+    </li>))
+    }</ul>
+</LayoutBase>

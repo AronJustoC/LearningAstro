@@ -1,8 +1,7 @@
 ---
-layout: ../layouts/LayoutBase.astro
 title: "Mi Primer Post en Markdown"
 autor: "Aron"
-fecha: "2025-10-01"
+fecha: 2025-10-01
 ---
 
 # ¡Este es mi primer post escrito en Markdown
@@ -19,4 +18,3 @@ También puedo añadir bloques de código:
 ```javascript
 console.log("¡Hola, Markdown!");
 ```
-
