@@ -1,0 +1,31 @@
+---
+const links = [
+  { name: "Inicio", href: "/" },
+  { name: "Servicios", href: "/servicios" },
+  { name: "Proyectos", href: "/proyectos" },
+  { name: "Contacto", href: "/contacto" },
+];
+---
+
+<header
+  class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-xl shadow-blue-500/5"
+>
+  <nav class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <!--Seccion de logo-->
+      <a href="/" class="flex items-center gap-3 group"
+        ><div
+          class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-purple-500 flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-blue-500/50"
+        >
+          <span class="text-white font-bold text-xl">AJ</span>
+        </div>
+        <span class="text-2xl font-bold tracking-tight"
+          ><span
+            class="bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent"
+            >Aron</span
+          ><span class="text-gray-900"> Justo</span></span
+        >
+      </a>
+    </div>
+  </nav>
+</header>
