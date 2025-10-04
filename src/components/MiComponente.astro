@@ -5,18 +5,8 @@ interface Props {
   counter: number;
 }
 //Tipamos las pros de astro 'Astro.props'
-const {title, counter} = Astro.props;
+const { title, counter } = Astro.props;
 ---
 
 <h2>{title}</h2>
 <p>Este comentario se renderizo {counter} veces</p>
-
-<style>
-h2{
-  color: purple;
-}
-p {
-  font-style: italic;
-}
-</style>
-

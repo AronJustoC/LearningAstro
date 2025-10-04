@@ -1,16 +1,6 @@
+@import "tailwindcss";
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-h1 {
-  color: #ff5733;
-  font-size: 3rem;
-}
-
-main {
-  padding: 1.5rem;
-  max-width: 800px;
-  margin: auto;
 }
