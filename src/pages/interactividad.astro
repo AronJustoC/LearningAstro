@@ -1,12 +1,24 @@
 ---
 import LayoutBase from "../layouts/LayoutBase.astro";
+import Contador from "../components/Contador.jsx";
 ---
 
 <LayoutBase title="pagina interactiva">
   <h1>Probando interactividad</h1>
-  <p>Aplasta f12 y ve a consola</p>
+  <p>
+    Esta parte de la pagina es estatica HTML, renderizado en servidor. No es
+    interactiva
+  </p>
+  <Contador client:visible />
+  <div style="height: 120vh;"></div>
+  <p>
+    El componente del contador solo se cargó cuando apareció en la pantalla
+    gracias a <strong>client:visible</strong>.
+  </p>
 </LayoutBase>
 
 <script>
   console.log("Hola mundo desde astro");
+  const message: string = "Hola mundo desde TS";
+  console.log(message);
 </script>

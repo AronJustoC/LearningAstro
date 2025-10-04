@@ -35,11 +35,12 @@ Este archivo servirá como nuestra guía para aprender Astro.js desde cero, util
 
 **Objetivo:** Añadir interactividad del lado del cliente con TypeScript.
 
-- [ ] **Scripts del Lado del Cliente:**
+- [x] **Scripts del Lado del Cliente:**
   - Añadir TypeScript a nuestras páginas con la etiqueta `<script>`.
-  - Entender el procesamiento de scripts en servidor y cliente.
+  - Entender que los scripts son procesados (incl. TypeScript) y ejecutados en el cliente por defecto.
+  - Las directivas `client:*` se reservan para componentes de UI (React, Svelte, etc.), no para la etiqueta `<script>`.
 
-- [ ] **Frameworks de UI con TypeScript (React, Svelte, Vue):**
+- [x] **Frameworks de UI con TypeScript (React, Svelte, Vue):**
   - Integrar un componente de un framework (ej. React con `.tsx`).
   - Entender el concepto de "Astro Islands".
   - Utilizar directivas de cliente (`client:load`, `client:idle`, `client:visible`).
