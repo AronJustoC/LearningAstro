@@ -1,15 +1,25 @@
 @import "tailwindcss";
-
-/* personalizacion de fuentes */
 @layer base {
-  html {
-    font-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
-    color: #111827; /* gray-900 */
-    background-color: #f9fafb; /* gray-50 */
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #111827;
+    --color-primary: #06b6d4;
+    --color-primary-dark: #0e7490;
   }
 
-  code,
-  pre {
-    font-family: "Fira Code", ui-monospace, SFMono-Regular, monospace;
+  html.dark {
+    --color-bg: #0f172a;
+    --color-text: #f9fafb;
+    --color-primary: #22d3ee;
+    --color-primary-dark: #0891b2;
+  }
+
+  html {
+    font-family: "Poppins", sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition:
+      background-color 0.3s,
+      color 0.3s;
   }
 }

@@ -9,46 +9,96 @@ const links = [
 ---
 
 <header
-  class="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-xl shadow-blue-500/5"
+  class="sticky top-0 z-50 backdrop-blur-xl border-b shadow-xl transition-colors duration-300"
+  style="background-color: color-mix(in srgb, var(--color-bg) 80%, transparent); border-color: color-mix(in srgb, var(--color-primary) 20%, transparent); box-shadow: 0 10px 40px -10px color-mix(in srgb, var(--color-primary) 5%, transparent);"
 >
   <nav class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
-      <!--Seccion de logo-->
-      <a href="/" class="flex items-center gap-5 group"
-        ><div
-          class="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 via-cyan-700 to-cyan-950 flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-blue-500/50"
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-5 group">
+        <div
+          class="relative w-12 h-12 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:-rotate-1 transition-all duration-300 shadow-lg"
+          style="background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); box-shadow: 0 10px 30px color-mix(in srgb, var(--color-primary) 50%, transparent);"
         >
           <span class="text-white font-bold text-2xl">AJ</span>
         </div>
-        <span class="text-2xl font-bold tracking-tight"
-          ><span
-            class="bg-gradient-to-br from-cyan-400 to-cyan-700 bg-clip-text text-transparent"
-            >Aron</span
-          ><span class="text-gray-900"> Justo</span></span
-        >
+        <span class="text-2xl font-bold tracking-tight">
+          <span
+            class="bg-clip-text text-transparent"
+            style="background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));"
+          >
+            Aron
+          </span>
+          <span style="color: var(--color-text);"> Justo</span>
+        </span>
       </a>
-      <!--Seccion de navegacion-->
+
+      <!-- Navegación Desktop -->
       <ul class="hidden lg:flex items-center gap-3">
         {
           links.map((link) => (
             <li>
               <a
                 href={link.href}
-                class="relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-700 transition-all duration-300 group"
+                class="nav-link relative inline-block px-4 py-2 text-sm font-medium transform hover:scale-105 transition-all duration-300 group"
+                style="color: var(--color-text);"
               >
                 {link.name}
-                <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-500 to-cyan-700 group-hover:w-full transition-all duration-200" />
+                <span
+                  class="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-200"
+                  style="background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));"
+                />
               </a>
             </li>
           ))
         }
       </ul>
-      <!--Boton llamado a la accion-->
-      <div class="hidden lg:block">
+
+      <!--Computadoras: Dark Mode CTA-->
+      <div class="hidden lg:flex items-center gap-4">
+        <button
+          id="themeToggle"
+          class="p-2.5 rounded-xl transition-all duration-300 active:scale-95 group"
+          style="background-color: color-mix(in srgb, var(--color-bg) 10%, var(--color-primary) 10%); color: var(--color-text);"
+          aria-label="Cambiar tema"
+        >
+          <svg
+            id="sunIcon"
+            class="w-5 h-5 hidden dark:block group-hover:rotate-45 transition-transform duration-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            ></path>
+          </svg>
+          <svg
+            id="moonIcon"
+            class="w-5 h-5 block dark:hidden group-hover:rotate-12 transition-transform duration-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            ></path>
+          </svg>
+        </button>
+
+        <!-- Botón CTA -->
         <a
           href="/contacto"
-          class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-cyan-700 text-white rounded-xl font-semibold text-sm shadow-lg shadow-blue-400/40 hover:shadow-xl hover:shadow-blue-400/60 hover:-translate-y-0.5 transition-all duration-300"
-          >Empezar Proyecto
+          class="cta-btn inline-flex items-center gap-2 px-6 py-2.5 text-white rounded-xl font-semibold text-sm shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+          style="background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark)); box-shadow: 0 10px 30px color-mix(in srgb, var(--color-primary) 40%, transparent);"
+        >
+          Empezar Proyecto
           <svg
             class="w-5 h-5"
             fill="none"
@@ -63,48 +113,91 @@ const links = [
           </svg>
         </a>
       </div>
-      <!--Boton menú celulares-->
-      <button
-        id="menuBtn"
-        class="lg:hidden p-2 rounded-xl text-gray-700 hover:bg-gray-100 active:scale-95 transition-all duration-200"
-        aria-label="Abrir menú"
-        ><svg
-          class="w-5 h-6"
-          id="menuIcon"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+
+      <!-- Celular: Dark Mode + Menú -->
+      <div class="flex lg:hidden items-center gap-2">
+        <button
+          id="themeToggleMobile"
+          class="p-2 rounded-xl transition-all duration-300 active:scale-95 group"
+          style="background-color: color-mix(in srgb, var(--color-bg) 10%, var(--color-primary) 10%); color: var(--color-text);"
+          aria-label="Cambiar tema"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-        <svg
-          class="w-6 h-6 hidden"
-          id="closeIcon"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+          <svg
+            id="sunIconMobile"
+            class="w-5 h-5 hidden dark:block group-hover:rotate-45 transition-transform duration-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+            ></path>
+          </svg>
+          <svg
+            id="moonIconMobile"
+            class="w-5 h-5 block dark:hidden group-hover:rotate-12 transition-transform duration-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            ></path>
+          </svg>
+        </button>
+
+        <!-- Botón menú móvil -->
+        <button
+          id="menuBtn"
+          class="p-2 rounded-xl hover:bg-opacity-10 active:scale-95 transition-all duration-200"
+          style="color: var(--color-text);"
+          aria-label="Abrir menú"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
+          <svg
+            class="w-6 h-6"
+            id="menuIcon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg
+            class="w-6 h-6 hidden"
+            id="closeIcon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <!--Menu celulares-->
+    <!-- Menú móvil -->
     <div id="mobileMenu" class="hidden lg:hidden pb-6 animate-fadeIn">
       <div class="flex flex-col gap-1 pt-4">
         {
           links.map((link) => (
             <a
               href={link.href}
-              class="px-4 py-3 text-gray-700 hover:text-cyan-700 hover:bg-cyan-50 rounded-xl font-medium transition-all duration-200 text-center"
+              class="mobile-link px-4 py-3 rounded-xl font-medium transition-all duration-200 text-center"
+              style="color: var(--color-text);"
             >
               {link.name}
             </a>
@@ -112,29 +205,50 @@ const links = [
         }
         <a
           href="/contacto"
-          class="mt-4 py-3 bg-gradient-to-r from-cyan-600 to-cyan-950 text-white text-center rounded-xl font-semibold shadow-lg shadow-blue-500/40 hover:shadow-xl transition-all duration-200"
-          >Empezar Proyecto</a
+          class="mt-4 py-3 text-white text-center rounded-xl font-semibold shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          style="background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark)); box-shadow: 0 10px 30px color-mix(in srgb, var(--color-primary) 40%, transparent);"
         >
+          Empezar Proyecto
+        </a>
       </div>
     </div>
   </nav>
 </header>
+
 <style>
   @keyframes fadeIn {
     from {
       opacity: 0;
       transform: translateY(-10px);
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
-    .animate-fadeIn {
-      animation: fadeIn 0.3s ease-out;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  /* Hover effects usando variables CSS */
+  .nav-link:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .mobile-link:hover {
+    color: var(--color-primary-dark);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+
+  .cta-btn:hover {
+    box-shadow: 0 15px 40px
+      color-mix(in srgb, var(--color-primary) 60%, transparent);
+  }
 </style>
+
 <script>
+  // Menú móvil
   const menuBtn = document.getElementById("menuBtn");
   const mobileMenu = document.getElementById("mobileMenu");
   const menuIcon = document.getElementById("menuIcon");
@@ -144,5 +258,30 @@ const links = [
     mobileMenu?.classList.toggle("hidden");
     menuIcon?.classList.toggle("hidden");
     closeIcon?.classList.toggle("hidden");
+  });
+
+  //Toggle
+  const themeToggle = document.getElementById("themeToggle");
+  const themeToggleMobile = document.getElementById("themeToggleMobile");
+  const htmlElement = document.documentElement;
+
+  function applyTheme(theme) {
+    if (theme == "dark") {
+      htmlElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      htmlElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }
+  //Desktop
+  themeToggle?.addEventListener("click", () => {
+    const isDark = htmlElement.classList.contains("dark");
+    applyTheme(isDark ? "light" : "dark");
+  });
+  //Mobile
+  themeToggleMobile?.addEventListener("click", () => {
+    const isDark = htmlElement.classList.contains("dark");
+    applyTheme(isDark ? "light" : "dark");
   });
 </script>
