@@ -43,6 +43,106 @@ const links = [
           ))
         }
       </ul>
+      <!--Boton llamado a la accion-->
+      <div class="hidden lg:block">
+        <a
+          href="/contacto"
+          class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-cyan-700 text-white rounded-xl font-semibold text-sm shadow-lg shadow-blue-400/40 hover:shadow-xl hover:shadow-blue-400/60 hover:-translate-y-0.5 transition-all duration-300"
+          >Empezar Proyecto
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+          </svg>
+        </a>
+      </div>
+      <!--Boton menú celulares-->
+      <button
+        id="menuBtn"
+        class="lg:hidden p-2 rounded-xl text-gray-700 hover:bg-gray-100 active:scale-95 transition-all duration-200"
+        aria-label="Abrir menú"
+        ><svg
+          class="w-5 h-6"
+          id="menuIcon"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg
+          class="w-6 h-6 hidden"
+          id="closeIcon"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!--Menu celulares-->
+    <div id="mobileMenu" class="hidden lg:hidden pb-6 animate-fadeIn">
+      <div class="flex flex-col gap-1 pt-4">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="px-4 py-3 text-gray-700 hover:text-cyan-700 hover:bg-cyan-50 rounded-xl font-medium transition-all duration-200 text-center"
+            >
+              {link.name}
+            </a>
+          ))
+        }
+        <a
+          href="/contacto"
+          class="mt-4 py-3 bg-gradient-to-r from-cyan-600 to-cyan-950 text-white text-center rounded-xl font-semibold shadow-lg shadow-blue-500/40 hover:shadow-xl transition-all duration-200"
+          >Empezar Proyecto</a
+        >
+      </div>
     </div>
   </nav>
 </header>
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.3s ease-out;
+    }
+  }
+</style>
+<script>
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const menuIcon = document.getElementById("menuIcon");
+  const closeIcon = document.getElementById("closeIcon");
+
+  menuBtn?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("hidden");
+    menuIcon?.classList.toggle("hidden");
+    closeIcon?.classList.toggle("hidden");
+  });
+</script>
