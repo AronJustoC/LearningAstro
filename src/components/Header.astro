@@ -3,6 +3,7 @@ const links = [
   { name: "Inicio", href: "/" },
   { name: "Servicios", href: "/servicios" },
   { name: "Proyectos", href: "/proyectos" },
+  { name: "Blog", href: "/blog" },
   { name: "Contacto", href: "/contacto" },
 ];
 ---
@@ -13,19 +14,35 @@ const links = [
   <nav class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       <!--Seccion de logo-->
-      <a href="/" class="flex items-center gap-3 group"
+      <a href="/" class="flex items-center gap-5 group"
         ><div
-          class="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 via-blue-500 to-purple-500 flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-blue-500/50"
+          class="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 via-cyan-700 to-cyan-950 flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-blue-500/50"
         >
-          <span class="text-white font-bold text-xl">AJ</span>
+          <span class="text-white font-bold text-2xl">AJ</span>
         </div>
         <span class="text-2xl font-bold tracking-tight"
           ><span
-            class="bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent"
+            class="bg-gradient-to-br from-cyan-400 to-cyan-700 bg-clip-text text-transparent"
             >Aron</span
           ><span class="text-gray-900"> Justo</span></span
         >
       </a>
+      <!--Seccion de navegacion-->
+      <ul class="hidden lg:flex items-center gap-3">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-700 transition-all duration-300 group"
+              >
+                {link.name}
+                <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-500 to-cyan-700 group-hover:w-full transition-all duration-200" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </nav>
 </header>
