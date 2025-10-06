@@ -1,0 +1,142 @@
+---
+import Icon from "./Icon.astro";
+
+const currentYear = new Date().getFullYear();
+
+const footerLinks = [
+  { name: "GitHub", href: "https://github.com/AronJustoC", icon: "github" },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/aronjusto/",
+    icon: "linkedin",
+  },
+  { name: "Email", href: "mailto:aronchoque72@gmail.com", icon: "email" },
+];
+
+const sections = [
+  {
+    title: "Navegación",
+    links: [
+      { name: "Inicio", href: "/" },
+      { name: "Servicios", href: "/servicios" },
+      { name: "Proyectos", href: "/proyectos" },
+      { name: "Blog", href: "/blog" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { name: "Privacidad", href: "/privacidad" },
+      { name: "Términos", href: "/terminos" },
+    ],
+  },
+];
+---
+
+<footer class="footer-style border-t transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+    <!--Grid principal-->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+      <!--Primera columna - Marca-->
+      <div class="space-y-4">
+        <a href="/" class="inline-flex group items-center gap-3 group"
+          ><div
+            class="logo-gradient w-10 h-10 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-all duration-300"
+          >
+            <span class="text-white font-bold text-lg">AC</span>
+          </div>
+          <span class="text-color text-xl font-bold"
+            >Aron <span class="text-gradient bg-clip-text text-transparent"
+              >Choque</span
+            ></span
+          >
+        </a>
+        <p class="text-color text-sm opacity-70">
+          Desarrollador Full Stack creando experiencias excepcionales.
+        </p>
+      </div>
+      <!--Col. Links -->
+      <div class="grid grid-cols-2 gap-8 md:col-span-2">
+        {
+          sections.map((section) => (
+            <div>
+              <h3 class="text-color font-semibold mb-4">{section.title}</h3>
+              <ul class="space-y-3">
+                {section.links.map((link) => (
+                  <li>
+                    <a
+                      href={link.href}
+                      class="footer-link text-sm opacity-70 hover:opacity-100 transition-opacity duration-300"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+    <!--Separador-->
+    <div
+      class="border-t opacity-20 mb-8"
+      style="border-color: var(--color-primary)"
+    >
+    </div>
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <p class="text-sm opacity-60" style="color: var(--color-text)">
+        Hecho con ❤️ en © {currentYear}
+      </p>
+      <div class="flex items-center gap-4">
+        {
+          footerLinks.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="social-link w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+              aria-label={link.name}
+            >
+              <Icon icon={link.icon} class="w-5 h-5" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</footer>
+<style>
+  .footer-link:hover {
+    color: var(--color-primary-dark);
+  }
+  .footer-style {
+    border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    background-color: var(--color-bg);
+  }
+  .footer-link:hover {
+    color: var(--color-primary-dark);
+  }
+
+  .social-link:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-primary-dark);
+  }
+  .logo-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-primary-dark)
+    );
+  }
+  .text-color {
+    color: var(--color-text);
+  }
+  .text-gradient {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-primary),
+      var(--color-primary-dark)
+    );
+  }
+</style>
