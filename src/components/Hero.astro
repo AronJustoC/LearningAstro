@@ -2,27 +2,54 @@
 
 ---
 
-<section class="grid grid-cols-1 lg:grid-cols-2 py-12">
-  <div class="max-w-7xl mx-auto lg:px-8">
-    <div class="space-y-6">
-      <h1>Soy Aron Choque</h1>
-      <p>
-        Desarrollador apasionado por crear experiencias web que combinan diseño
-        elegante con código limpio.
-      </p>
-      <div class="flex gap-4">
-        <a href="/proyectos">Ver mi trabajo</a>
-        <a href="/contacto">Contáctame</a>
+<section class="min-h-screen flex items-center py-20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div class="space-y-8">
+        <div class="space-y-6">
+          <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
+            Soy <span class="block mt-2">Aron Choque</span>
+          </h1>
+          <p>
+            Desarrollador Full Stack apasionado por crear experiencias web que
+            combinan diseño elegante con código limpio. Transformo ideas en
+            productos digitales que la gente ama usar.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-5">
+            <a href="/proyectos" class="px-8 py-4 rounded-xl font-semibold"
+              >Ver mi trabajo</a
+            >
+            <a
+              href="/contacto"
+              class="px-8 py-4 rounded-xl font-semibold border-2">Contáctame</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="order-2">
+        <div
+          class="relative rounded-2xl overflow-hidden shadow-md shadow-blue-200"
+        >
+          <div class="flex items-center gap-2 px-4 py-3 border-b">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <span class="text-sm font-mono ml-2 opacity-60">developer.ts</span>
+          </div>
+          <div class="">
+            <pre>
+          <code>
+      const aron = &#123;
+        name: "Aron Choque",
+        role: "Full Stack Developer"
+      &#125;;
+          </code>
+        </pre>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="flex justify-center">
-    <pre><code>
-     const aron = &#123;
-    name: "Aron Choque",
-    role: "Full Stack Developer"
-  &#125;;
-    </code></pre>
   </div>
 </section>
