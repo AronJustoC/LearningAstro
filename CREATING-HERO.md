@@ -12,8 +12,8 @@ Seguiremos un enfoque incremental, empezando por una estructura simple y añadie
 
 **Pasos:**
 
-1.  Crea el archivo `src/components/Hero.astro`.
-2.  Añade el siguiente código, que define una sección con dos columnas: una para el texto y otra para un bloque de código de ejemplo.
+1. Crea el archivo `src/components/Hero.astro`.
+2. Añade el siguiente código, que define una sección con dos columnas: una para el texto y otra para un bloque de código de ejemplo.
 
 ```astro
 {/* src/components/Hero.astro */}
@@ -23,7 +23,7 @@ Seguiremos un enfoque incremental, empezando por una estructura simple y añadie
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     {/* Contenedor principal de la rejilla */}
     <div class="grid lg:grid-cols-2 gap-12 items-center">
-      
+
       {/* Columna Izquierda: Texto */}
       <div class="space-y-6">
         <h1>Hola, soy Aron Justo</h1>
@@ -61,7 +61,7 @@ const aron = {
 
 ---
 
-### [ ] Checkpoint 2: Estilizado con Tailwind CSS
+### [x] Checkpoint 2: Estilizado con Tailwind CSS
 
 **Objetivo:** Aplicar clases de Tailwind CSS para dar forma al layout, la tipografía y los elementos básicos, haciendo que el componente sea responsive.
 
@@ -74,7 +74,7 @@ const aron = {
 <section class="min-h-screen flex items-center py-20">
   <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
     <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-      
+
       {/* Columna Izquierda: Texto */}
       <div class="space-y-8 order-2 lg:order-1">
         <h1 class="text-5xl lg:text-7xl font-bold leading-tight">
@@ -134,14 +134,14 @@ const aron = {
 
 ---
 
-### [ ] Checkpoint 3: Integración de Shiki para Resaltado de Sintaxis
+### [x] Checkpoint 3: Integración de Shiki para Resaltado de Sintaxis
 
 **Objetivo:** Añadir resaltado de sintaxis profesional al bloque de código usando Shiki.
 
 **Pasos:**
 
-1.  Instala Shiki: `npm install shiki`.
-2.  Actualiza el `script` del frontmatter para procesar el código y el `template` para renderizar el resultado.
+1. Instala Shiki: `npm install shiki`.
+2. Actualiza el `script` del frontmatter para procesar el código y el `template` para renderizar el resultado.
 
 ```astro
 {/* src/components/Hero.astro */}
@@ -190,7 +190,7 @@ const highlighted = await codeToHtml(sampleCode, {
           </a>
         </div>
       </div>
-      
+
       {/* Columna Derecha: Bloque de Código con Shiki */}
       <div class="order-1 lg:order-2">
         <div class="relative rounded-2xl overflow-hidden shadow-2xl">
@@ -203,7 +203,7 @@ const highlighted = await codeToHtml(sampleCode, {
             </div>
             <span class="text-sm font-mono ml-2 opacity-60">auth.ts</span>
           </div>
-          
+
           {/* Contenido del código con Shiki */}
           <div class="p-6 overflow-x-auto">
             <Fragment set:html={highlighted} />
@@ -230,7 +230,7 @@ const highlighted = await codeToHtml(sampleCode, {
 
 **Pasos:** Agrega los atributos `style` a los elementos correspondientes. Este paso asume que tienes variables como `--color-primary` definidas en un archivo CSS global.
 
-*En este punto, el código se volverá idéntico al que me proporcionaste inicialmente, pero sin las animaciones.*
+_En este punto, el código se volverá idéntico al que me proporcionaste inicialmente, pero sin las animaciones._
 
 **Checkpoint de Git:** El componente ya tiene su diseño final y está listo para los toques finales.
 
@@ -247,11 +247,11 @@ const highlighted = await codeToHtml(sampleCode, {
 
 **Pasos:**
 
-1.  Añade la etiqueta `<style>` al final del archivo con las definiciones de `@keyframes` y las clases de ayuda.
-2.  Añade las clases de animación (`animate-fadeIn`, `animate-slideUp`) a los elementos HTML.
-3.  Añade los `div` para los "blobs" decorativos de fondo.
+1. Añade la etiqueta `<style>` al final del archivo con las definiciones de `@keyframes` y las clases de ayuda.
+2. Añade las clases de animación (`animate-fadeIn`, `animate-slideUp`) a los elementos HTML.
+3. Añade los `div` para los "blobs" decorativos de fondo.
 
-*El código final será exactamente el que me mostraste en tu consulta inicial.*
+_El código final será exactamente el que me mostraste en tu consulta inicial._
 
 **Checkpoint de Git:** El componente está completo, con un diseño pulido y animaciones.
 
@@ -266,5 +266,5 @@ const highlighted = await codeToHtml(sampleCode, {
 
 ¡Felicidades! Has construido un componente `Hero` impresionante. Como mejora futura, podrías considerar:
 
-*   **Refactorizar Estilos:** Mover los estilos en línea a una etiqueta `<style>` con clases (como hicimos con el `Footer`), para un HTML más limpio.
-*   **Props del Componente:** Permitir que el título, la descripción o el snippet de código se pasen como `props` para hacer el componente aún más reutilizable.
+- **Refactorizar Estilos:** Mover los estilos en línea a una etiqueta `<style>` con clases (como hicimos con el `Footer`), para un HTML más limpio.
+- **Props del Componente:** Permitir que el título, la descripción o el snippet de código se pasen como `props` para hacer el componente aún más reutilizable.
