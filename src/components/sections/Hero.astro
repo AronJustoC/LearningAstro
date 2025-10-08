@@ -1,0 +1,161 @@
+---
+import { codeToHtml } from "shiki";
+
+// Código TypeScript minimalista
+const sampleCode = `interface Developer {
+  name: string;
+  role: string;
+  passion: string;
+}
+
+const aron: Developer = {
+  name: "Aron Justo",
+  role: "Backend Developer",
+  passion: "Building amazing things"
+};
+
+export default aron;`;
+
+// Genera el HTML coloreado con Shiki
+const highlighted = await codeToHtml(sampleCode, {
+  lang: "typescript",
+  theme: "vitesse-dark",
+});
+---
+
+<section
+  class="relative min-h-[80vh] flex items-center py-20 transition-colors duration-300"
+  style="background-color: var(--color-bg);"
+>
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 w-full">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Columna Izquierda: Texto -->
+      <div class="space-y-6 order-2 lg:order-1">
+        <!-- Título -->
+        <h1
+          class="text-5xl lg:text-6xl font-bold leading-tight"
+          style="color: var(--color-text);"
+        >
+          Hola, soy
+          <span
+            class="bg-clip-text text-transparent"
+            style="background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));"
+          >
+            Aron Justo
+          </span>
+        </h1>
+
+        <!-- Descripción -->
+        <p
+          class="text-lg opacity-70 leading-relaxed max-w-lg"
+          style="color: var(--color-text);"
+        >
+          Backend Developer. Creo experiencias web simples y elegantes con
+          código limpio.
+        </p>
+
+        <!-- CTA simple -->
+        <div class="pt-4">
+          <a
+            href="/proyectos"
+            class="inline-flex items-center gap-2 text-lg font-medium group transition-colors duration-300"
+            style="color: var(--color-primary-dark);"
+          >
+            Ver proyectos
+            <svg
+              class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Código minimalista -->
+      <div class="order-2 lg:order-2">
+        <div class="relative">
+          <!-- Code block -->
+          <div
+            class="relative rounded-xl overflow-hidden border shadow-xl"
+            style="background-color: color-mix(in srgb, var(--color-bg) 98%, var(--color-primary) 10%); border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);"
+          >
+            <!-- Header minimalista -->
+            <div
+              class="flex items-center gap-2 px-4 py-2.5 border-b"
+              style="border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);"
+            >
+              <div class="flex gap-1.5">
+                <div
+                  class="w-2.5 h-2.5 rounded-full opacity-50"
+                  style="background-color: var(--color-text);"
+                >
+                </div>
+                <div
+                  class="w-2.5 h-2.5 rounded-full opacity-50"
+                  style="background-color: var(--color-text);"
+                >
+                </div>
+                <div
+                  class="w-2.5 h-2.5 rounded-full opacity-50"
+                  style="background-color: var(--color-text);"
+                >
+                </div>
+              </div>
+              <span
+                class="text-xs font-mono ml-2 opacity-50"
+                style="color: var(--color-text);">developer.ts</span
+              >
+            </div>
+
+            <!-- Code content con Shiki -->
+            <div class="code-wrapper p-6 overflow-x-auto">
+              <Fragment set:html={highlighted} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Hacer el fondo de Shiki transparente */
+  .code-wrapper :global(.shiki),
+  .code-wrapper :global(pre) {
+    background-color: transparent !important;
+    padding: 0;
+    margin: 0;
+  }
+
+  .code-wrapper :global(code) {
+    font-family: "Fira Code", ui-monospace, monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    display: block;
+  }
+
+  /* Scrollbar minimalista */
+  .code-wrapper {
+    scrollbar-width: thin;
+  }
+
+  .code-wrapper::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .code-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .code-wrapper::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--color-primary) 25%, transparent);
+    border-radius: 2px;
+  }
+</style>

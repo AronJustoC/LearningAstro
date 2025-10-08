@@ -1,5 +1,5 @@
 ---
-import Icon from "./Icon.astro";
+import Icon from "../shared/Icon.astro";
 
 const currentYear = new Date().getFullYear();
 
@@ -94,7 +94,7 @@ const sections = [
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              class="social-link w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+              class="social-link w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
               aria-label={link.name}
             >
               <Icon icon={link.icon} class="w-5 h-5" />

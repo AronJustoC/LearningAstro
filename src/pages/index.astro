@@ -1,0 +1,18 @@
+---
+import LayoutBase from "../layouts/LayoutBase.astro";
+import Header from "../components/sections/Header.astro";
+import Hero from "../components/sections/Hero.astro";
+import Projects from "../components/sections/Projects.astro";
+import TechCarousel from "../components/sections/TechCarousel.astro";
+import Footer from "../components/sections/Footer.astro";
+---
+
+<LayoutBase title="Portfolio">
+  <Header />
+  <main>
+    <Hero />
+    <TechCarousel />
+    <Projects />
+  </main>
+  <Footer />
+</LayoutBase>

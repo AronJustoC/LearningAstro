@@ -224,40 +224,249 @@ const highlighted = await codeToHtml(sampleCode, {
 
 ---
 
-### [ ] Checkpoint 4: Estilos Personalizados y Acabados Visuales
+### [x] Checkpoint 4: Estilos Personalizados y Acabados Visuales
 
-**Objetivo:** Añadir todos los estilos en línea que usan variables CSS para dar al componente su aspecto final y único (colores, gradientes, brillos).
+**Objetivo:** Aplicar nuestra paleta de colores definida en `global.css`, mejorar el aspecto de los botones y añadir un efecto de brillo de fondo para dar profundidad.
 
-**Pasos:** Agrega los atributos `style` a los elementos correspondientes. Este paso asume que tienes variables como `--color-primary` definidas en un archivo CSS global.
+**Pasos:**
 
-_En este punto, el código se volverá idéntico al que me proporcionaste inicialmente, pero sin las animaciones._
+1. **Añadir Estilos a Botones:** Modificaremos los links para que parezcan botones, uno principal (con fondo) y uno secundario (con borde), usando las variables de color.
+2. **Añadir Brillos de Fondo:** Agregaremos `divs` con posicionamiento absoluto, gradientes radiales y un filtro de desenfoque (`blur`) para crear un efecto de "blob" o brillo decorativo detrás del contenido.
 
-**Checkpoint de Git:** El componente ya tiene su diseño final y está listo para los toques finales.
+**Código:** Reemplaza el contenido de `src/components/Hero.astro` con el siguiente código.
+
+```astro
+{/* src/components/Hero.astro - CHECKPOINT 4 */}}
+---
+import { codeToHtml } from "shiki";
+
+// ... (el código de Shiki no cambia)
+const sampleCode = `interface Developer {
+  name: string;
+  role: string;
+  passion: string;
+}
+
+const aron: Developer = {
+  name: "Aron Choque",
+  role: "JS Developer",
+  passion: "Building amazing things",
+}
+
+export default aron;
+`;
+
+const highlighted = await codeToHtml(sampleCode, {
+  lang: "typescript",
+  theme: "catppuccin-macchiato",
+});
+---
+<section class="relative min-h-screen flex items-center py-20">
+  {/* Efectos de brillo de fondo */}
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <div class="absolute top-0 left-0 w-96 h-96 rounded-full bg-primary-glow opacity-20 blur-3xl"></div>
+    <div class="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-secondary-glow opacity-20 blur-3xl"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div class="space-y-8 order-2 lg:order-1">
+        <div class="space-y-6">
+          <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
+            Soy <span class="block mt-2" style="color: var(--color-primary);">Aron Choque</span>
+          </h1>
+          <p class="text-md lg:text-lg opacity-80 leading-relaxed max-w-xl">
+            Desarrollador <strong>Backend</strong> con Node apasionado por crear
+            experiencias web sólidas y seguras.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-5">
+            <a href="/proyectos" class="px-8 py-4 rounded-xl font-semibold transition-transform duration-300 hover:scale-105" style="background-color: var(--color-primary); color: var(--color-bg);">
+              Ver mi trabajo
+            </a>
+            <a href="/contacto" class="px-8 py-4 rounded-xl font-semibold border-2 transition-transform duration-300 hover:scale-105" style="border-color: var(--color-primary); color: var(--color-primary);">
+              Contáctame
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="order-1 lg:order-2">
+        <div class="relative rounded-2xl overflow-hidden shadow-2xl" style="border: 1px solid var(--color-primary-dark);">
+          <div class="flex items-center gap-2 px-4 py-3 border-b" style="border-color: var(--color-primary-dark);">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <span class="text-sm font-mono ml-2 opacity-60">developer.ts</span>
+          </div>
+          <div class="p-6 overflow-x-auto">
+            <Fragment set:html={highlighted} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bg-primary-glow {
+    background-color: var(--color-primary);
+  }
+  .bg-secondary-glow {
+    background-color: var(--color-primary-dark);
+  }
+</style>
+```
+
+**Checkpoint de Git:**
 
 > ```bash
 > git add .
-> git commit -m "style(hero): apply custom theme and visual details"
+> git commit -m "style(hero): apply custom theme and decorative elements"
 > ```
 
 ---
 
-### [ ] Checkpoint 5: Animaciones y Efectos Finales
+### [ ] Checkpoint 5: Animaciones de Entrada y Transiciones
 
-**Objetivo:** Dar vida al componente con animaciones sutiles y añadir los elementos decorativos de fondo.
+**Objetivo:** Dar vida al componente con animaciones de entrada para los elementos y mejorar las transiciones de los botones.
 
 **Pasos:**
 
-1. Añade la etiqueta `<style>` al final del archivo con las definiciones de `@keyframes` y las clases de ayuda.
-2. Añade las clases de animación (`animate-fadeIn`, `animate-slideUp`) a los elementos HTML.
-3. Añade los `div` para los "blobs" decorativos de fondo.
+1. **Definir Animaciones:** Añadiremos una etiqueta `<style>` para definir `@keyframes` para las animaciones `fadeIn` (aparecer) y `slideUp` (deslizar hacia arriba).
+2. **Aplicar Animaciones:** Usaremos clases y estilos en línea para aplicar estas animaciones a los elementos del `Hero`, usando `animation-delay` para que aparezcan de forma escalonada.
 
-_El código final será exactamente el que me mostraste en tu consulta inicial._
+**Código:** Reemplaza el contenido de `src/components/Hero.astro` con el código final.
 
-**Checkpoint de Git:** El componente está completo, con un diseño pulido y animaciones.
+```astro
+{/* src/components/Hero.astro - CHECKPOINT 5 (FINAL) */}}
+---
+import { codeToHtml } from "shiki";
+
+// ... (el código de Shiki no cambia)
+const sampleCode = `interface Developer {
+  name: string;
+  role: string;
+  passion: string;
+}
+
+const aron: Developer = {
+  name: "Aron Choque",
+  role: "JS Developer",
+  passion: "Building amazing things",
+}
+
+export default aron;
+`;
+
+const highlighted = await codeToHtml(sampleCode, {
+  lang: "typescript",
+  theme: "catppuccin-macchiato",
+});
+---
+<section class="relative min-h-screen flex items-center py-20">
+  {/* Efectos de brillo de fondo */}
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <div class="absolute top-0 left-0 w-96 h-96 rounded-full bg-primary-glow opacity-20 blur-3xl animate-blob"></div>
+    <div class="absolute top-1/2 right-0 w-96 h-96 rounded-full bg-secondary-glow opacity-20 blur-3xl animate-blob animation-delay-2000"></div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div class="space-y-8 order-2 lg:order-1 animate-slideUp">
+        <div class="space-y-6">
+          <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
+            Soy <span class="block mt-2" style="color: var(--color-primary);">Aron Choque</span>
+          </h1>
+          <p class="text-md lg:text-lg opacity-80 leading-relaxed max-w-xl" style="animation-delay: 0.2s;">
+            Desarrollador <strong>Backend</strong> con Node apasionado por crear
+            experiencias web sólidas y seguras.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-5" style="animation-delay: 0.4s;">
+            <a href="/proyectos" class="px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg" style="background-color: var(--color-primary); color: var(--color-bg);">
+              Ver mi trabajo
+            </a>
+            <a href="/contacto" class="px-8 py-4 rounded-xl font-semibold border-2 transition-all duration-300 hover:scale-105 hover:shadow-lg" style="border-color: var(--color-primary); color: var(--color-primary); box-shadow: 0 0 10px transparent;">
+              Contáctame
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="order-1 lg:order-2 animate-fadeIn" style="animation-delay: 0.6s;">
+        <div class="relative rounded-2xl overflow-hidden shadow-2xl" style="border: 1px solid var(--color-primary-dark);">
+          <div class="flex items-center gap-2 px-4 py-3 border-b" style="border-color: var(--color-primary-dark);">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <span class="text-sm font-mono ml-2 opacity-60">developer.ts</span>
+          </div>
+          <div class="p-6 overflow-x-auto">
+            <Fragment set:html={highlighted} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bg-primary-glow {
+    background-color: var(--color-primary);
+  }
+  .bg-secondary-glow {
+    background-color: var(--color-primary-dark);
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(20px, -30px) scale(1.1); }
+    50% { transform: translate(-20px, 30px) scale(0.9); }
+    75% { transform: translate(10px, -10px) scale(1.05); }
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.5s forwards;
+    opacity: 0;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.5s forwards;
+    opacity: 0;
+  }
+
+  .animate-blob {
+    animation: blob 10s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+</style>
+```
+
+**Checkpoint de Git:**
 
 > ```bash
 > git add .
-> git commit -m "feat(hero): add animations and decorative elements"
+> git commit -m "feat(hero): add entry animations and transitions"
 > ```
 
 ---
