@@ -1,0 +1,125 @@
+---
+import type { Post } from "../../types/Post";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+---
+
+<article
+  class="project-card group flex flex-col justify-between rounded-xl border shadow-lg overflow-hidden"
+>
+  <!-- Imagen del proyecto -->
+  <div class="image-wrapper relative overflow-hidden rounded-t-xl">
+    <img
+      src={post.imageUrl}
+      alt={`Captura de pantalla del proyecto ${post.title}`}
+      loading="lazy"
+      width="400"
+      height="192"
+      class="w-full object-cover h-48 border-b"
+    />
+  </div>
+
+  <!-- Contenido -->
+  <div class="flex flex-col p-6 space-y-4">
+    <h3 class="text-xl font-semibold text-title">
+      {post.title}
+    </h3>
+
+    <p class="text-sm leading-relaxed text-description">
+      {post.content}
+    </p>
+
+    <!-- Enlace -->
+    <a
+      href="/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link-more inline-flex items-center self-start gap-2 text-sm font-medium"
+      aria-label={`Ver más sobre ${post.title}`}
+    >
+      Ver más
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        class="w-4 h-4 arrow-icon"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
+      </svg>
+    </a>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    background-color: color-mix(
+      in srgb,
+      var(--color-bg) 90%,
+      var(--color-primary) 6%
+    );
+    border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    background-color: color-mix(
+      in srgb,
+      var(--color-bg) 90%,
+      var(--color-primary) 10%
+    );
+    border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  }
+
+  .image-wrapper img {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+
+  .project-card:hover .image-wrapper img {
+    transform: scale(1.05);
+  }
+
+  .text-title {
+    color: var(--color-text);
+  }
+
+  .text-description {
+    color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  }
+
+  .link-more {
+    color: var(--color-primary);
+    transition: all 0.3s ease;
+  }
+
+  .link-more:hover {
+    opacity: 0.8;
+  }
+
+  .arrow-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover .arrow-icon {
+    transform: translateX(0.25rem);
+  }
+
+  /* Accesibilidad: focus visible */
+  .link-more:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: 0.25rem;
+  }
+</style>
