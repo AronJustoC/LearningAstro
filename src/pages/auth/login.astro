@@ -1,0 +1,24 @@
+---
+import LayoutBase from "../../layouts/LayoutBase.astro";
+---
+
+<LayoutBase title="Login">
+  <div class="flex justify-center items-center min-h-screen">
+    <div class="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-md">
+      <h1 class="text-2xl font-bold text-center text-white">Iniciar Sesion</h1>
+      <!--formulario react-->
+      <p class="text-sm text-center text-gray-400">
+        El formulario interactivo se aniadira en el paso siguiente
+      </p>
+      <p class="text-sm text-center text-gray-400">
+        ¿No tienes una cuenta?<br />
+        <a
+          href="/auth/register"
+          class="font-medium"
+          style="color: var(--color-text)"
+          >Regístrate
+        </a>
+      </p>
+    </div>
+  </div>
+</LayoutBase>
