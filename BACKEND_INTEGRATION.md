@@ -18,17 +18,147 @@ Este documento detalla el plan paso a paso para integrar un backend en nuestro p
   - **Acción:** Crear los archivos `src/pages/auth/login.astro` y `src/pages/auth/register.astro`.
   - **Buena Práctica:** Agrupar las páginas relacionadas con la autenticación en una carpeta `auth` mejora la organización del proyecto.
 
-- [ ] **Paso 1.3: Desarrollar los formularios con React**
+- [x] **Paso 1.3: Desarrollar los formularios con React**
   - **Acción:** Crear los componentes `src/components/auth/LoginForm.tsx` y `src/components/auth/RegisterForm.tsx`.
   - **Buena Práctica:** Estos componentes manejarán el estado del formulario (entradas de usuario, validaciones) y las llamadas a la API. Se integrarán en las páginas de Astro con la directiva `client:load`.
+  - **Implementación (`LoginForm.tsx`):**
+    - **Estado:** Se usa `useState` para manejar `email` y `password`.
+    - **Envío:** Una función `handleSubmit` previene el comportamiento por defecto del formulario y contendrá la lógica de `fetch` para llamar a la API.
+    - **Código de ejemplo:**
+      ```tsx
+      // src/components/auth/LoginForm.tsx
+      import React, { useState } from 'react';
 
-- [ ] **Paso 1.4: Implementar el manejo de tokens**
+      const LoginForm = () => {
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+
+        const handleSubmit = async (e: React.FormEvent) => {
+          e.preventDefault();
+          console.log('Datos del formulario:', { email, password });
+          // Próximamente: Llamada a la API con fetch
+        };
+
+        return (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* ... campos de email y password ... */}
+          </form>
+        );
+      };
+
+      export default LoginForm;
+      ```
+  - **Implementación (`RegisterForm.tsx`):**
+    - **Estado:** Similar al login, pero se añade un campo `username`.
+    - **Envío:** La función `handleSubmit` recogerá `username`, `email` y `password` para enviarlos a la API.
+    - **Código de ejemplo:**
+      ```tsx
+      // src/components/auth/RegisterForm.tsx
+      import React, { useState } from 'react';
+
+      const RegisterForm = () => {
+        const [username, setUsername] = useState('');
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+
+        const handleSubmit = async (e: React.FormEvent) => {
+          e.preventDefault();
+          console.log('Datos del formulario:', { username, email, password });
+          // Próximamente: Llamada a la API con fetch
+        };
+
+        return (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* ... campos de username, email y password ... */}
+          </form>
+        );
+      };
+
+      export default RegisterForm;
+      ```
+
+- [x] **Paso 1.4: Implementar el manejo de tokens**
   - **Acción:** Dentro de los componentes de React, usar `fetch` para llamar a los endpoints `api/auth/login` y `api/auth/register`.
   - **Buena Práctica (Seguridad):** Para empezar, podemos guardar los tokens (`accessToken`, `refreshToken`) en `localStorage`. Sin embargo, para un entorno de producción, la mejor práctica es que el backend configure los tokens en **cookies `HttpOnly`** para prevenir ataques XSS.
+  - **Implementación (`LoginForm.tsx`):**
+    - Se modifica la función `handleSubmit` para incluir la llamada `fetch` al endpoint de login.
+    - Se añade manejo de estado para errores y se guarda el token en `localStorage`.
+    - **Código de ejemplo con `fetch`:**
+      ```tsx
+      // ... (código de ejemplo para LoginForm)
+      ```
+  - **Implementación (`RegisterForm.tsx`):**
+    - Se aplica la misma lógica de `fetch` al `handleSubmit` del formulario de registro, apuntando al endpoint de register.
+    - **Código de ejemplo con `fetch`:**
+      ```tsx
+      // src/components/auth/RegisterForm.tsx
+      const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        // ... (lógica para limpiar errores)
 
-- [ ] **Paso 1.5: Crear un Store global para el estado de autenticación**
-  - **Acción:** Usar una librería ligera como `nanostores` (`npm install nanostores`) para gestionar el estado global (ej. si el usuario está logueado, sus datos). Crear el archivo `src/stores/authStore.ts`.
+        try {
+          const response = await fetch('http://localhost:4000/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, email, password }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Registro exitoso:', data);
+            // Opcional: Iniciar sesión y guardar token
+          } else {
+            // ... (manejo de error de registro)
+          }
+        } catch (error) {
+          // ... (manejo de error de red)
+        }
+      };
+      ```
+
+- [x] **Paso 1.5: Crear un Store global para el estado de autenticación**
+  - **Acción:** Usar una librería ligera como `nanostores` (`npm install nanostores @nanostores/react`) para gestionar el estado global (ej. si el usuario está logueado, sus datos). Crear el archivo `src/stores/authStore.ts`.
   - **Buena Práctica:** Un store global permite que cualquier componente (Astro, React, etc.) pueda reaccionar a los cambios de estado de autenticación de forma sencilla.
+  - **Implementación (`authStore.ts`):**
+    - Se usa `atom` para el estado de autenticación (`isAuthenticated`).
+    - Se usa `map` para la información del usuario (`user`).
+    - Se crean acciones `login` y `logout` para modificar el estado.
+    - **Código de ejemplo:**
+      ```ts
+      // src/stores/authStore.ts
+      import { atom, map } from 'nanostores';
+
+      export const isAuthenticated = atom(false);
+      export const user = map<Record<string, any>>({});
+
+      export function login(userData: Record<string, any>) {
+        isAuthenticated.set(true);
+        user.set(userData);
+        if (userData.token) {
+          localStorage.setItem('token', userData.token);
+        }
+      }
+
+      export function logout() {
+        isAuthenticated.set(false);
+        user.set({});
+        localStorage.removeItem('token');
+      }
+      ```
+  - **Uso en React:**
+    - Se importa el hook `useStore` de `@nanostores/react` y las acciones del store.
+    - La acción `login` se llama después de una respuesta exitosa de la API.
+
+      ```tsx
+      // En LoginForm.tsx
+      import { useStore } from '@nanostores/react';
+      import { isAuthenticated, login } from '../../stores/authStore';
+
+      const $isAuthenticated = useStore(isAuthenticated);
+
+      // Dentro de handleSubmit, si la API responde OK:
+      login(data); // Llama a la acción para actualizar el estado global
+      ```
 
 #### Commit de Git para la Fase 1
 
@@ -43,15 +173,55 @@ git commit -m "feat(auth): implement user registration and login flow"
 
 **Objetivo:** Crear una sección privada donde el usuario autenticado pueda gestionar los proyectos y los posts del blog.
 
-- [ ] **Paso 2.1: Crear la página base del Dashboard**
+- [x] **Paso 2.1: Crear la página base del Dashboard**
   - **Acción:** Crear el archivo `src/pages/admin/dashboard.astro`.
+  - **Implementación:** Se crea la página con un layout base y un título. La lógica de protección se añadirá en el siguiente paso.
 
-- [ ] **Paso 2.2: Proteger la ruta del Dashboard**
+- [x] **Paso 2.2: Proteger la ruta del Dashboard**
   - **Acción:** En el `frontmatter` de `dashboard.astro`, añadir lógica para verificar si el usuario está autenticado (consultando el store o la cookie). Si no lo está, redirigir a la página de login usando `Astro.redirect('/auth/login')`.
+  - **Implementación:**
+    - El código en el `frontmatter` se ejecuta en el servidor.
+    - Se usa `Astro.cookies.get('token')` para leer la cookie de autenticación.
+    - Si la cookie no existe, se redirige al usuario a `/auth/login`.
+    - **Nota:** Esto requiere que el `LoginForm.tsx` cree la cookie después de un inicio de sesión exitoso (ej. `document.cookie = 'token=...; path=/;'`).
+    - **Código de ejemplo en `dashboard.astro`:**
+      ```astro
+      ---
+      import LayoutBase from '../../layouts/LayoutBase.astro';
 
-- [ ] **Paso 2.3: Desarrollar componentes de gestión (CRUD)**
+      const token = Astro.cookies.get('token');
+      if (!token) {
+        return Astro.redirect('/auth/login');
+      }
+      ---
+      {/* ... resto del HTML ... */}
+      ```
+
+- [x] **Paso 2.3: Desarrollar componentes de gestión (CRUD)**
   - **Acción:** Crear componentes interactivos como `src/components/admin/ProjectsManager.tsx` y `src/components/admin/PostsManager.tsx`.
   - **Buena Práctica:** Cada componente se encargará de las operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para un tipo de contenido, llamando a los endpoints protegidos de la API con el `accessToken`.
+  - **Implementación (`ProjectsManager.tsx`):**
+    - ... (explicación y código como ya está)
+  - **Implementación (`PostsManager.tsx`):**
+    - Sigue el mismo patrón que `ProjectsManager.tsx`, pero para gestionar las publicaciones del blog.
+    - Apunta al endpoint de `posts` y utiliza el tipo `Post`.
+    - **Código de ejemplo:**
+      ```tsx
+      // src/components/admin/PostsManager.tsx
+      import React, { useState, useEffect } from 'react';
+      import type { Post } from '../../types/Post';
+
+      const PostsManager = () => {
+        // ... (lógica similar a ProjectsManager para obtener y listar posts)
+      };
+      ```
+  - **Integración en el Dashboard:**
+    - Ambos componentes se añaden a `dashboard.astro` con la directiva `client:load`.
+      ```astro
+      // src/pages/admin/dashboard.astro
+      <ProjectsManager client:load />
+      <PostsManager client:load />
+      ```
 
 #### Commit de Git para la Fase 2
 
@@ -66,18 +236,75 @@ git commit -m "feat(admin): create protected dashboard for content management"
 
 **Objetivo:** Modificar las páginas existentes para que muestren el contenido dinámicamente desde el backend.
 
-- [ ] **Paso 3.1: Refactorizar la sección de Proyectos**
+- [x] **Paso 3.1: Refactorizar la sección de Proyectos**
   - **Acción:** En `src/pages/index.astro` (o donde se listen los proyectos), usar `fetch` en el `frontmatter` para obtener los datos de los proyectos desde `api/projects` y pasarlos al componente que los renderiza.
+  - **Implementación:**
+    - Se realiza una llamada `fetch` en el `frontmatter` de `index.astro` a un endpoint público de la API.
+    - Los datos obtenidos se pasan como `props` al componente que renderiza la lista de proyectos (ej. `Projects.astro`).
+    - El componente `Projects.astro` se modifica para recibir y mapear estas `props`.
+    - **Código de ejemplo en `index.astro`:**
+      ```astro
+      ---
+      // Se obtienen los proyectos desde la API
+      const response = await fetch('http://localhost:4000/api/projects/public');
+      const projects = await response.json();
+      ---
+      {/* Se pasan los proyectos al componente */}
+      <Projects projects={projects} />
+      ```
 
-- [ ] **Paso 3.2: Crear las páginas del Blog**
+- [x] **Paso 3.2: Crear las páginas del Blog**
   - **Acción:**
     1. Crear `src/pages/blog/index.astro` para listar todos los posts.
     2. Crear `src/pages/blog/[slug].astro` usando rutas dinámicas para mostrar un post individual.
   - **Buena Práctica:** Astro puede generar estas páginas de forma estática en tiempo de construcción (`getStaticPaths`) o renderizarlas en el servidor bajo demanda (SSR), dependiendo de la configuración.
+  - **Implementación (Índice):**
+    - La página `index.astro` obtiene todos los posts desde un endpoint público y los muestra en una lista.
+      ```astro
+      // src/pages/blog/index.astro
+      const response = await fetch('http://localhost:4000/api/posts/public');
+      const posts = await response.json();
+      ```
+  - **Implementación (Detalle):**
+    - La página `[slug].astro` usa `getStaticPaths` para generar una página por cada post.
+    - `getStaticPaths` obtiene todos los posts y crea un mapa de rutas basado en el `slug`.
+    - La página recibe los datos del post correspondiente a través de `Astro.props`.
+      ```astro
+      // src/pages/blog/[slug].astro
+      export async function getStaticPaths() {
+        const response = await fetch('http://localhost:4000/api/posts/public');
+        const posts = await response.json();
+        return posts.map(post => ({ params: { slug: post.slug }, props: { post } }));
+      }
+      const { post } = Astro.props;
+      ```
 
-- [ ] **Paso 3.3: Tipificar las respuestas de la API**
+- [x] **Paso 3.3: Tipificar las respuestas de la API**
   - **Acción:** Crear/actualizar los archivos en `src/types/` (ej. `Post.ts`, `Project.ts`) para que coincidan con la estructura de datos devuelta por la API.
-  - **Buena Práctica:** Usar TypeScript para tipificar los datos de la API previene errores y mejora el autocompletado durante el desarrollo.
+  - **Buena Práctica:** Usar TypeScript para tipificar los datos de la API previene errores, habilita el autocompletado y sirve como documentación.
+  - **Implementación:**
+    - Se definen interfaces de TypeScript para cada tipo de dato que proviene de la API.
+    - **Código de ejemplo para `Project.ts`:**
+      ```ts
+      // src/types/Project.ts
+      export interface Project {
+        id: number;
+        name: string;
+        description: string;
+        // ... y otras propiedades
+      }
+      ```
+    - **Código de ejemplo para `Post.ts`:**
+      ```ts
+      // src/types/Post.ts
+      export interface Post {
+        id: number;
+        title: string;
+        slug: string;
+        content: string;
+        // ... y otras propiedades
+      }
+      ```
 
 #### Commit de Git para la Fase 3
 
