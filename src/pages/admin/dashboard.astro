@@ -1,0 +1,20 @@
+---
+import ProjectManager from "./ProjectManager";
+import LayoutBase from "../../layouts/LayoutBase.astro";
+
+//const token = Astro.cookies.get("token");
+//if (!token) {
+//return Astro.redirect("../auth/login");
+//}
+---
+
+<LayoutBase title="Admin Dashboard">
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold">Panel de administracion</h1>
+    <p class="mt-4">
+      Bienvenido al Dashboard. Desde aqui podras gestionar el contenido del
+      sitio
+    </p>
+  </div>
+  <ProjectManager client:load />
+</LayoutBase>
