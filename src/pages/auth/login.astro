@@ -1,23 +1,31 @@
 ---
 import LayoutBase from "../../layouts/LayoutBase.astro";
 import LoginForm from "../../components/auth/LoginForm";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "../../components/ui/card";
 ---
 
 <LayoutBase title="Login">
-  <div class="flex justify-center items-center min-h-screen">
-    <div class="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-md">
-      <h1 class="text-2xl font-bold text-center text-white">Iniciar Sesion</h1>
-      <!--formulario react-->
-      <LoginForm />
-      <p class="text-sm text-center text-gray-400">
-        ¿No tienes una cuenta?<br />
-        <a
-          href="/auth/register"
-          class="font-medium"
-          style="color: var(--color-text)"
-          >Regístrate
-        </a>
-      </p>
-    </div>
+  <div class="flex flex-col items-center justify-center min-h-screen px-4">
+    <Card className="w-full max-w-md border-primary/20 shadow-2xl">
+      <CardHeader>
+        <CardTitle className="text-2xl text-center">
+          Iniciar Sesión
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <LoginForm client:load />
+        <p class="text-sm text-center text-muted-foreground">
+          ¿No tienes una cuenta?<br />
+          <a href="/auth/register" class="font-medium text-primary">
+            Regístrate
+          </a>
+        </p>
+      </CardContent>
+    </Card>
   </div>
 </LayoutBase>

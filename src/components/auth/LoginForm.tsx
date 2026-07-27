@@ -1,28 +1,67 @@
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    console.log("Datos a enviar: ", { email, password });
-    alert("Revisa la consola para ver los datos del formulario");
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.PUBLIC_API_BASE_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        },
+      );
+
+      if (response.status === 401) {
+        setError("Email o contraseña incorrectos");
+        return;
+      }
+
+      if (!response.ok) {
+        setError(`Error del servidor (${response.status})`);
+        return;
+      }
+
+      const data = await response.json();
+      const accessToken = data.token.token;
+
+      localStorage.setItem("accessToken", accessToken);
+      document.cookie = `token=${accessToken}; path=/; max-age=3600`;
+
+      window.location.href = "/admin/dashboard";
+    } catch {
+      setError("No se pudo conectar con el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-300"
-        >
-          Email
-        </label>
-        <input
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      <div className="space-y-1.5">
+        <Label htmlFor="email">Email</Label>
+        <Input
           id="email"
           name="email"
           type="email"
@@ -30,29 +69,40 @@ export default function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none  focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium">
-          Contraseña
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-1  focus:ring-blue-500  focus:border-blue-500"
-        />
+
+      <div className="space-y-1.5">
+        <Label htmlFor="password">Contraseña</Label>
+        <div className="relative">
+          <Input
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="pr-9"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {showPassword ? (
+              <EyeOff className="size-4" />
+            ) : (
+              <Eye className="size-4" />
+            )}
+          </button>
+        </div>
       </div>
-      <button
-        type="submit"
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2  focus:ring-blue-500"
-      >
-        Iniciar Sesión
-      </button>
+
+      <Button type="submit" disabled={loading} className="w-full h-9">
+        {loading ? "Ingresando..." : "Iniciar Sesión"}
+      </Button>
     </form>
   );
 }
