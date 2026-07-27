@@ -33,10 +33,7 @@ const { title, description } = Astro.props;
       rel="stylesheet"
     />
   </head>
-  <body>
-    <main>
-      <!--Aqui se injectara cada pagina-->
-      <slot />
-    </main>
+  <body class="flex flex-col min-h-screen">
+    <slot />
   </body>
 </html>
