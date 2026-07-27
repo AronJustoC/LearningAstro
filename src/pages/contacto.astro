@@ -1,0 +1,77 @@
+---
+import LayoutBase from "../layouts/LayoutBase.astro";
+import Header from "../components/sections/Header.astro";
+import Footer from "../components/sections/Footer.astro";
+import Icon from "../components/shared/Icon.astro";
+import ContactForm from "../components/sections/ContactForm";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "../components/ui/card";
+
+const socials = [
+  { name: "GitHub", href: "https://github.com/AronJustoC", icon: "github" },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/aronjusto/",
+    icon: "linkedin",
+  },
+  { name: "Email", href: "mailto:aronchoque72@gmail.com", icon: "email" },
+];
+---
+
+<LayoutBase title="Contacto | Aron Choque">
+  <Header />
+  <main class="flex-1">
+    <section class="py-16 scroll-mt-24">
+      <div class="container max-w-4xl m-auto p-6">
+        <h1 class="text-3xl font-bold text-center mb-2">Contacto</h1>
+        <p class="text-center text-muted-foreground mb-12">
+          ¿Tenés un proyecto en mente? Escribime.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="flex flex-col justify-center gap-4">
+            {
+              socials.map((social) => (
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-link flex items-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium transition-colors"
+                >
+                  <Icon icon={social.icon} class="w-5 h-5" />
+                  {social.name}
+                </a>
+              ))
+            }
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Enviame un mensaje</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ContactForm client:load />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>
+
+<style>
+  .social-link {
+    border-color: var(--border);
+    color: var(--color-text);
+  }
+
+  .social-link:hover {
+    background-color: var(--accent);
+    color: var(--color-primary);
+  }
+</style>
