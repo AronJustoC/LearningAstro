@@ -2,22 +2,44 @@
 import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
 import StatCard from "../../components/admin/StatCard.astro";
 
-//const token = Astro.cookies.get("token");
-//if (!token) {
-//return Astro.redirect("../auth/login");
-//}
+const token = Astro.cookies.get("token")?.value;
+if (!token) {
+  return Astro.redirect("/auth/login");
+}
 
-const totalPosts = 15;
-const totalProjects = 8;
-const newUsers = 3;
+const authHeader = { Authorization: `Bearer ${token}` };
+const [postsRes, projectsRes, usersRes] = await Promise.all([
+  fetch(`${import.meta.env.API_BASE_URL}/posts`, { headers: authHeader }),
+  fetch(`${import.meta.env.API_BASE_URL}/projects`, { headers: authHeader }),
+  fetch(`${import.meta.env.API_BASE_URL}/users`, { headers: authHeader }),
+]);
+
+if (
+  postsRes.status === 401 ||
+  projectsRes.status === 401 ||
+  usersRes.status === 401
+) {
+  return Astro.redirect("/auth/login");
+}
+
+const { posts } = postsRes.ok ? await postsRes.json() : { posts: [] };
+const { projects } = projectsRes.ok
+  ? await projectsRes.json()
+  : { projects: [] };
+const { data: users } = usersRes.ok ? await usersRes.json() : { data: [] };
+const totalPosts = posts?.length ?? 0;
+const totalProjects = projects?.length ?? 0;
+const totalUsers = users?.length ?? 0;
 ---
 
 <LayoutDashboard title="Admin Dashboard">
-  <h1>Dashboard</h1>
-  <p>Bienvenido al panel de administracion.</p>
+  <h1 class="text-2xl font-bold">Dashboard</h1>
+  <p class="text-muted-foreground mt-1">
+    Bienvenido al panel de administración.
+  </p>
   <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 mt-8">
     <StatCard title="Total Posts" value={totalPosts} />
     <StatCard title="Total Proyectos" value={totalProjects} />
-    <StatCard title="Nuevos Usuarios (Mes)" value={newUsers} />
+    <StatCard title="Total Usuarios" value={totalUsers} />
   </div>
 </LayoutDashboard>

@@ -1,33 +1,57 @@
-<aside class="p-4 border border-r-2">
-  <nav>
-    <h2 class="text-2xl mb-8">Admin Panel</h2>
-    <ul class="list-none p-0 m-0 flex flex-col gap-4">
+<aside
+  class="w-64 min-h-screen border-r border-border bg-card p-4 flex flex-col"
+>
+  <nav class="flex flex-col flex-1">
+    <h2 class="text-xl font-semibold mb-6 px-2">Admin Panel</h2>
+    <ul class="flex flex-col gap-1 list-none p-0 m-0">
       <li>
         <a
           href="/admin/dashboard"
-          class="no-underline text-xl transition-colors duration-200"
+          class="sidebar-link block rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors"
           >Dashboard</a
         >
       </li>
       <li>
         <a
           href="/admin/posts"
-          class="no-underline text-xl transition-colors duration-200"
+          class="sidebar-link block rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors"
           >Gestionar Posts</a
         >
       </li>
       <li>
         <a
           href="/admin/projects"
-          class="no-underline text-xl transition-colors duration-200"
+          class="sidebar-link block rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors"
           >Gestionar Proyectos</a
         >
       </li>
       <li>
-        <a href="/" class="no-underline text-xl transition-colors duration-200"
+        <a
+          href="/"
+          class="sidebar-link block rounded-lg px-3 py-2 text-sm font-medium text-foreground transition-colors"
           >Volver al sitio</a
         >
       </li>
     </ul>
+    <button
+      id="logoutBtn"
+      class="mt-auto block w-full text-left rounded-lg px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
+    >
+      Cerrar sesión
+    </button>
   </nav>
 </aside>
+
+<style>
+  .sidebar-link:hover {
+    background-color: var(--accent);
+  }
+</style>
+
+<script>
+  document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    localStorage.removeItem("accessToken");
+    document.cookie = "token=; path=/; max-age=0";
+    window.location.href = "/auth/login";
+  });
+</script>

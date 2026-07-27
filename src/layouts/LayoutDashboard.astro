@@ -28,22 +28,11 @@ const { title, description } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <style>
-      .dashboard-grid {
-        display: grid;
-        grid-template-columns: 250px 1fr;
-        min-height: 100vh;
-      }
-      main {
-        padding: 2rem;
-      }
-    </style>
   </head>
-  <body>
-    <div class="dashboard-grid">
+  <body class="bg-background text-foreground">
+    <div class="flex min-h-screen">
       <Sidebar />
-      <main>
-        <!--Aqui se injectara cada pagina-->
+      <main class="flex-1 p-8 max-w-6xl">
         <slot />
       </main>
     </div>

@@ -1,0 +1,14 @@
+---
+import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
+import ProjectsManager from "../../components/admin/ProjectsManager";
+
+const token = Astro.cookies.get("token")?.value;
+if (!token) {
+  return Astro.redirect("/auth/login");
+}
+---
+
+<LayoutDashboard title="Gestionar Proyectos">
+  <h1 class="text-2xl font-bold mb-6">Gestionar Proyectos</h1>
+  <ProjectsManager client:load />
+</LayoutDashboard>
