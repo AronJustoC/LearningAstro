@@ -1,0 +1,46 @@
+---
+import LayoutBase from "../../layouts/LayoutBase.astro";
+import Header from "../../components/sections/Header.astro";
+import Footer from "../../components/sections/Footer.astro";
+import PostCard from "../../components/shared/PostCard.astro";
+import AuthDialog from "../../components/auth/AuthDialog";
+import type { Post } from "../../types/Post";
+
+const response = await fetch(`${import.meta.env.API_BASE_URL}/posts/public`);
+const responseData = response.ok ? await response.json() : { posts: [] };
+const posts: Post[] = responseData.posts ?? [];
+---
+
+<LayoutBase title="Blog | Aron Choque">
+  <Header />
+  <main class="flex-1">
+    <section class="py-16 scroll-mt-24">
+      <div class="container max-w-6xl m-auto p-6">
+        <div class="flex items-center justify-between mb-8">
+          <h1 class="text-3xl font-bold">Blog</h1>
+          <AuthDialog client:load />
+        </div>
+        {
+          posts.length === 0 ? (
+            <p class="empty-state text-center py-12">
+              Todavía no hay posts publicados. ¡Volvé pronto!
+            </p>
+          ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {posts.map((post) => (
+                <PostCard post={post} />
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>
+
+<style>
+  .empty-state {
+    color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  }
+</style>

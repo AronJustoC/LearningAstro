@@ -35,9 +35,7 @@ const { post } = Astro.props;
 
     <!-- Enlace -->
     <a
-      href="/"
-      target="_blank"
-      rel="noopener noreferrer"
+      href={`/blog/${post.slug}`}
       class="link-more inline-flex items-center self-start gap-2 text-sm font-medium"
       aria-label={`Ver más sobre ${post.title}`}
     >
