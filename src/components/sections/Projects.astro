@@ -2,17 +2,45 @@
 import type { Project } from "../../types";
 import ProjectCard from "../shared/ProjectCard.astro";
 
-const response = await fetch(`${import.meta.env.API_BASE_URL}/projects`);
-const responseData = await response.json();
-const projects: Project[] = responseData.projects;
-console.log("datos recibidos de la api: ", projects);
+const response = await fetch(`${import.meta.env.API_BASE_URL}/projects/public`);
+const responseData = response.ok ? await response.json() : { projects: [] };
+const projects: Project[] = responseData.projects ?? [];
 ---
 
-<section class="py-16">
+<section id="proyectos" class="py-16 scroll-mt-24">
   <div class="container max-w-6xl m-auto p-6">
     <h2 class="text-3xl font-bold text-center mb-8">Mis Proyectos</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {projects.map((project) => <ProjectCard project={project} />)}
+    {
+      projects.length === 0 ? (
+        <p class="empty-state text-center py-12">
+          Todavía no hay proyectos publicados. ¡Volvé pronto!
+        </p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      )
+    }
+    <div class="text-center mt-10">
+      <a href="/proyectos" class="text-sm font-medium link-more">
+        Ver todos los proyectos →
+      </a>
     </div>
   </div>
 </section>
+
+<style>
+  .empty-state {
+    color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  }
+
+  .link-more {
+    color: var(--color-primary);
+  }
+
+  .link-more:hover {
+    opacity: 0.8;
+  }
+</style>

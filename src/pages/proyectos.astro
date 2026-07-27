@@ -1,0 +1,44 @@
+---
+import LayoutBase from "../layouts/LayoutBase.astro";
+import Header from "../components/sections/Header.astro";
+import Footer from "../components/sections/Footer.astro";
+import ProjectCard from "../components/shared/ProjectCard.astro";
+import type { Project } from "../types/Project";
+
+const response = await fetch(
+  `${import.meta.env.API_BASE_URL}/projects/public`,
+);
+const responseData = response.ok ? await response.json() : { projects: [] };
+const projects: Project[] = responseData.projects ?? [];
+---
+
+<LayoutBase title="Proyectos | Aron Choque">
+  <Header />
+  <main class="flex-1">
+    <section class="py-16 scroll-mt-24">
+      <div class="container max-w-6xl m-auto p-6">
+        <h1 class="text-3xl font-bold text-center mb-8">Proyectos</h1>
+        {
+          projects.length === 0 ? (
+            <p class="empty-state text-center py-12">
+              Todavía no hay proyectos publicados. ¡Volvé pronto!
+            </p>
+          ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project) => (
+                <ProjectCard project={project} />
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>
+
+<style>
+  .empty-state {
+    color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  }
+</style>
