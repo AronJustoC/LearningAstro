@@ -5,13 +5,15 @@ import { codeToHtml } from "shiki";
 const sampleCode = `interface Developer {
   name: string;
   role: string;
-  passion: string;
+  focus: string[];
+  location: string;
 }
 
 const aron: Developer = {
-  name: "Aron Justo",
-  role: "Backend Developer",
-  passion: "Building amazing things"
+  name: "Aron Choque",
+  role: "Developer",
+  focus: ["Infra", "Automatizacion", "IA"],
+  location: "Cusco, Peru"
 };
 
 export default aron;`;
@@ -41,23 +43,29 @@ const highlighted = await codeToHtml(sampleCode, {
             class="bg-clip-text text-transparent"
             style="background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));"
           >
-            Aron Justo
+            Aron Choque
           </span>
         </h1>
+
+        <p class="text-lg font-medium opacity-90" style="color: var(--color-text);">
+          Desarrollador
+          <span class="opacity-60 font-normal">· Cusco, Perú</span>
+        </p>
 
         <!-- Descripción -->
         <p
           class="text-lg opacity-70 leading-relaxed max-w-lg"
           style="color: var(--color-text);"
         >
-          Backend Developer. Creo experiencias web simples y elegantes con
-          código limpio.
+          Construyo software con foco en infraestructura y automatización de
+          flujos de trabajo con IA (agentes, MCP, Claude Code). Combino rigor
+          analítico con código limpio y prácticas modernas.
         </p>
 
         <!-- CTA simple -->
         <div class="pt-4">
           <a
-            href="/proyectos"
+            href="/#proyectos"
             class="inline-flex items-center gap-2 text-lg font-medium group transition-colors duration-300"
             style="color: var(--color-primary-dark);"
           >
