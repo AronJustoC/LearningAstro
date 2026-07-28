@@ -2,7 +2,8 @@
 import PostCard from "../shared/PostCard.astro";
 import type { Post } from "../../types/Post.ts";
 
-const response = await fetch(`${import.meta.env.API_BASE_URL}/posts/public`);
+const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const response = await fetch(`${apiBaseUrl}/posts/public`);
 const responseData = response.ok ? await response.json() : { posts: [] };
 const posts: Post[] = responseData.posts ?? [];
 ---

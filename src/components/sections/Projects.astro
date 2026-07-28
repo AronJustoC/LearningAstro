@@ -2,7 +2,8 @@
 import type { Project } from "../../types";
 import ProjectCard from "../shared/ProjectCard.astro";
 
-const response = await fetch(`${import.meta.env.API_BASE_URL}/projects/public`);
+const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const response = await fetch(`${apiBaseUrl}/projects/public`);
 const responseData = response.ok ? await response.json() : { projects: [] };
 const projects: Project[] = responseData.projects ?? [];
 ---

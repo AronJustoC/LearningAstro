@@ -7,7 +7,7 @@ import type { Post } from "../../types/Post";
 
 const { slug } = Astro.params;
 const response = await fetch(
-  `${import.meta.env.API_BASE_URL}/posts/public/${slug}`,
+  `${process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL}/posts/public/${slug}`,
 );
 
 if (!response.ok) {

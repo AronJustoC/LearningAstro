@@ -6,7 +6,8 @@ import PostCard from "../../components/shared/PostCard.astro";
 import AuthDialog from "../../components/auth/AuthDialog";
 import type { Post } from "../../types/Post";
 
-const response = await fetch(`${import.meta.env.API_BASE_URL}/posts/public`);
+const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const response = await fetch(`${apiBaseUrl}/posts/public`);
 const responseData = response.ok ? await response.json() : { posts: [] };
 const posts: Post[] = responseData.posts ?? [];
 ---

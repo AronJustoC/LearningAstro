@@ -8,10 +8,11 @@ if (!token) {
 }
 
 const authHeader = { Authorization: `Bearer ${token}` };
+const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
 const [postsRes, projectsRes, usersRes] = await Promise.all([
-  fetch(`${import.meta.env.API_BASE_URL}/posts`, { headers: authHeader }),
-  fetch(`${import.meta.env.API_BASE_URL}/projects`, { headers: authHeader }),
-  fetch(`${import.meta.env.API_BASE_URL}/users`, { headers: authHeader }),
+  fetch(`${apiBaseUrl}/posts`, { headers: authHeader }),
+  fetch(`${apiBaseUrl}/projects`, { headers: authHeader }),
+  fetch(`${apiBaseUrl}/users`, { headers: authHeader }),
 ]);
 
 if (
