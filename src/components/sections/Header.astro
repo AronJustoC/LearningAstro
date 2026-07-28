@@ -59,6 +59,7 @@ const links = [
           class="p-2.5 rounded-xl transition-all duration-300 active:scale-95 group"
           style="background-color: color-mix(in srgb, var(--color-bg) 10%, var(--color-primary) 10%); color: var(--color-text);"
           aria-label="Cambiar tema"
+          aria-pressed="false"
         >
           <svg
             id="sunIcon"
@@ -119,6 +120,7 @@ const links = [
           class="p-2 rounded-xl transition-all duration-300 active:scale-95 group"
           style="background-color: color-mix(in srgb, var(--color-bg) 10%, var(--color-primary) 10%); color: var(--color-text);"
           aria-label="Cambiar tema"
+          aria-pressed="false"
         >
           <svg
             id="sunIconMobile"
@@ -156,6 +158,8 @@ const links = [
           class="p-2 rounded-xl hover:bg-opacity-10 active:scale-95 transition-all duration-200"
           style="color: var(--color-text);"
           aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
         >
           <svg
             class="w-6 h-6"
@@ -253,9 +257,10 @@ const links = [
   const closeIcon = document.getElementById("closeIcon");
 
   menuBtn?.addEventListener("click", () => {
-    mobileMenu?.classList.toggle("hidden");
+    const isOpen = mobileMenu?.classList.toggle("hidden") === false;
     menuIcon?.classList.toggle("hidden");
     closeIcon?.classList.toggle("hidden");
+    menuBtn.setAttribute("aria-expanded", String(isOpen));
   });
 
   //Toggle
@@ -264,13 +269,11 @@ const links = [
   const htmlElement = document.documentElement;
 
   function applyTheme(theme) {
-    if (theme == "dark") {
-      htmlElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      htmlElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    const isDark = theme === "dark";
+    htmlElement.classList.toggle("dark", isDark);
+    localStorage.setItem("theme", theme);
+    themeToggle?.setAttribute("aria-pressed", String(isDark));
+    themeToggleMobile?.setAttribute("aria-pressed", String(isDark));
   }
   //Desktop
   themeToggle?.addEventListener("click", () => {
@@ -282,4 +285,9 @@ const links = [
     const isDark = htmlElement.classList.contains("dark");
     applyTheme(isDark ? "light" : "dark");
   });
+
+  // Sincroniza aria-pressed con el tema aplicado antes de hidratar (ver LayoutBase.astro)
+  const initialDark = htmlElement.classList.contains("dark");
+  themeToggle?.setAttribute("aria-pressed", String(initialDark));
+  themeToggleMobile?.setAttribute("aria-pressed", String(initialDark));
 </script>

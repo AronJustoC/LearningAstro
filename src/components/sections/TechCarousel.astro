@@ -81,11 +81,11 @@ const categories = [
             <div class="flex flex-wrap justify-center gap-2">
               {category.items.map((tech) => (
                 <div
-                  class="tech-card inline-flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors duration-300"
+                  class="tech-card inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-colors duration-300"
                   style="background-color: color-mix(in srgb, var(--color-bg) 90%, var(--color-primary) 5%); border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);"
                 >
                   {tech.icon && (
-                    <IconCarousel icon={tech.icon} class="w-5 h-5" />
+                    <IconCarousel icon={tech.icon} class="w-8 h-8" />
                   )}
                   <span
                     class="text-xs font-medium whitespace-nowrap"

@@ -1,5 +1,6 @@
 ---
 import type { Project } from "../../types/Project";
+import EntityCard from "./EntityCard.astro";
 
 interface Props {
   project: Project;
@@ -8,143 +9,10 @@ interface Props {
 const { project } = Astro.props;
 ---
 
-<article
-  class="project-card group flex flex-col justify-between rounded-xl border shadow-lg overflow-hidden"
->
-  <!-- Imagen del proyecto -->
-  <div class="image-wrapper relative overflow-hidden rounded-t-xl">
-    {
-      project.imageUrl ? (
-        <img
-          src={project.imageUrl}
-          alt={`Captura de pantalla del proyecto ${project.title}`}
-          loading="lazy"
-          width="400"
-          height="192"
-          class="w-full object-cover h-48 border-b"
-        />
-      ) : (
-        <div class="image-placeholder w-full h-48 border-b flex items-center justify-center">
-          <span class="text-3xl font-bold opacity-30">
-            {project.title.slice(0, 2).toUpperCase()}
-          </span>
-        </div>
-      )
-    }
-  </div>
-
-  <!-- Contenido -->
-  <div class="flex flex-col p-6 space-y-4">
-    <h3 class="text-xl font-semibold text-title">
-      {project.title}
-    </h3>
-
-    <p class="text-sm leading-relaxed text-description">
-      {project.description}
-    </p>
-
-    <!-- Enlace -->
-    {
-      (project.repoUrl || project.liveUrl) && (
-        <a
-          href={project.liveUrl || project.repoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="link-more inline-flex items-center self-start gap-2 text-sm font-medium"
-          aria-label={`Ver más sobre ${project.title}`}
-        >
-          Ver más
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            class="w-4 h-4 arrow-icon"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-            />
-          </svg>
-        </a>
-      )
-    }
-  </div>
-</article>
-
-<style>
-  .project-card {
-    background-color: color-mix(
-      in srgb,
-      var(--color-bg) 90%,
-      var(--color-primary) 6%
-    );
-    border-color: color-mix(in srgb, var(--color-primary) 20%, transparent);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .project-card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    background-color: color-mix(
-      in srgb,
-      var(--color-bg) 90%,
-      var(--color-primary) 10%
-    );
-    border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
-  }
-
-  .image-wrapper img {
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    border-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
-  }
-
-  .image-placeholder {
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--color-primary) 15%, var(--color-bg)),
-      color-mix(in srgb, var(--color-primary-dark) 15%, var(--color-bg))
-    );
-    border-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
-    color: var(--color-primary);
-  }
-
-  .project-card:hover .image-wrapper img {
-    transform: scale(1.05);
-  }
-
-  .text-title {
-    color: var(--color-text);
-  }
-
-  .text-description {
-    color: color-mix(in srgb, var(--color-text) 70%, transparent);
-  }
-
-  .link-more {
-    color: var(--color-primary);
-    transition: all 0.3s ease;
-  }
-
-  .link-more:hover {
-    opacity: 0.8;
-  }
-
-  .arrow-icon {
-    transition: transform 0.3s ease;
-  }
-
-  .project-card:hover .arrow-icon {
-    transform: translateX(0.25rem);
-  }
-
-  /* Accesibilidad: focus visible */
-  .link-more:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
-    border-radius: 0.25rem;
-  }
-</style>
+<EntityCard
+  imageUrl={project.imageUrl}
+  imageAlt={`Captura de pantalla del proyecto ${project.title}`}
+  title={project.title}
+  description={project.description}
+  href={project.liveUrl || project.repoUrl}
+/>

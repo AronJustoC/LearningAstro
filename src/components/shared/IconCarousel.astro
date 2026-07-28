@@ -99,15 +99,10 @@ const content = svgContent?.match(/<svg[^>]*>([\s\S]*)<\/svg>/)?.[1] ?? "";
     <svg
       class:list={[className]}
       viewBox={viewBox}
+      aria-hidden="true"
+      focusable="false"
       {...attrs}
       set:html={content}
     />
   )
 }
-
-<style>
-  svg {
-    width: 4rem;
-    height: 4rem;
-  }
-</style>
