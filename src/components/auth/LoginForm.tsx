@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,9 +52,9 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} aria-busy={loading} className="space-y-5">
       {error && (
-        <Alert variant="destructive">
+        <Alert variant="destructive" role="alert">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -67,8 +67,11 @@ export default function LoginForm() {
           type="email"
           autoComplete="email"
           required
+          aria-invalid={Boolean(error)}
+          disabled={loading}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
@@ -81,15 +84,18 @@ export default function LoginForm() {
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
             required
+            aria-invalid={Boolean(error)}
+            disabled={loading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="pr-9"
+            className="min-h-10 pr-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            disabled={loading}
+            className="absolute right-1 top-1/2 -translate-y-1/2 size-8 flex items-center justify-center text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring rounded-md transition-colors disabled:opacity-50"
           >
             {showPassword ? (
               <EyeOff className="size-4" />
@@ -100,8 +106,19 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <Button type="submit" disabled={loading} className="w-full h-9">
-        {loading ? "Ingresando..." : "Iniciar Sesión"}
+      <Button
+        type="submit"
+        disabled={loading}
+        className="w-full min-h-10 text-[var(--color-on-action)] font-medium bg-[var(--color-action)] hover:bg-[var(--color-action)]/90 hover:-translate-y-px shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring active:translate-y-0"
+      >
+        {loading ? (
+          <span className="flex items-center justify-center gap-2">
+            <Loader2 className="size-4 animate-spin" />
+            Ingresando...
+          </span>
+        ) : (
+          "Iniciar Sesión"
+        )}
       </Button>
     </form>
   );

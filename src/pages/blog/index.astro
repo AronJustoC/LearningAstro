@@ -7,25 +7,43 @@ import AuthDialog from "../../components/auth/AuthDialog";
 import type { Post } from "../../types/Post";
 
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
-const response = await fetch(`${apiBaseUrl}/posts/public`);
-const responseData = response.ok ? await response.json() : { posts: [] };
-const posts: Post[] = responseData.posts ?? [];
+let posts: Post[] = [];
+let loadFailed = false;
+try {
+  const response = await fetch(`${apiBaseUrl}/posts/public`, {
+    signal: AbortSignal.timeout(5000),
+  });
+  if (response.ok) posts = (await response.json()).posts ?? [];
+  else loadFailed = true;
+} catch (error) {
+  console.error("No se pudo cargar posts:", error);
+  loadFailed = true;
+}
 ---
 
-<LayoutBase title="Blog | Aron Choque">
+<LayoutBase title="Blog | Aron J. Choque">
   <Header />
-  <main class="flex-1">
-    <section class="py-16 scroll-mt-24">
-      <div class="container max-w-6xl m-auto p-6">
+  <main id="main" class="flex-1">
+    <section class="py-16 lg:py-20 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="flex items-center justify-between mb-8">
-          <h1 class="text-3xl font-bold">Blog</h1>
+          <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left text-[var(--color-text)]">
+            Blog
+          </h1>
           <AuthDialog client:load />
         </div>
         {
-          posts.length === 0 ? (
-            <p class="empty-state text-center py-12">
-              Todavía no hay posts publicados. ¡Volvé pronto!
-            </p>
+          loadFailed || posts.length === 0 ? (
+            <div class="hairline-t hairline-b py-6">
+              <span class="label block mb-1" style={loadFailed ? "color: var(--color-action);" : undefined}>
+                {loadFailed ? "Error de carga" : "Sin datos"}
+              </span>
+              <p class="text-sm" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
+                {loadFailed
+                  ? "No pudimos cargar los posts ahora. Intenta de nuevo en unos minutos."
+                  : "Todavía no hay posts publicados. ¡Vuelve pronto!"}
+              </p>
+            </div>
           ) : (
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post) => (
@@ -40,8 +58,3 @@ const posts: Post[] = responseData.posts ?? [];
   <Footer />
 </LayoutBase>
 
-<style>
-  .empty-state {
-    color: color-mix(in srgb, var(--color-text) 60%, transparent);
-  }
-</style>

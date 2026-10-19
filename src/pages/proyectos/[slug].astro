@@ -1,0 +1,71 @@
+---
+import LayoutBase from "../../layouts/LayoutBase.astro";
+import Header from "../../components/sections/Header.astro";
+import Footer from "../../components/sections/Footer.astro";
+import { findFeaturedProject } from "../../data/projects";
+import { whatsappUrl } from "../../lib/contact";
+
+const project = findFeaturedProject(Astro.params.slug);
+if (!project) {
+  return Astro.redirect("/proyectos", 302);
+}
+
+const arrow = "M7 17L17 7M8 7h9v9";
+---
+
+<LayoutBase
+  title={`${project.title} | Aron Choque`}
+  description={project.description ?? undefined}
+>
+  <Header />
+  <main id="main" class="flex-1">
+    <article class="py-16 lg:py-20">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <a href="/proyectos" class="link-arrow text-sm mb-8">
+          <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          Todos los proyectos
+        </a>
+
+        <div class="grid lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-16 items-start">
+          <div class="space-y-6">
+            <h1 class="display" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">
+              {project.title}
+            </h1>
+            <p class="text-lg leading-relaxed max-w-xl" style="color: color-mix(in srgb, var(--color-text) 82%, transparent);">
+              {project.description}
+            </p>
+            <div class="flex flex-wrap items-center gap-x-8 gap-y-4 pt-2">
+              <a href="/contacto" class="btn-block">
+                Quiero algo similar
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={arrow}></path></svg>
+              </a>
+              <a
+                href={whatsappUrl(`Hola Aron, vi el proyecto ${project.title} y quiero conversar sobre algo similar para mi empresa.`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="link-arrow"
+              >
+                WhatsApp
+                <span class="sr-only">(se abre en otra pestaña)</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={arrow}></path></svg>
+              </a>
+            </div>
+          </div>
+
+          {
+            project.imageUrl && (
+              <img
+                src={project.imageUrl}
+                alt={`Captura de pantalla del proyecto ${project.title}`}
+                width="1280"
+                height="800"
+                class="w-full h-auto rounded-[2px] hairline"
+              />
+            )
+          }
+        </div>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</LayoutBase>

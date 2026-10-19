@@ -1,6 +1,7 @@
 export interface Project {
   id: number;
   title: string;
+  slug?: string; // solo proyectos destacados con página de detalle
   description?: string | null;
   imageUrl?: string | null;
   repoUrl?: string | null;

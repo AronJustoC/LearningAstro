@@ -1,0 +1,114 @@
+---
+import type { Project } from "../../types/Project";
+import { findFeaturedProject } from "../../data/projects";
+
+interface Props {
+  project: Project;
+  eager?: boolean;
+}
+
+const { project, eager = false } = Astro.props;
+const year = project.createdAt ? new Date(project.createdAt).getFullYear() : null;
+// Solo los destacados tienen página de detalle (se resuelven desde src/data/projects.ts).
+const detailHref =
+  project.slug && findFeaturedProject(project.slug)
+    ? `/proyectos/${project.slug}`
+    : null;
+const muted = "text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]";
+const primaryClass = "link-arrow min-h-11 px-2 text-sm";
+const quietClass =
+  "quiet-link min-h-11 px-2 inline-flex items-center gap-1.5 label transition-colors duration-150";
+---
+
+<li
+  class="project-row motion-reveal-row hairline-b grid grid-cols-1 md:grid-cols-[240px_1fr_auto_auto] gap-6 items-center py-6 transition-colors duration-150"
+>
+  <div class="motion-reveal-media w-full md:w-[240px] aspect-[8/5] shrink-0">
+    {
+      project.imageUrl ? (
+        <img
+          src={project.imageUrl}
+          alt={`Captura de pantalla del proyecto ${project.title}`}
+          width="240"
+          height="150"
+          loading={eager ? "eager" : "lazy"}
+          class="w-full h-full object-cover object-top rounded-[2px] hairline"
+        />
+      ) : (
+        <div class="w-full h-full rounded-[2px] hairline flex items-center justify-center bg-[var(--surface-2)]">
+          <span aria-hidden="true" class={`label text-sm ${muted}`}>
+            {project.title.slice(0, 2).toUpperCase()}
+          </span>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="min-w-0">
+    <h3 class="text-[1.75rem] font-bold leading-tight text-[var(--color-text)]">
+      {project.title}
+    </h3>
+    <p class={`text-sm line-clamp-3 mt-2 max-w-xl ${muted}`}>
+      {project.description}
+    </p>
+  </div>
+
+  <div class="whitespace-nowrap">
+    {year && <span class={`label ${muted}`}>{year}</span>}
+  </div>
+
+  <div class="flex flex-wrap items-center gap-2 shrink-0">
+    {
+      detailHref && (
+        <a
+          href={detailHref}
+          class={primaryClass}
+          aria-label={`Ver detalle del proyecto ${project.title}`}
+        >
+          Ver más
+          <svg class="inline w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+        </a>
+      )
+    }
+    {
+      project.liveUrl && (
+        <a
+          href={project.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={quietClass}
+          aria-label={`Abrir proyecto ${project.title}`}
+        >
+          Abrir
+          <svg class="inline w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9" /></svg>
+        </a>
+      )
+    }
+    {
+      project.repoUrl && (
+        <a
+          href={project.repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={quietClass}
+          aria-label={`Ver repositorio del proyecto ${project.title}`}
+        >
+          Repo
+          <svg class="inline w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9" /></svg>
+        </a>
+      )
+    }
+  </div>
+</li>
+
+<style>
+  .project-row:hover {
+    background-color: var(--surface-2);
+  }
+  .quiet-link {
+    color: color-mix(in srgb, var(--color-text) 68%, transparent);
+  }
+  .quiet-link:hover {
+    color: var(--color-text);
+  }
+</style>

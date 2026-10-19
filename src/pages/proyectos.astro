@@ -2,43 +2,38 @@
 import LayoutBase from "../layouts/LayoutBase.astro";
 import Header from "../components/sections/Header.astro";
 import Footer from "../components/sections/Footer.astro";
-import ProjectCard from "../components/shared/ProjectCard.astro";
+import ProjectRow from "../components/shared/ProjectRow.astro";
 import type { Project } from "../types/Project";
+import { featuredProjects } from "../data/projects";
 
-const response = await fetch(
-  `${process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL}/projects/public`,
-);
-const responseData = response.ok ? await response.json() : { projects: [] };
-const projects: Project[] = responseData.projects ?? [];
+const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+let apiProjects: Project[] = [];
+try {
+  const response = await fetch(`${apiBaseUrl}/projects/public`, {
+    signal: AbortSignal.timeout(5000),
+  });
+  if (response.ok) apiProjects = (await response.json()).projects ?? [];
+} catch (error) {
+  console.error("No se pudo cargar projects:", error);
+}
+// Respaldo: si el backend falla o no tiene proyectos, se muestran los destacados.
+const projects: Project[] = apiProjects.length > 0 ? apiProjects : featuredProjects;
 ---
 
 <LayoutBase title="Proyectos | Aron Choque">
   <Header />
-  <main class="flex-1">
-    <section class="py-16 scroll-mt-24">
-      <div class="container max-w-6xl m-auto p-6">
-        <h1 class="text-3xl font-bold text-center mb-8">Proyectos</h1>
-        {
-          projects.length === 0 ? (
-            <p class="empty-state text-center py-12">
-              Todavía no hay proyectos publicados. ¡Volvé pronto!
-            </p>
-          ) : (
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project) => (
-                <ProjectCard project={project} />
-              ))}
-            </div>
-          )
-        }
+  <main id="main" class="flex-1">
+    <section class="py-16 lg:py-20 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left mb-8 text-[var(--color-text)]">
+          Proyectos
+        </h1>
+        <ul class="hairline-t">
+          {projects.map((project, i) => <ProjectRow project={project} eager={i < 3} />)}
+        </ul>
       </div>
     </section>
   </main>
   <Footer />
 </LayoutBase>
 
-<style>
-  .empty-state {
-    color: color-mix(in srgb, var(--color-text) 60%, transparent);
-  }
-</style>

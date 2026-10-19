@@ -1,25 +1,56 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import "@fontsource/barlow/400.css";
+@import "@fontsource/barlow/500.css";
+@import "@fontsource/barlow/600.css";
+@import "@fontsource/barlow/700.css";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource/barlow-condensed/700.css";
+@import "@fontsource/barlow-condensed/800.css";
 
 @custom-variant dark (&:is(.dark *));
 @layer base {
   :root {
-    --color-bg: #ffffff;
+    --color-bg: #f8fafc;
     --color-text: #111827;
-    --color-primary: #26edf7e8;
-    --color-primary-dark: #0e7490;
+    --color-primary: #12b0ff;
+    --color-primary-dark: #0a74b3;
+    --gradient-brand: linear-gradient(135deg, #085e96, #0a74b3);
+    --color-action: #0a74b3;
+    --color-on-action: #ffffff;
+    --focus-color: #0a74b3;
+    --hairline: color-mix(in srgb, #0f172a 16%, transparent);
+    --surface-2: #eef2f7;
+    --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.06), 0 4px 12px -4px rgb(15 23 42 / 0.08);
+    --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.06), 0 12px 24px -8px rgb(10 116 179 / 0.25);
+    --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+    --motion-fast: 180ms;
+    --motion-base: 420ms;
+    --motion-slow: 700ms;
   }
 
   html.dark {
-    --color-bg: #0f172a;
+    --color-bg: #0b1220;
     --color-text: #f9fafb;
-    --color-primary: #22d3ee;
-    --color-primary-dark: #0891b2;
+    --color-primary: #0e9be6;
+    --color-primary-dark: #0b86cc;
+    --gradient-brand: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    --color-action: #0e9be6;
+    --color-on-action: #0b1220;
+    --focus-color: #0e9be6;
+    --hairline: color-mix(in srgb, #e2e8f0 14%, transparent);
+    --surface-2: #111a2e;
+    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 12px -4px rgb(0 0 0 / 0.5);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.4), 0 12px 24px -8px rgb(14 155 230 / 0.25);
   }
 
   html {
+    color-scheme: light;
+    font-size: 106.25%; /* Barlow tiene el ojo medio pequeño: sube el piso de lectura a ~17px */
+    scroll-padding-top: 5rem;
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
     background-color: var(--color-bg);
     color: var(--color-text);
     transition:
@@ -32,7 +63,22 @@
   }
   body {
     @apply bg-background text-foreground;
+    min-height: 100dvh;
+    line-height: 1.6;
   }
+  html.dark { color-scheme: dark; }
+  html.dark body {
+    line-height: 1.65; /* texto claro sobre oscuro: algo más de aire */
+    letter-spacing: 0.01em;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    line-height: 0.95;
+  }
+  h1, h2 { font-weight: 800; }
+  h3 { font-weight: 700; }
 
   /* Foco visible consistente en toda la app (WCAG 2.4.7) */
   a:focus-visible,
@@ -40,7 +86,7 @@
   input:focus-visible,
   textarea:focus-visible,
   [tabindex]:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--focus-color);
     outline-offset: 2px;
     border-radius: 0.25rem;
   }
@@ -56,9 +102,8 @@
     *,
     *::before,
     *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      animation: none !important;
+      transition: none !important;
       scroll-behavior: auto !important;
     }
   }
@@ -74,9 +119,61 @@
   }
 }
 
+/* Movimiento progresivo: sin JS y con reduced-motion, todo queda visible. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-home-motion] .motion-reveal-row:not(.motion-revealed) {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  html.js [data-home-motion] .motion-reveal-row:not(.motion-revealed) .motion-reveal-media {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  html.js [data-hero-motion] .hero-line-inner {
+    animation: hero-line-in var(--motion-slow) var(--ease-out-expo) both;
+    clip-path: inset(100% 0 0 0);
+    transform: translateY(0.72em);
+  }
+
+  html.js [data-hero-motion] .hero-line:nth-child(2) .hero-line-inner {
+    animation-delay: 90ms;
+  }
+
+  html.js [data-hero-motion] .hero-outline-sweep::after {
+    animation: hero-fill-sweep 900ms var(--ease-out-expo) 240ms both;
+  }
+
+  html.js [data-hero-motion]:not(.hero-motion-complete) .ticker-item,
+  html.js [data-hero-motion]:not(.hero-motion-complete) #panel-dev .line,
+  html.js [data-hero-motion]:not(.hero-motion-complete) .focus-cell {
+    opacity: 0;
+  }
+
+  html.js [data-hero-motion]:not(.hero-motion-complete) #panel-dev .line,
+  html.js [data-hero-motion]:not(.hero-motion-complete) .focus-cell {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes hero-line-in {
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-fill-sweep {
+  0% { clip-path: inset(0 100% 0 0); }
+  52% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 100%); }
+}
+
 @theme inline {
-  --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-heading: var(--font-display);
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -123,23 +220,23 @@
 :root {
   --background: var(--color-bg);
   --foreground: var(--color-text);
-  --card: color-mix(in srgb, var(--color-bg) 90%, var(--color-primary) 6%);
+  --card: var(--surface-2);
   --card-foreground: var(--color-text);
   --popover: var(--card);
   --popover-foreground: var(--color-text);
-  --primary: var(--color-primary);
+  --primary: var(--color-primary-dark);
   --primary-foreground: #ffffff;
-  --secondary: color-mix(in srgb, var(--color-bg) 85%, var(--color-primary) 10%);
+  --secondary: var(--surface-2);
   --secondary-foreground: var(--color-text);
-  --muted: color-mix(in srgb, var(--color-bg) 90%, var(--color-primary) 5%);
+  --muted: var(--surface-2);
   --muted-foreground: color-mix(in srgb, var(--color-text) 60%, transparent);
-  --accent: color-mix(in srgb, var(--color-primary) 15%, var(--color-bg));
+  --accent: color-mix(in srgb, var(--color-primary) 8%, var(--color-bg));
   --accent-foreground: var(--color-text);
   --destructive: #ef4444;
   --border: color-mix(in srgb, var(--color-primary) 20%, transparent);
-  --input: color-mix(in srgb, var(--color-primary) 25%, transparent);
+  --input: #64748b;
   --ring: var(--color-primary);
-  --radius: 0.5rem;
+  --radius: 0.25rem;
   --sidebar: var(--card);
   --sidebar-foreground: var(--color-text);
   --sidebar-primary: var(--color-primary);
@@ -148,4 +245,82 @@
   --sidebar-accent-foreground: var(--color-text);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--color-primary);
+}
+html.dark {
+  --primary: var(--color-primary);
+  --primary-foreground: #0f172a;
+}
+
+/* Mundo visual "panel de control": utilidades reutilizables */
+@layer components {
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.005em;
+    line-height: 0.92;
+  }
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--color-text);
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .hairline-b { border-bottom: 1px solid var(--hairline); }
+  .hairline-t { border-top: 1px solid var(--hairline); }
+  .hairline { border: 1px solid var(--hairline); }
+  .btn-block {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 2px;
+    background: var(--color-action);
+    color: var(--color-on-action);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  }
+  .btn-block:hover { filter: brightness(0.96); }
+  .btn-block:active { transform: translateY(0); filter: brightness(0.96); }
+  .btn-block[aria-disabled="true"], .btn-block:disabled { opacity: 0.5; pointer-events: none; }
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--color-text);
+    transition: gap 0.2s ease, color 0.2s ease;
+  }
+  .stack-tag svg { filter: grayscale(1); transition: filter 0.2s ease; }
+    .link-arrow:hover { gap: 0.75rem; color: var(--focus-color); }
+
+  /* Tipografía consistente: títulos de tarjetas/diálogos y botones comparten la voz display */
+  .font-heading {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  [data-slot="button"] {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+
+/* Modo claro: todo lo relleno de azul lleva un borde negro fino para sentirse menos saturado */
+html:not(.dark) .btn-block,
+html:not(.dark) [class*="bg-[var(--color-action)]"],
+html:not(.dark) [data-slot="button"][class*="bg-primary"] {
+  border: 1px solid #0b1220;
 }

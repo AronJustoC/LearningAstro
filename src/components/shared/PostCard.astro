@@ -11,7 +11,7 @@ const { post } = Astro.props;
 
 <EntityCard
   imageUrl={post.imageUrl}
-  imageAlt={`Captura de pantalla del proyecto ${post.title}`}
+  imageAlt={`Captura de pantalla de ${post.title}`}
   title={post.title}
   description={post.content}
   href={`/blog/${post.slug}`}

@@ -14,13 +14,13 @@ interface Props {
 const { title, value } = Astro.props;
 ---
 
-<Card>
-  <CardHeader>
+<Card className="border-border shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] hover:-translate-y-px transition-all duration-200">
+  <CardHeader className="pb-2">
     <CardTitle className="text-sm font-medium text-muted-foreground">
       {title}
     </CardTitle>
   </CardHeader>
   <CardContent>
-    <p class="text-3xl font-bold">{value}</p>
+    <p class="text-3xl font-bold tracking-tight text-foreground font-[var(--font-mono)]">{value}</p>
   </CardContent>
 </Card>

@@ -57,63 +57,34 @@ const categories = [
 ];
 ---
 
-<section
-  class="py-16 transition-colors duration-300"
-  style="background-color: var(--color-bg);"
->
-  <div class="container max-w-6xl m-auto p-6">
-    <h2
-      class="text-2xl lg:text-3xl font-bold text-center mb-10"
-      style="color: var(--color-text);"
-    >
-      Stack & Herramientas
+<section class="py-16 lg:py-20">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <h2 class="display text-[clamp(2.25rem,5vw,3.5rem)] text-left mb-8 text-[var(--color-text)]">
+      Stack
     </h2>
-    <div class="space-y-8">
+
+    <div class="hairline-t">
       {
         categories.map((category) => (
-          <div>
-            <h3
-              class="text-xs font-semibold uppercase tracking-wider text-center mb-3 opacity-50"
-              style="color: var(--color-text);"
-            >
+          <div class="motion-reveal-row hairline-b py-5 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+            <span class="label w-56 shrink-0 text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
               {category.title}
-            </h3>
-            <div class="flex flex-wrap justify-center gap-2">
+            </span>
+            <ul class="flex flex-wrap items-center gap-2 flex-1">
               {category.items.map((tech) => (
-                <div
-                  class="tech-card inline-flex items-center gap-1.5 px-2 py-1.5 rounded-lg border transition-colors duration-300"
-                  style="background-color: color-mix(in srgb, var(--color-bg) 90%, var(--color-primary) 5%); border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);"
-                >
+                <li class="stack-tag inline-flex items-center gap-2 pr-3 min-h-8 text-sm">
                   {tech.icon && (
-                    <IconCarousel icon={tech.icon} class="w-8 h-8" />
+                    <IconCarousel icon={tech.icon} class="w-4 h-4 shrink-0" />
                   )}
-                  <span
-                    class="text-xs font-medium whitespace-nowrap"
-                    style="color: var(--color-text);"
-                  >
+                  <span class="text-sm whitespace-nowrap text-[var(--color-text)]">
                     {tech.name}
                   </span>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ))
       }
     </div>
   </div>
 </section>
-
-<style>
-  .tech-card:hover {
-    background-color: color-mix(
-      in srgb,
-      var(--color-bg) 90%,
-      var(--color-primary) 10%
-    ) !important;
-    border-color: color-mix(
-      in srgb,
-      var(--color-primary) 40%,
-      transparent
-    ) !important;
-  }
-</style>

@@ -21,21 +21,21 @@ export default function AuthDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger render={<Button variant="outline" size="sm" />}>
+      <DialogTrigger render={<Button variant="outline" className="min-h-10 px-4 hover:-translate-y-px shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-200 active:translate-y-0" />}>
         Ingresar
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md shadow-[var(--shadow-lift)] border-border">
         <DialogHeader>
-          <DialogTitle className="text-xl text-center">
+          <DialogTitle className="text-xl text-center font-semibold text-foreground">
             {tab === "login" ? "Iniciar Sesión" : "Crear Cuenta"}
           </DialogTitle>
         </DialogHeader>
         <Tabs value={tab} onValueChange={(value) => setTab(value as string)}>
-          <TabsList className="w-full">
-            <TabsTrigger value="login" className="flex-1">
+          <TabsList className="w-full h-11 p-1 bg-muted/60">
+            <TabsTrigger value="login" className="flex-1 min-h-9 transition-all duration-200">
               Ingresar
             </TabsTrigger>
-            <TabsTrigger value="register" className="flex-1">
+            <TabsTrigger value="register" className="flex-1 min-h-9 transition-all duration-200">
               Registrarme
             </TabsTrigger>
           </TabsList>

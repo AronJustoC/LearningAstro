@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Impeccable: capturas y notas locales de diseño
+.impeccable/
+
+# El proyecto usa bun (bun.lock)
+package-lock.json

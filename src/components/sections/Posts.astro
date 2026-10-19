@@ -1,47 +1,122 @@
 ---
-import PostCard from "../shared/PostCard.astro";
 import type { Post } from "../../types/Post.ts";
 
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
-const response = await fetch(`${apiBaseUrl}/posts/public`);
-const responseData = response.ok ? await response.json() : { posts: [] };
-const posts: Post[] = responseData.posts ?? [];
+let posts: Post[] = [];
+let loadFailed = false;
+try {
+  const response = await fetch(`${apiBaseUrl}/posts/public`, {
+    signal: AbortSignal.timeout(5000),
+  });
+  if (response.ok) posts = (await response.json()).posts ?? [];
+  else loadFailed = true;
+} catch (error) {
+  console.error("No se pudo cargar posts:", error);
+  loadFailed = true;
+}
+
+const formatDate = (isoString?: string) => {
+  if (!isoString) return "";
+  try {
+    const d = new Date(isoString);
+    return new Intl.DateTimeFormat("es-PE", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(d);
+  } catch {
+    return "";
+  }
+};
 ---
 
-<section id="blog" class="py-16 scroll-mt-24">
-  <div class="container max-w-6xl m-auto p-6">
-    <h2 class="text-3xl font-bold text-center mb-8">Mis Posts</h2>
-    {
-      posts.length === 0 ? (
-        <p class="empty-state text-center py-12">
-          Todavía no hay posts publicados. ¡Volvé pronto!
-        </p>
-      ) : (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((post) => (
-            <PostCard post={post} />
-          ))}
-        </div>
-      )
-    }
-    <div class="text-center mt-10">
-      <a href="/blog" class="text-sm font-medium link-more">
-        Ver todos los posts →
+<section id="blog" class="py-16 lg:py-20 scroll-mt-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-baseline justify-between mb-8">
+      <h2 class="display text-[clamp(2.25rem,5vw,3.5rem)] text-[var(--color-text)]">
+        Blog
+      </h2>
+      {
+        posts.length > 0 && (
+          <span class="label text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
+            {posts.length} registros
+          </span>
+        )
+      }
+    </div>
+
+    <div class="hairline-t">
+      {
+        loadFailed ? (
+          <div class="hairline-b py-6">
+            <span class="label text-[var(--color-action)] block mb-1">Error de carga</span>
+            <p class="text-sm text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
+              No pudimos cargar los posts ahora. Intenta de nuevo en unos minutos.
+            </p>
+          </div>
+        ) : posts.length === 0 ? (
+          <div class="hairline-b py-6">
+            <span class="label text-[color-mix(in_srgb,var(--color-text)_75%,transparent)] block mb-1">Sin datos</span>
+            <p class="text-sm text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
+              Todavía no hay posts publicados. ¡Vuelve pronto!
+            </p>
+          </div>
+        ) : (
+          <ul class="divide-y-0">
+            {posts.map((post) => {
+              const formattedDate = formatDate(post.createdAt);
+              return (
+                <li class="post-row hairline-b grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 items-center py-5 transition-colors duration-150">
+                  <div class="whitespace-nowrap">
+                    {formattedDate && (
+                      <span class="label text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
+                        {formattedDate}
+                      </span>
+                    )}
+                  </div>
+
+                  <div class="min-w-0">
+                    <h3 class="text-[1.75rem] font-bold leading-tight text-[var(--color-text)]">
+                      {post.title}
+                    </h3>
+                  </div>
+
+                  <div class="flex items-center gap-2 shrink-0">
+                    <a
+                      href={`/blog/${post.slug}`}
+                      class="action-btn hairline rounded-[2px] min-h-11 px-4 inline-flex items-center justify-center label transition-all duration-150"
+                      aria-label={`Leer post ${post.title}`}
+                    >
+                      Leer <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
+                    </a>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )
+      }
+    </div>
+
+    <div class="mt-8">
+      <a href="/blog" class="link-arrow text-sm">
+        Ver todos los posts <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
       </a>
     </div>
   </div>
 </section>
 
 <style>
-  .empty-state {
-    color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  .post-row:hover {
+    background-color: var(--surface-2);
   }
 
-  .link-more {
-    color: var(--color-primary);
+  .action-btn {
+    color: var(--color-text);
   }
 
-  .link-more:hover {
-    opacity: 0.8;
+  .action-btn:hover {
+    border-color: var(--focus-color);
+    transform: translateY(-1px);
   }
 </style>

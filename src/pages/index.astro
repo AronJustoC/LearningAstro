@@ -1,5 +1,6 @@
 ---
 import LayoutBase from "../layouts/LayoutBase.astro";
+import StatusStrip from "../components/sections/StatusStrip.astro";
 import Header from "../components/sections/Header.astro";
 import Hero from "../components/sections/Hero.astro";
 import Projects from "../components/sections/Projects.astro";
@@ -9,12 +10,180 @@ import Posts from "../components/sections/Posts.astro";
 ---
 
 <LayoutBase title="Portfolio">
+  <StatusStrip />
   <Header />
-  <main class="flex-1">
+  <main id="main" class="flex-1" data-home-motion>
     <Hero />
-    <TechCarousel />
     <Projects />
+    <TechCarousel />
     <Posts />
   </main>
   <Footer />
 </LayoutBase>
+
+<script>
+  const motionPreference = window.matchMedia(
+    "(prefers-reduced-motion: no-preference)",
+  );
+
+  if (motionPreference.matches) {
+    const motionSafety = window.setTimeout(() => {
+      document
+        .querySelectorAll<HTMLElement>(".motion-reveal-row")
+        .forEach((row) => row.classList.add("motion-revealed"));
+    }, 1500);
+    const easeOutExpo = "cubic-bezier(.16, 1, .3, 1)";
+    const hero = document.querySelector<HTMLElement>("[data-hero-motion]");
+
+    if (hero && hero.dataset.motionPlayed !== "true") {
+      hero.dataset.motionPlayed = "true";
+
+      hero.querySelectorAll<HTMLElement>(".ticker-item").forEach((item, index) => {
+        item.animate(
+          [
+            { opacity: 0 },
+            { opacity: 1 },
+          ],
+          {
+            duration: 300,
+            delay: 40 + index * 45,
+            easing: easeOutExpo,
+            fill: "forwards",
+          },
+        );
+      });
+
+      const codeLines = hero.querySelectorAll<HTMLElement>("#panel-dev .line");
+      codeLines.forEach((line, index) => {
+        line.animate(
+          [
+            { opacity: 0, transform: "translateY(10px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          {
+            duration: 440,
+            delay: 180 + index * 45,
+            easing: easeOutExpo,
+            fill: "forwards",
+          },
+        );
+      });
+
+      hero.querySelectorAll<HTMLElement>(".focus-cell").forEach((cell, index) => {
+        cell.animate(
+          [
+            { opacity: 0, transform: "translateY(10px)" },
+            { opacity: 1, transform: "translateY(0)" },
+          ],
+          {
+            duration: 380,
+            delay: 1080 + index * 70,
+            easing: easeOutExpo,
+            fill: "forwards",
+          },
+        );
+      });
+
+      const lastLine = codeLines.item(codeLines.length - 1);
+      if (lastLine) {
+        const caret = document.createElement("span");
+        caret.className = "terminal-caret";
+        caret.setAttribute("aria-hidden", "true");
+        lastLine.append(caret);
+        caret.animate(
+          [
+            { opacity: 1 },
+            { opacity: 0 },
+            { opacity: 1 },
+          ],
+          {
+            duration: 1000,
+            iterations: 3,
+            easing: "steps(1, end)",
+          },
+        );
+      }
+
+      window.setTimeout(() => {
+        hero.classList.add("hero-motion-complete");
+      }, 1600);
+    }
+
+    const revealRows = Array.from(
+      document.querySelectorAll<HTMLElement>(".motion-reveal-row"),
+    );
+    let observer: IntersectionObserver | undefined;
+
+    const revealRow = (row: HTMLElement, delay = 0) => {
+      if (row.classList.contains("motion-revealed")) return;
+
+      const rowAnimation = row.animate(
+        [
+          { opacity: 0, transform: "translateY(14px)" },
+          { opacity: 1, transform: "translateY(0)" },
+        ],
+        {
+          duration: 420,
+          delay,
+          easing: easeOutExpo,
+          fill: "forwards",
+        },
+      );
+
+      const media = row.querySelector<HTMLElement>(".motion-reveal-media");
+      const mediaAnimation = media?.animate(
+        [
+          { clipPath: "inset(0 0 100% 0)" },
+          { clipPath: "inset(0 0 0 0)" },
+        ],
+        {
+          duration: 520,
+          delay,
+          easing: easeOutExpo,
+          fill: "forwards",
+        },
+      );
+
+      rowAnimation.finished
+        .then(() => {
+          row.classList.add("motion-revealed");
+          rowAnimation.cancel();
+          mediaAnimation?.cancel();
+        })
+        .catch(() => {});
+    };
+
+    const revealAll = () => {
+      revealRows.forEach((row) => {
+        observer?.unobserve(row);
+        row.classList.add("motion-revealed");
+      });
+    };
+
+    if ("IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries
+            .filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.15)
+            .sort((a, b) => {
+              const position = a.target.compareDocumentPosition(b.target);
+              return position & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+            })
+            .forEach((entry, index) => {
+              const row = entry.target as HTMLElement;
+              observer?.unobserve(row);
+              revealRow(row, index * 70);
+            });
+        },
+        { threshold: 0.15 },
+      );
+
+      revealRows.forEach((row) => observer?.observe(row));
+    } else {
+      revealAll();
+    }
+
+    window.clearTimeout(motionSafety);
+    window.setTimeout(revealAll, 1500);
+  }
+</script>

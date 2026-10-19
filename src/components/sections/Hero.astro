@@ -1,8 +1,9 @@
 ---
 import { codeToHtml } from "shiki";
+import { whatsappUrl } from "../../lib/contact";
+import Icon from "../shared/Icon.astro";
 
-// Código TypeScript minimalista
-const sampleCode = `interface Developer {
+const devCode = `interface Developer {
   name: string;
   role: string;
   focus: string[];
@@ -12,158 +13,230 @@ const sampleCode = `interface Developer {
 const aron: Developer = {
   name: "Aron Choque",
   role: "Developer",
-  focus: ["Infra", "Automatizacion", "IA"],
-  location: "Cusco, Peru"
+  focus: ["Infra", "Automatización", "IA"],
+  location: "Cusco, Perú"
 };
 
 export default aron;`;
 
-// Genera el HTML coloreado con Shiki
-const highlighted = await codeToHtml(sampleCode, {
-  lang: "typescript",
-  theme: "vitesse-dark",
-});
+const stackCode = `{
+  "infra": ["Docker", "GitHub Actions", "PostgreSQL"],
+  "backend": ["Node.js", "Express", "NestJS", "Prisma"],
+  "frontend": ["Astro", "React", "Tailwind CSS"],
+  "ia": ["Claude Code", "MCP", "Agentes"]
+}`;
+
+const opts = { theme: "github-dark" } as const;
+const [devHtml, stackHtml] = await Promise.all([
+  codeToHtml(devCode, { lang: "typescript", ...opts }),
+  codeToHtml(stackCode, { lang: "json", ...opts }),
+]);
+
+const ticker = ["Astro", "TypeScript", "Node.js", "PostgreSQL", "Docker", "Claude Code"];
+const focus = [
+  { word: "Plataformas web", text: "Sitios, tiendas y sistemas a tu medida.", href: "/#proyectos" },
+  { word: "Automatización", text: "Menos tareas manuales en tus procesos.", href: "/#proyectos" },
+  { word: "Agentes de IA", text: "Asistentes que ejecutan tareas por ti.", href: "/contacto" },
+];
 ---
 
-<section
-  class="relative min-h-[75vh] flex items-center py-20 transition-colors duration-300"
-  style="background-color: var(--color-bg);"
->
-  <div class="max-w-6xl mx-auto px-6 lg:px-8 w-full">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
-      <!-- Columna Izquierda: Texto -->
-      <div class="space-y-6 order-2 lg:order-1">
-        <!-- Título -->
-        <h1
-          class="text-5xl lg:text-6xl font-bold leading-tight"
-          style="color: var(--color-text);"
-        >
-          Hola, soy
-          <span
-            class="bg-clip-text text-transparent"
-            style="background-image: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));"
-          >
-            Aron Choque
+<section aria-labelledby="hero-title" data-hero-motion>
+  <!-- Ticker de stack -->
+  <div class="hairline-b">
+    <div
+      class="ticker max-w-7xl mx-auto px-6 lg:px-8 h-9 flex items-center gap-x-6 overflow-x-auto label whitespace-nowrap"
+      style="color: color-mix(in srgb, var(--color-text) 72%, transparent);"
+    >
+      <span class="ticker-item inline-flex items-center gap-2" style="color: color-mix(in srgb, var(--color-text) 60%, transparent);">
+        <span class="inline-block w-1.5 h-1.5" style="background: var(--color-action);" aria-hidden="true"></span>
+        Stack
+      </span>
+      {ticker.map((name) => <span class="ticker-item">{name}</span>)}
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
+    <div class="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
+      <!-- Texto -->
+      <div class="space-y-8">
+        <h1 id="hero-title" class="display" style="font-size: clamp(2.5rem, 5.6vw, 5rem); overflow-wrap: anywhere; hyphens: auto;">
+          <span class="hero-line block">
+            <span class="hero-line-inner block">Software a medida</span>
+          </span>
+          <span class="hero-line block">
+            <span class="hero-line-inner hero-outline-sweep outline-text block" data-text="para tu empresa.">para tu empresa.</span>
           </span>
         </h1>
 
-        <p class="text-lg font-medium opacity-90" style="color: var(--color-text);">
-          Desarrollador
-          <span class="opacity-60 font-normal">· Cusco, Perú</span>
-        </p>
+        <div class="space-y-4 max-w-xl">
+          <p class="text-lg font-medium">
+            Desarrollo de software para empresas
+            <span style="color: color-mix(in srgb, var(--color-text) 70%, transparent);" class="font-normal">
+              · Cusco, Perú
+            </span>
+          </p>
+          <p class="text-base leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 80%, transparent);">
+            Desarrollo soluciones de software para empresas y negocios:
+            plataformas web, sistemas a medida, automatización de procesos y
+            agentes de IA. Te acompaño desde la idea hasta que funciona.
+          </p>
+        </div>
 
-        <!-- Descripción -->
-        <p
-          class="text-lg opacity-70 leading-relaxed max-w-lg"
-          style="color: var(--color-text);"
-        >
-          Construyo software con foco en infraestructura y automatización de
-          flujos de trabajo con IA (agentes, MCP, Claude Code). Combino rigor
-          analítico con código limpio y prácticas modernas.
-        </p>
-
-        <!-- CTA simple -->
-        <div class="pt-4">
-          <a
-            href="/#proyectos"
-            class="inline-flex items-center gap-2 text-lg font-medium group transition-colors duration-300"
-            style="color: var(--color-primary-dark);"
-          >
-            Ver proyectos
-            <svg
-              class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
+        <div class="hero-actions">
+          <a href="/contacto" class="hero-primary">Hablemos de tu proyecto</a>
+          <a href="/#proyectos" class="hero-secondary">Ver proyectos</a>
+          <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" class="hero-tertiary label">
+            <Icon icon="whatsapp" class="w-4 h-4" aria-hidden="true" />
+            WhatsApp
+            <span class="sr-only">(se abre en otra pestaña)</span>
           </a>
         </div>
       </div>
 
-      <!-- Columna Derecha: Código minimalista -->
-      <div class="order-2 lg:order-2">
-        <div class="relative">
-          <!-- Code block -->
-          <div
-            class="relative rounded-xl overflow-hidden border shadow-2xl"
-            style="background-color: color-mix(in srgb, var(--color-bg) 98%, var(--color-primary) 20%); border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);"
-          >
-            <!-- Header minimalista -->
-            <div
-              class="flex items-center gap-2 px-4 py-2.5 border-b"
-              style="border-color: color-mix(in srgb, var(--color-primary) 15%, transparent);"
-            >
-              <div class="flex gap-1.5">
-                <div
-                  class="w-2.5 h-2.5 rounded-full opacity-50"
-                  style="background-color: var(--color-text);"
-                >
-                </div>
-                <div
-                  class="w-2.5 h-2.5 rounded-full opacity-50"
-                  style="background-color: var(--color-text);"
-                >
-                </div>
-                <div
-                  class="w-2.5 h-2.5 rounded-full opacity-50"
-                  style="background-color: var(--color-text);"
-                >
-                </div>
-              </div>
-              <span
-                class="text-xs font-mono ml-2 opacity-50"
-                style="color: var(--color-text);">developer.ts</span
-              >
-            </div>
-
-            <!-- Code content con Shiki -->
-            <div class="code-wrapper p-6 overflow-x-auto">
-              <Fragment set:html={highlighted} />
-            </div>
+      <!-- Panel terminal -->
+      <div class="terminal min-w-0">
+        <div class="flex items-center hairline-b-dark">
+          <div role="tablist" aria-label="Archivos" class="flex">
+            <button role="tab" id="tab-dev" aria-controls="panel-dev" aria-selected="true" class="tab">developer.ts</button>
+            <button role="tab" id="tab-stack" aria-controls="panel-stack" aria-selected="false" tabindex="-1" class="tab">stack.json</button>
           </div>
         </div>
+
+        <div id="panel-dev" role="tabpanel" aria-labelledby="tab-dev" tabindex="0" class="code-wrapper p-5 overflow-x-auto">
+          <Fragment set:html={devHtml} />
+        </div>
+        <div id="panel-stack" role="tabpanel" aria-labelledby="tab-stack" tabindex="0" hidden class="code-wrapper p-5 overflow-x-auto">
+          <Fragment set:html={stackHtml} />
+        </div>
+
+        <div class="flex items-center justify-between hairline-t-dark px-4 h-9 label" style="color: #94a3b8;">
+          <span id="panel-lang">TypeScript</span>
+          <span>UTF-8 · LF</span>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Fila de foco -->
+  <div class="hairline-t hairline-b">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-3">
+      {
+        focus.map((item, i) => (
+          <a
+            href={item.href}
+            class:list={["focus-cell px-6 lg:px-8 py-8 flex flex-col gap-2 transition-colors duration-150", i > 0 && "md:border-l border-t md:border-t-0"]}
+            style="border-color: var(--hairline);"
+          >
+            <span class="display" style="font-size: 1.75rem; font-weight: 700;">{item.word}</span>
+            <span style="color: color-mix(in srgb, var(--color-text) 78%, transparent);" class="text-sm">{item.text}</span>
+          </a>
+        ))
+      }
     </div>
   </div>
 </section>
 
 <style>
-  /* Hacer el fondo de Shiki transparente */
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; }
+  .hero-actions > a { display: inline-flex; align-items: center; min-height: 2.75rem; transition: color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease; }
+  .hero-primary { padding: 0 0.5rem 0 0.75rem; border-left: 2px solid var(--color-action); font: 700 1.0625rem var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; }
+  .hero-secondary { color: color-mix(in srgb, var(--color-text) 72%, transparent); padding: 0 0.25rem; text-underline-offset: 6px; }
+  .hero-secondary:hover { color: var(--color-text); text-decoration: underline; }
+  .hero-tertiary { gap: 0.5rem; color: color-mix(in srgb, var(--color-text) 68%, transparent); }
+  .hero-primary:hover { color: var(--color-action); background: color-mix(in srgb, var(--color-action) 6%, transparent); }
+  .hero-tertiary:hover { color: var(--color-text); }
+  .hero-actions > a:active { opacity: 0.68; }
+  @media (max-width: 480px) {
+    .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem; }
+    .hero-primary { grid-column: 1 / -1; width: max-content; }
+  }
+  .focus-cell:hover { background-color: var(--surface-2); }
+  .hero-outline-sweep { position: relative; }
+  .hero-outline-sweep::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: var(--color-text);
+    -webkit-text-stroke: 0 transparent;
+    clip-path: inset(0 0 0 100%);
+  }
+  .ticker { -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); }
+  .terminal {
+    background-color: #0b1220;
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    color: #e2e8f0;
+    box-shadow: var(--shadow-lift);
+  }
+  .hairline-b-dark { border-bottom: 1px solid rgb(226 232 240 / 0.14); }
+  .hairline-t-dark { border-top: 1px solid rgb(226 232 240 / 0.14); }
+  .tab {
+    height: 2.25rem;
+    padding: 0 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #94a3b8;
+    border-right: 1px solid rgb(226 232 240 / 0.14);
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  .tab:hover { color: #e2e8f0; }
+  .tab[aria-selected="true"] {
+    color: #e2e8f0;
+    border-bottom-color: #0e9be6;
+  }
+  .tab:focus-visible { outline: 2px solid #0e9be6; outline-offset: -2px; }
+
   .code-wrapper :global(.shiki),
   .code-wrapper :global(pre) {
     background-color: transparent !important;
     padding: 0;
     margin: 0;
   }
-
   .code-wrapper :global(code) {
-    font-family: "Fira Code", ui-monospace, monospace;
-    font-size: 0.9em;
-    line-height: 1.5;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.7;
     display: block;
   }
-
-  /* Scrollbar minimalista */
-  .code-wrapper {
-    scrollbar-width: thin;
-  }
-
-  .code-wrapper::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .code-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .code-wrapper::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--color-primary) 25%, transparent);
-    border-radius: 2px;
+  #panel-dev :global(.line) { display: inline-block; min-width: 100%; }
+  .code-wrapper { scrollbar-width: thin; }
+  :global(.terminal-caret) {
+    display: inline-block;
+    width: 0.58em;
+    height: 1em;
+    margin-left: 0.2em;
+    vertical-align: -0.14em;
+    background: #e2e8f0;
   }
 </style>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+  const langs: Record<string, string> = { "tab-dev": "TypeScript", "tab-stack": "JSON" };
+  const select = (tab: HTMLButtonElement) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute("aria-controls") ?? "");
+      if (panel) panel.hidden = !on;
+    });
+    const lang = document.getElementById("panel-lang");
+    if (lang) lang.textContent = langs[tab.id] ?? "";
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (e) => {
+      const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
+      if (!keys.includes(e.key)) return;
+      e.preventDefault();
+      const next =
+        e.key === "Home" ? tabs[0]
+        : e.key === "End" ? tabs[tabs.length - 1]
+        : tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus();
+      select(next);
+    });
+  });
+</script>

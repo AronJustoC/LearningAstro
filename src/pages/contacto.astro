@@ -4,59 +4,67 @@ import Header from "../components/sections/Header.astro";
 import Footer from "../components/sections/Footer.astro";
 import Icon from "../components/shared/Icon.astro";
 import ContactForm from "../components/sections/ContactForm";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "../components/ui/card";
+import { CONTACT_EMAIL, WHATSAPP_DISPLAY, whatsappUrl } from "../lib/contact";
 
-const socials = [
-  { name: "GitHub", href: "https://github.com/AronJustoC", icon: "github" },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/in/aronjusto/",
-    icon: "linkedin",
-  },
-  { name: "Email", href: "mailto:aronchoque72@gmail.com", icon: "email" },
+// Canales directos, en orden de preferencia: WhatsApp y correo primero.
+const channels = [
+  { label: "WhatsApp", value: WHATSAPP_DISPLAY, href: whatsappUrl(), icon: "whatsapp" },
+  { label: "Correo", value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}`, icon: "email" },
+  { label: "GitHub", value: "AronJustoC", href: "https://github.com/AronJustoC", icon: "github" },
+  { label: "LinkedIn", value: "aronjusto", href: "https://www.linkedin.com/in/aronjusto/", icon: "linkedin" },
 ];
+const isExternal = (href: string) => href.startsWith("http");
 ---
 
-<LayoutBase title="Contacto | Aron Choque">
+<LayoutBase title="Contacto | Aron J. Choque">
   <Header />
-  <main class="flex-1">
-    <section class="py-16 scroll-mt-24">
-      <div class="container max-w-4xl m-auto p-6">
-        <h1 class="text-3xl font-bold text-center mb-2">Contacto</h1>
-        <p class="text-center text-muted-foreground mb-12">
-          ¿Tenés un proyecto en mente? Escribime.
-        </p>
+  <main id="main" class="flex-1">
+    <section class="py-16 lg:py-20">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="max-w-2xl mb-12 lg:mb-16">
+          <h1 class="display mb-5" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">
+            Hablemos de tu proyecto
+          </h1>
+          <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
+            Cuéntame qué necesitas resolver en tu empresa o negocio. Te respondo
+            con una propuesta clara y los siguientes pasos.
+          </p>
+        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="flex flex-col justify-center gap-4">
-            {
-              socials.map((social) => (
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="social-link flex items-center gap-3 rounded-lg border px-4 py-3 text-sm font-medium transition-colors"
-                >
-                  <Icon icon={social.icon} class="w-5 h-5" />
-                  {social.name}
-                </a>
-              ))
-            }
+        <div class="grid lg:grid-cols-[1.25fr_1fr] gap-12 lg:gap-16 items-start">
+          <!-- Formulario -->
+          <div class="form-panel hairline rounded-[2px] p-6 sm:p-8">
+            <ContactForm client:load />
+            <p class="text-sm mt-5" style="color: color-mix(in srgb, var(--color-text) 72%, transparent);">
+              El formulario prepara el mensaje en tu aplicación de correo.
+            </p>
           </div>
+          <!-- Canales directos -->
+          <aside aria-labelledby="canales-title" class="lg:sticky lg:top-28">
+            <h2 id="canales-title" class="display mb-4" style="font-size: 1.75rem;">Canales directos</h2>
+            <ul class="hairline-t">
+              {
+                channels.map((c) => (
+                  <li class="hairline-b">
+                    <a
+                      href={c.href}
+                      target={isExternal(c.href) ? "_blank" : undefined}
+                      rel={isExternal(c.href) ? "noopener noreferrer" : undefined}
+                      class="channel grid grid-cols-[1.5rem_5rem_1fr] sm:grid-cols-[1.5rem_6rem_1fr] items-center gap-3 sm:gap-4 min-h-14 px-1 transition-colors duration-150"
+                    >
+                      <Icon icon={c.icon} class="w-5 h-5" />
+                      <span class="label">{c.label}</span>
+                      <span class="text-sm sm:text-base [overflow-wrap:anywhere]">
+                        {c.value}
+                        {isExternal(c.href) && <span class="sr-only"> (se abre en otra pestaña)</span>}
+                      </span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </aside>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Enviame un mensaje</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ContactForm client:load />
-            </CardContent>
-          </Card>
         </div>
       </div>
     </section>
@@ -65,13 +73,17 @@ const socials = [
 </LayoutBase>
 
 <style>
-  .social-link {
-    border-color: var(--border);
+  .channel {
     color: var(--color-text);
   }
-
-  .social-link:hover {
-    background-color: var(--accent);
-    color: var(--color-primary);
+  .channel .label {
+    color: color-mix(in srgb, var(--color-text) 68%, transparent);
+  }
+  .channel:hover {
+    background-color: var(--surface-2);
+    color: var(--focus-color);
+  }
+  .form-panel {
+    background-color: var(--color-bg);
   }
 </style>

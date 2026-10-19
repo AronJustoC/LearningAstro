@@ -6,43 +6,50 @@ import AuthDialog from "../../components/auth/AuthDialog";
 import type { Post } from "../../types/Post";
 
 const { slug } = Astro.params;
-const response = await fetch(
-  `${process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL}/posts/public/${slug}`,
-);
-
-if (!response.ok) {
-  return new Response(null, { status: 404 });
+let post: Post | null = null;
+try {
+  const response = await fetch(
+    `${process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL}/posts/public/${slug}`,
+    { signal: AbortSignal.timeout(5000) },
+  );
+  if (response.ok) post = (await response.json()).post ?? null;
+} catch (error) {
+  console.error("No se pudo cargar el post:", error);
 }
 
-const { post }: { post: Post } = await response.json();
+// Sin post (no existe o el backend no responde): vuelve al listado en vez de romper la página.
+if (!post) {
+  return Astro.redirect("/blog", 302);
+}
 ---
 
-<LayoutBase title={`${post.title} | Blog`}>
+<LayoutBase title={`${post.title} | Blog`} description={post.content?.slice(0, 150)}>
   <Header />
-  <main class="flex-1">
-    <article class="py-16">
-      <div class="container max-w-3xl m-auto p-6 space-y-6">
+  <main id="main" class="flex-1">
+    <article class="py-16 lg:py-20">
+      <div class="max-w-3xl mx-auto px-6 space-y-6">
         {
           post.imageUrl && (
             <img
               src={post.imageUrl}
               alt={post.title}
-              class="w-full rounded-xl object-cover max-h-96"
+              class="w-full rounded-[2px] hairline object-cover max-h-96"
             />
           )
         }
-        <h1 class="text-3xl md:text-4xl font-bold">{post.title}</h1>
+        <h1 class="display" style="font-size: clamp(2.25rem, 5vw, 3.5rem);">{post.title}</h1>
         {
           post.author?.username && (
-            <p class="text-sm opacity-60">Por {post.author.username}</p>
+            <p class="label" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">Por {post.author.username}</p>
           )
         }
-        <div class="prose max-w-none leading-relaxed whitespace-pre-line">
+        <div class="max-w-none text-lg leading-relaxed whitespace-pre-line" style="color: color-mix(in srgb, var(--color-text) 90%, transparent);">
           {post.content}
         </div>
         <div class="flex items-center justify-between">
-          <a href="/blog" class="inline-block text-sm font-medium link-back">
-            ← Volver al blog
+          <a href="/blog" class="link-arrow text-sm">
+            <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            Volver al blog
           </a>
           <AuthDialog client:load />
         </div>
@@ -52,8 +59,3 @@ const { post }: { post: Post } = await response.json();
   <Footer />
 </LayoutBase>
 
-<style>
-  .link-back {
-    color: var(--color-primary);
-  }
-</style>
