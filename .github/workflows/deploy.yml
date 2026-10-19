@@ -50,7 +50,7 @@ jobs:
         run: |
           ssh -o BatchMode=yes -o IdentitiesOnly=yes -i ~/.ssh/deploy_key \
             "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            'cd ~/adnwebs && docker compose -p adnwebs up -d web && docker compose -p adnwebs ps web'
+            'cd ~/adnwebs && docker compose -p adnwebs up -d --no-deps web && docker compose -p adnwebs ps web'
 
       - name: Health check
         run: |
