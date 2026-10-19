@@ -1,9 +1,18 @@
 name: Deploy
 
+# Cada push a main construye la imagen aquí (el VPS no compila nada), la sube por SSH
+# y recrea SOLO el servicio `web` del stack `adnwebs`. No toca api, base de datos ni had_*.
 on:
   push:
     branches: [main]
   workflow_dispatch:
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: false
+
+env:
+  IMAGE: localhost/adnwebs-web:latest
 
 jobs:
   build-and-deploy:
@@ -11,15 +20,44 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: oven-sh/setup-bun@v2
+      - name: Build image
+        run: |
+          docker build \
+            --build-arg "PUBLIC_API_BASE_URL=${{ secrets.VPS_PUBLIC_API_BASE_URL }}" \
+            -t "$IMAGE" .
 
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Configure SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
-      - name: Build
-        run: npm run build
-        env:
-          PUBLIC_API_BASE_URL: ${{ secrets.PUBLIC_API_BASE_URL }}
+      - name: Upload image
+        run: |
+          docker save "$IMAGE" | gzip | ssh -o BatchMode=yes -o IdentitiesOnly=yes \
+            -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'gunzip | docker load'
 
-      - name: Trigger EasyPanel deploy
-        run: curl -fsSL -X POST "${{ secrets.EASYPANEL_DEPLOY_WEBHOOK }}"
+      - name: Recreate web
+        run: |
+          ssh -o BatchMode=yes -o IdentitiesOnly=yes -i ~/.ssh/deploy_key \
+            "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+            'cd ~/adnwebs && docker compose -p adnwebs up -d web && docker compose -p adnwebs ps web'
+
+      - name: Health check
+        run: |
+          for i in 1 2 3 4 5 6; do
+            code=$(ssh -o BatchMode=yes -o IdentitiesOnly=yes -i ~/.ssh/deploy_key \
+              "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
+              'curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:6002/' || true)
+            echo "intento $i: HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 5
+          done
+          echo "El sitio no respondió 200 tras el despliegue" >&2
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
