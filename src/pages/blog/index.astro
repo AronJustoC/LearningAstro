@@ -5,6 +5,22 @@ import Footer from "../../components/sections/Footer.astro";
 import PostCard from "../../components/shared/PostCard.astro";
 import AuthDialog from "../../components/auth/AuthDialog";
 import type { Post } from "../../types/Post";
+import { getCollection } from "astro:content";
+
+// Serie en video: un artículo por episodio, de menor a mayor.
+const episodios = (await getCollection("serie")).sort((a, b) => a.data.episodio - b.data.episodio);
+// Stack completo de la app (todo lo que aparece en los episodios).
+const stackApp = [
+  "Kotlin",
+  "Jetpack Compose",
+  "Room · SQLite",
+  "Android Studio",
+  "Emulador de Android",
+  "Gradle",
+  "Claude Code",
+  "Agentes ECC",
+  "Impeccable",
+];
 
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
 let posts: Post[] = [];
@@ -33,7 +49,76 @@ try {
           <AuthDialog client:load />
         </div>
         {
-          loadFailed || posts.length === 0 ? (
+          episodios.length > 0 && (
+            <section aria-labelledby="serie-title" class="mb-16">
+              <div class="max-w-2xl mb-8">
+                <p class="label mb-2" style="color: var(--color-action);">Serie en video</p>
+                <h2 id="serie-title" class="display mb-4" style="font-size: clamp(1.75rem, 4vw, 2.75rem);">
+                  Creando una app desde cero
+                </h2>
+                <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
+                  Construyo una app de rutinas para Android con una IA como compañera. Cada episodio
+                  cuenta un problema real, cómo lo resolví y con qué herramientas.
+                </p>
+              </div>
+              <div class="mb-8">
+                <p class="label mb-2" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">Stack</p>
+                <ul class="flex flex-wrap gap-2" aria-label="Tecnologías de la serie">
+                  {stackApp.map((tech) => <li class="hairline label rounded-[2px] px-3 py-1.5">{tech}</li>)}
+                </ul>
+              </div>
+              <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {episodios.map((ep) => (
+                  <li>
+                    <a
+                      href={`/blog/serie/${ep.id}`}
+                      class="serie-card group flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"
+                    >
+                      <img
+                        src={ep.data.imagen}
+                        alt={ep.data.imagenAlt}
+                        loading="lazy"
+                        width="400"
+                        height="224"
+                        class="w-full h-56 object-cover object-[50%_38%] hairline-b"
+                      />
+                      <div class="flex flex-col flex-1 p-5 gap-3">
+                        <p class="label" style="color: var(--color-action);">Episodio {ep.data.episodio}</p>
+                        <h3 class="text-xl font-bold leading-snug text-[var(--color-text)]">{ep.data.title}</h3>
+                        <p class="text-sm leading-relaxed line-clamp-3" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
+                          {ep.data.descripcion}
+                        </p>
+                        <ul class="flex flex-wrap gap-1.5 mt-auto pt-2" aria-label="Stack del episodio">
+                          {ep.data.stack.slice(0, 4).map((tech) => (
+                            <li class="hairline label rounded-[2px] px-2 py-1">{tech}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )
+        }
+        {
+          posts.length > 0 && (
+            <section aria-labelledby="mas-title">
+              {episodios.length > 0 && (
+                <h2 id="mas-title" class="display mb-6" style="font-size: clamp(1.75rem, 4vw, 2.75rem);">
+                  Más artículos
+                </h2>
+              )}
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.map((post) => (
+                  <PostCard post={post} />
+                ))}
+              </div>
+            </section>
+          )
+        }
+        {
+          posts.length === 0 && episodios.length === 0 && (
             <div class="hairline-t hairline-b py-6">
               <span class="label block mb-1" style={loadFailed ? "color: var(--color-action);" : undefined}>
                 {loadFailed ? "Error de carga" : "Sin datos"}
@@ -44,12 +129,6 @@ try {
                   : "Todavía no hay posts publicados. ¡Vuelve pronto!"}
               </p>
             </div>
-          ) : (
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
-                <PostCard post={post} />
-              ))}
-            </div>
           )
         }
       </div>
@@ -57,4 +136,12 @@ try {
   </main>
   <Footer />
 </LayoutBase>
+
+<style>
+  .serie-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--focus-color);
+  }
+</style>
 

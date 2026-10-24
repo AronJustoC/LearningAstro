@@ -1,0 +1,126 @@
+---
+import { getCollection, getEntry, render } from "astro:content";
+import LayoutBase from "../../../layouts/LayoutBase.astro";
+import Header from "../../../components/sections/Header.astro";
+import Footer from "../../../components/sections/Footer.astro";
+
+const { slug } = Astro.params;
+const entry = slug ? await getEntry("serie", slug) : undefined;
+
+// Sin artículo: vuelve al blog en vez de mostrar una página rota.
+if (!entry) {
+  return Astro.redirect("/blog", 302);
+}
+
+const { Content } = await render(entry);
+const { title, descripcion, episodio, stack, pregunta } = entry.data;
+
+// Episodios ordenados para enlazar anterior / siguiente.
+const episodios = (await getCollection("serie")).sort((a, b) => a.data.episodio - b.data.episodio);
+const idx = episodios.findIndex((e) => e.id === entry.id);
+const anterior = idx > 0 ? episodios[idx - 1] : null;
+const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
+---
+
+<LayoutBase title={`${title} | Blog`} description={descripcion}>
+  <Header />
+  <main id="main" class="flex-1">
+    <article class="py-16 lg:py-20">
+      <div class="max-w-3xl mx-auto px-6 space-y-8">
+        <header class="space-y-5">
+          <p class="label" style="color: var(--color-action);">
+            Episodio {episodio} · Creando una app desde cero
+          </p>
+          <h1 class="display" style="font-size: clamp(2.25rem, 5vw, 3.5rem);">{title}</h1>
+          <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
+            {descripcion}
+          </p>
+          <div>
+            <p class="label mb-2" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">Stack</p>
+            <ul class="flex flex-wrap gap-2" aria-label="Tecnologías de este episodio">
+              {stack.map((tech) => <li class="hairline label rounded-[2px] px-3 py-1.5">{tech}</li>)}
+            </ul>
+          </div>
+        </header>
+
+        <div class="serie-body">
+          <Content />
+        </div>
+
+        <aside class="hairline-t hairline-b py-6">
+          <p class="label mb-2" style="color: var(--color-action);">Tu turno</p>
+          <p class="text-xl font-bold">{pregunta}</p>
+          <p class="text-sm mt-2" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
+            Cuéntame qué harías tú: me escribes por <a class="link-arrow inline-flex" href="/contacto">contacto</a>.
+          </p>
+        </aside>
+
+        <nav class="flex flex-wrap items-center justify-between gap-4" aria-label="Episodios de la serie">
+          {
+            anterior ? (
+              <a href={`/blog/serie/${anterior.id}`} class="link-arrow text-sm">
+                <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                Ep. {anterior.data.episodio}: {anterior.data.title}
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            siguiente && (
+              <a href={`/blog/serie/${siguiente.id}`} class="link-arrow text-sm">
+                Ep. {siguiente.data.episodio}: {siguiente.data.title}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+              </a>
+            )
+          }
+        </nav>
+        <a href="/blog" class="link-arrow text-sm">Volver al blog</a>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</LayoutBase>
+
+<style>
+  .serie-body {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: color-mix(in srgb, var(--color-text) 90%, transparent);
+  }
+  .serie-body :global(h2) {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    font-size: 1.75rem;
+    line-height: 1.1;
+    margin: 2.5rem 0 0.75rem;
+    color: var(--color-text);
+  }
+  .serie-body :global(p) { margin: 0 0 1rem; }
+  .serie-body :global(ul),
+  .serie-body :global(ol) { margin: 0 0 1rem; padding-left: 1.25rem; }
+  .serie-body :global(ul) { list-style: square; }
+  .serie-body :global(ol) { list-style: decimal; }
+  .serie-body :global(li) { margin-bottom: 0.4rem; }
+  .serie-body :global(strong) { color: var(--color-text); }
+  .serie-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    padding: 0.1rem 0.35rem;
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    overflow-wrap: anywhere;
+  }
+  .serie-body :global(img) {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    max-height: 30rem;
+    height: auto;
+    margin: 1.5rem auto;
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+  }
+</style>
