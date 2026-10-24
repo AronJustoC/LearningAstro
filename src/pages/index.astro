@@ -7,9 +7,43 @@ import Projects from "../components/sections/Projects.astro";
 import TechCarousel from "../components/sections/TechCarousel.astro";
 import Footer from "../components/sections/Footer.astro";
 import Posts from "../components/sections/Posts.astro";
+import { CONTACT_EMAIL } from "../lib/contact";
+
+const site = "https://aronjusto.site";
+// Datos estructurados: quién es y qué ofrece, para que buscadores y asistentes lo entiendan.
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${site}/#persona`,
+    name: "Aron J. Choque",
+    jobTitle: "Desarrollador de software",
+    description:
+      "Desarrollo software a medida para empresas: plataformas web, sistemas, automatización de procesos y agentes de IA.",
+    url: site,
+    image: `${site}/og-default.png`,
+    email: CONTACT_EMAIL,
+    address: { "@type": "PostalAddress", addressLocality: "Cusco", addressCountry: "PE" },
+    knowsAbout: ["Desarrollo web", "Automatización de procesos", "Agentes de IA", "Android", "Astro", "React"],
+    sameAs: ["https://github.com/AronJustoC", "https://www.linkedin.com/in/aronjusto/"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${site}/#sitio`,
+    name: "Aron J. Choque",
+    url: site,
+    inLanguage: "es",
+    publisher: { "@id": `${site}/#persona` },
+  },
+];
 ---
 
-<LayoutBase title="Portfolio">
+<LayoutBase
+  title="Aron J. Choque | Software a medida para empresas"
+  description="Desarrollo plataformas web, sistemas a medida, automatización de procesos y agentes de IA para empresas. Te acompaño desde la idea hasta que funciona."
+  jsonLd={jsonLd}
+>
   <StatusStrip />
   <Header />
   <main id="main" class="flex-1" data-home-motion>

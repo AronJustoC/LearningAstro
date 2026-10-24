@@ -1,0 +1,33 @@
+---
+import LayoutBase from "../layouts/LayoutBase.astro";
+import Header from "../components/sections/Header.astro";
+import Footer from "../components/sections/Footer.astro";
+
+Astro.response.status = 404;
+---
+
+<LayoutBase
+  title="Página no encontrada | Aron J. Choque"
+  description="La página que buscas no existe o cambió de lugar."
+  noindex
+>
+  <Header />
+  <main id="main" class="flex-1">
+    <section class="py-24 lg:py-32">
+      <div class="max-w-3xl mx-auto px-6 space-y-6">
+        <p class="label" style="color: var(--color-action);">Error 404</p>
+        <h1 class="display" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">Esta página no existe</h1>
+        <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
+          El enlace puede estar mal escrito o la página cambió de lugar. Estos caminos te llevan a lo importante:
+        </p>
+        <ul class="hairline-t">
+          <li class="hairline-b"><a class="link-arrow flex min-h-14 items-center" href="/">Inicio</a></li>
+          <li class="hairline-b"><a class="link-arrow flex min-h-14 items-center" href="/proyectos">Proyectos</a></li>
+          <li class="hairline-b"><a class="link-arrow flex min-h-14 items-center" href="/blog">Blog</a></li>
+          <li class="hairline-b"><a class="link-arrow flex min-h-14 items-center" href="/contacto">Contacto</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>

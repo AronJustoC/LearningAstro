@@ -56,6 +56,7 @@ export default function RegisterForm() {
           id="username"
           name="username"
           type="text"
+          autoComplete="username"
           required
           aria-invalid={Boolean(error)}
           disabled={loading}

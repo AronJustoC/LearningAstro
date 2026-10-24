@@ -13,7 +13,36 @@ if (!entry) {
 }
 
 const { Content } = await render(entry);
-const { title, descripcion, episodio, stack, pregunta } = entry.data;
+const { title, descripcion, episodio, fecha, imagen, imagenAlt, stack, pregunta } = entry.data;
+const esResumen = episodio === 0;
+
+const site = "https://aronjusto.site";
+const url = `${site}/blog/serie/${entry.id}`;
+// Datos estructurados: el artículo y su ruta de navegación.
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: descripcion,
+    image: `${site}${imagen}`,
+    datePublished: fecha.toISOString(),
+    inLanguage: "es",
+    keywords: stack.join(", "),
+    mainEntityOfPage: url,
+    author: { "@type": "Person", name: "Aron J. Choque", url: site },
+    publisher: { "@type": "Person", name: "Aron J. Choque", url: site },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: site },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${site}/blog` },
+      { "@type": "ListItem", position: 3, name: title, item: url },
+    ],
+  },
+];
 
 // Episodios ordenados para enlazar anterior / siguiente.
 const episodios = (await getCollection("serie")).sort((a, b) => a.data.episodio - b.data.episodio);
@@ -22,14 +51,22 @@ const anterior = idx > 0 ? episodios[idx - 1] : null;
 const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
 ---
 
-<LayoutBase title={`${title} | Blog`} description={descripcion}>
+<LayoutBase
+  title={`${title} | Blog`}
+  description={descripcion}
+  image={imagen}
+  imageAlt={imagenAlt}
+  type="article"
+  publishedTime={fecha.toISOString()}
+  jsonLd={jsonLd}
+>
   <Header />
   <main id="main" class="flex-1">
     <article class="py-16 lg:py-20">
       <div class="max-w-3xl mx-auto px-6 space-y-8">
         <header class="space-y-5">
           <p class="label" style="color: var(--color-action);">
-            Episodio {episodio} · Creando una app desde cero
+            {esResumen ? "Resumen de la serie" : `Episodio ${episodio}`} · Creando una app desde cero
           </p>
           <h1 class="display" style="font-size: clamp(2.25rem, 5vw, 3.5rem);">{title}</h1>
           <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
@@ -60,7 +97,7 @@ const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
             anterior ? (
               <a href={`/blog/serie/${anterior.id}`} class="link-arrow text-sm">
                 <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                Ep. {anterior.data.episodio}: {anterior.data.title}
+                {anterior.data.episodio === 0 ? "Resumen" : `Ep. ${anterior.data.episodio}`}: {anterior.data.title}
               </a>
             ) : (
               <span />
@@ -69,7 +106,7 @@ const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
           {
             siguiente && (
               <a href={`/blog/serie/${siguiente.id}`} class="link-arrow text-sm">
-                Ep. {siguiente.data.episodio}: {siguiente.data.title}
+                {siguiente.data.episodio === 0 ? "Resumen" : `Ep. ${siguiente.data.episodio}`}: {siguiente.data.title}
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
               </a>
             )
@@ -113,12 +150,14 @@ const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
     border-radius: 2px;
     overflow-wrap: anywhere;
   }
+  /* Todos los fotogramas son 9:16: reservar el espacio evita saltos de diseño al cargar. */
   .serie-body :global(img) {
     display: block;
     width: auto;
     max-width: 100%;
-    max-height: 30rem;
-    height: auto;
+    height: 30rem;
+    aspect-ratio: 9 / 16;
+    object-fit: contain;
     margin: 1.5rem auto;
     border: 1px solid var(--hairline);
     border-radius: 2px;

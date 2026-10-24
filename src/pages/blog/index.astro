@@ -37,7 +37,12 @@ try {
 }
 ---
 
-<LayoutBase title="Blog | Aron J. Choque">
+<LayoutBase
+  title="Blog | Aron J. Choque"
+  description="Cómo construyo una app de rutinas para Android con IA, episodio por episodio: el stack, los problemas reales y cómo los resolví."
+  image="/blog/serie-app/ep8-8.jpg"
+  imageAlt="La app de rutinas antes y después del diseño"
+>
   <Header />
   <main id="main" class="flex-1">
     <section class="py-16 lg:py-20 scroll-mt-24">
@@ -83,7 +88,9 @@ try {
                         class="w-full h-56 object-cover object-[50%_38%] hairline-b"
                       />
                       <div class="flex flex-col flex-1 p-5 gap-3">
-                        <p class="label" style="color: var(--color-action);">Episodio {ep.data.episodio}</p>
+                        <p class="label" style="color: var(--color-action);">
+                          {ep.data.episodio === 0 ? "Resumen de la serie" : `Episodio ${ep.data.episodio}`}
+                        </p>
                         <h3 class="text-xl font-bold leading-snug text-[var(--color-text)]">{ep.data.title}</h3>
                         <p class="text-sm leading-relaxed line-clamp-3" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
                           {ep.data.descripcion}
