@@ -41,6 +41,13 @@ const arrow = "M7 17L17 7M8 7h9v9";
                 Quiero algo similar
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={arrow}></path></svg>
               </a>
+              {project.liveUrl && (
+                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">
+                  Ver sitio
+                  <span class="sr-only">(se abre en otra pestaña)</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={arrow}></path></svg>
+                </a>
+              )}
               <a
                 href={whatsappUrl(`Hola Aron, vi el proyecto ${project.title} y quiero conversar sobre algo similar para mi empresa.`)}
                 target="_blank"
