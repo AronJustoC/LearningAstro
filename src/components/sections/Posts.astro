@@ -1,5 +1,11 @@
 ---
 import type { Post } from "../../types/Post.ts";
+import { getCollection } from "astro:content";
+
+// Serie en video: el resumen (episodio 0) va primero; el home muestra solo 3.
+const episodios = (await getCollection("serie"))
+  .sort((a, b) => a.data.episodio - b.data.episodio)
+  .slice(0, 3);
 
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
 let posts: Post[] = [];
@@ -45,9 +51,42 @@ const formatDate = (isoString?: string) => {
       }
     </div>
 
-    <div class="hairline-t">
+    {
+      episodios.length > 0 && (
+        <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+          {episodios.map((ep) => (
+            <li>
+              <a
+                href={`/blog/serie/${ep.id}`}
+                class="serie-card flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"
+              >
+                <img
+                  src={ep.data.imagen}
+                  alt={ep.data.imagenAlt}
+                  loading="lazy"
+                  width="400"
+                  height="224"
+                  class="w-full h-56 object-cover object-[50%_38%] hairline-b"
+                />
+                <div class="flex flex-col flex-1 p-5 gap-3">
+                  <p class="label" style="color: var(--color-action);">
+                    {ep.data.episodio === 0 ? "Resumen de la serie" : `Episodio ${ep.data.episodio}`}
+                  </p>
+                  <h3 class="text-xl font-bold leading-snug text-[var(--color-text)]">{ep.data.title}</h3>
+                  <p class="text-sm leading-relaxed line-clamp-3" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
+                    {ep.data.descripcion}
+                  </p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )
+    }
+
+    <div class={posts.length > 0 || episodios.length === 0 ? "hairline-t" : "hidden"}>
       {
-        loadFailed ? (
+        loadFailed && episodios.length === 0 ? (
           <div class="hairline-b py-6">
             <span class="label text-[var(--color-action)] block mb-1">Error de carga</span>
             <p class="text-sm text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
@@ -107,6 +146,12 @@ const formatDate = (isoString?: string) => {
 </section>
 
 <style>
+  .serie-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--focus-color);
+  }
+
   .post-row:hover {
     background-color: var(--surface-2);
   }
