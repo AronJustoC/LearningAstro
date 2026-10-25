@@ -8,7 +8,7 @@ export const featuredProjects: Project[] = [
     slug: "avanzik-workspace",
     title: "Avanzik Workspace",
     description:
-      "Workspace GIS/CAD para crear, organizar y exportar planos técnicos con plantillas, recursos y proyectos conectados.",
+      "Workspace GIS/CAD para crear, organizar y exportar planos técnicos con plantillas, recursos y proyectos conectados. Fui parte del equipo de desarrollo.",
     imageUrl: "/projects/avanzik.png",
   },
   {

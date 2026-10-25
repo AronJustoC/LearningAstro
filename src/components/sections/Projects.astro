@@ -14,7 +14,11 @@ try {
   console.error("No se pudo cargar projects:", error);
 }
 // Respaldo: si el backend falla o no tiene proyectos, se muestran los destacados.
-const list: Project[] = projects.length > 0 ? projects : featuredProjects;
+// La API manda; los destacados que aún no están en la base se añaden por título.
+const list: Project[] = [
+  ...projects,
+  ...featuredProjects.filter((f) => !projects.some((p) => p.title === f.title)),
+];
 ---
 
 <section id="proyectos" class="py-16 lg:py-20 scroll-mt-24">
