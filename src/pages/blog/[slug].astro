@@ -3,13 +3,18 @@ import LayoutBase from "../../layouts/LayoutBase.astro";
 import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import AuthDialog from "../../components/auth/AuthDialog";
+import ComentariosBlog, { type Comentario } from "../../components/blog/ComentariosBlog.astro";
 import type { Post } from "../../types/Post";
+import { marked } from "marked";
 
 const { slug } = Astro.params;
+const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
 let post: Post | null = null;
+let comentarios: Comentario[] = [];
+
 try {
   const response = await fetch(
-    `${process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL}/posts/public/${slug}`,
+    `${apiBaseUrl}/posts/public/${slug}`,
     { signal: AbortSignal.timeout(5000) },
   );
   if (response.ok) post = (await response.json()).post ?? null;
@@ -20,6 +25,22 @@ try {
 // Sin post (no existe o el backend no responde): vuelve al listado en vez de romper la página.
 if (!post) {
   return Astro.redirect("/blog", 302);
+}
+
+// El contenido se guarda en markdown; se convierte a HTML al servir la página.
+const contenidoHtml = await marked.parse(post.content ?? "");
+
+try {
+  const resComentarios = await fetch(
+    `${apiBaseUrl}/posts/public/${slug}/comentarios`,
+    { signal: AbortSignal.timeout(5000) },
+  );
+  if (resComentarios.ok) {
+    const dataComentarios = await resComentarios.json();
+    comentarios = dataComentarios.items ?? [];
+  }
+} catch (error) {
+  console.error("No se pudieron cargar los comentarios:", error);
 }
 ---
 
@@ -43,9 +64,8 @@ if (!post) {
             <p class="label" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">Por {post.author.username}</p>
           )
         }
-        <div class="max-w-none text-lg leading-relaxed whitespace-pre-line" style="color: color-mix(in srgb, var(--color-text) 90%, transparent);">
-          {post.content}
-        </div>
+        <div class="post-body" set:html={contenidoHtml}></div>
+        <ComentariosBlog slug={slug!} comentarios={comentarios} />
         <div class="flex items-center justify-between">
           <a href="/blog" class="link-arrow text-sm">
             <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -58,4 +78,52 @@ if (!post) {
   </main>
   <Footer />
 </LayoutBase>
+
+<style>
+  .post-body {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: color-mix(in srgb, var(--color-text) 90%, transparent);
+  }
+  .post-body :global(h1),
+  .post-body :global(h2),
+  .post-body :global(h3) {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin: 2.5rem 0 0.75rem;
+    color: var(--color-text);
+  }
+  .post-body :global(h2) { font-size: 1.75rem; }
+  .post-body :global(h3) { font-size: 1.35rem; }
+  .post-body :global(p) { margin: 0 0 1rem; }
+  .post-body :global(ul),
+  .post-body :global(ol) { margin: 0 0 1rem; padding-left: 1.25rem; }
+  .post-body :global(ul) { list-style: square; }
+  .post-body :global(ol) { list-style: decimal; }
+  .post-body :global(li) { margin-bottom: 0.4rem; }
+  .post-body :global(strong) { color: var(--color-text); }
+  .post-body :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    padding: 0.1rem 0.35rem;
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    overflow-wrap: anywhere;
+  }
+  /* Los fotogramas son 9:16: reservar el espacio evita saltos de diseño al cargar. */
+  .post-body :global(img) {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 30rem;
+    aspect-ratio: 9 / 16;
+    object-fit: contain;
+    margin: 1.5rem auto;
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+  }
+</style>
 

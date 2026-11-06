@@ -1,0 +1,274 @@
+---
+export interface Comentario {
+  id: string | number;
+  nombre: string;
+  cuerpo: string;
+  createdAt: string;
+}
+
+interface Props {
+  slug: string;
+  comentarios?: Comentario[];
+}
+
+const { slug, comentarios = [] } = Astro.props;
+---
+
+<section class="hairline-t pt-10 mt-10 space-y-8" aria-labelledby="comentarios-heading">
+  <div class="space-y-4">
+    <h2 id="comentarios-heading" class="display" style="font-size: clamp(1.75rem, 4vw, 2.75rem);">
+      Comentarios
+    </h2>
+
+    <p
+      id="sin-comentarios"
+      class:list={["text-base", { hidden: comentarios.length > 0 }]}
+      style="color: color-mix(in srgb, var(--color-text) 68%, transparent);"
+    >
+      Aún no hay comentarios. Sé la primera persona en opinar.
+    </p>
+
+    <ul id="lista-comentarios" class="space-y-6">
+      {
+        comentarios.map((c) => (
+          <li class="hairline p-5 rounded-[2px] space-y-2" style="background-color: var(--surface-2);">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+              <strong class="font-semibold text-base" style="color: var(--color-text);">{c.nombre}</strong>
+              <time datetime={c.createdAt} class="label text-xs" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
+                {new Date(c.createdAt).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </time>
+            </div>
+            <p class="whitespace-pre-wrap text-base leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 90%, transparent);">
+              {c.cuerpo}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <form id="form-comentario" data-slug={slug} class="hairline p-6 rounded-[2px] space-y-5" style="background-color: var(--surface-2);">
+    <h3 class="font-semibold text-lg" style="color: var(--color-text);">Deja un comentario</h3>
+
+    <!-- Honeypot -->
+    <div style="display: none;" aria-hidden="true">
+      <label for="campo-website">No llenar este campo</label>
+      <input type="text" id="campo-website" name="website" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="space-y-2">
+      <label for="campo-nombre" class="label block text-sm font-medium" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
+        Nombre <span aria-hidden="true" class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="campo-nombre"
+        name="nombre"
+        required
+        maxlength="80"
+        autocomplete="name"
+        class="w-full min-h-11 px-3.5 py-2 rounded-[2px] text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+        style="border: 1px solid var(--hairline); background-color: var(--color-bg); color: var(--color-text);"
+      />
+    </div>
+
+    <div class="space-y-2">
+      <label for="campo-correo" class="label block text-sm font-medium" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
+        Correo electrónico <span class="text-xs font-normal">(opcional, no se publica)</span>
+      </label>
+      <input
+        type="email"
+        id="campo-correo"
+        name="correo"
+        maxlength="254"
+        autocomplete="email"
+        class="w-full min-h-11 px-3.5 py-2 rounded-[2px] text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+        style="border: 1px solid var(--hairline); background-color: var(--color-bg); color: var(--color-text);"
+      />
+    </div>
+
+    <div class="space-y-2">
+      <div class="flex justify-between items-center">
+        <label for="campo-cuerpo" class="label block text-sm font-medium" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
+          Comentario <span aria-hidden="true" class="text-red-500">*</span>
+        </label>
+        <span id="contador-caracteres" class="text-xs font-mono" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);" aria-live="polite">
+          0 / 1000
+        </span>
+      </div>
+      <textarea
+        id="campo-cuerpo"
+        name="cuerpo"
+        required
+        maxlength="1000"
+        rows="4"
+        class="w-full min-h-24 p-3.5 rounded-[2px] text-base transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+        style="border: 1px solid var(--hairline); background-color: var(--color-bg); color: var(--color-text);"
+      ></textarea>
+    </div>
+
+    <p class="text-xs leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
+      Tus datos se tratan conforme a la Ley N° 29733 de Protección de Datos Personales. El correo no se publicará ni se compartirá con terceros.
+    </p>
+
+    <div id="mensaje-estado" role="status" aria-live="polite" class="text-sm font-medium min-h-5"></div>
+
+    <button
+      type="submit"
+      id="btn-enviar"
+      class="btn-block w-full sm:w-auto px-6 py-2.5 rounded-[2px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      style="background-color: var(--color-action); color: var(--color-bg);"
+    >
+      Publicar comentario
+    </button>
+  </form>
+</section>
+
+<script>
+  function setupComentarios() {
+    const form = document.getElementById("form-comentario") as HTMLFormElement | null;
+    if (!form || form.dataset.bound === "true") return;
+    form.dataset.bound = "true";
+
+    const slug = form.dataset.slug;
+    const cuerpoTextarea = document.getElementById("campo-cuerpo") as HTMLTextAreaElement | null;
+    const contador = document.getElementById("contador-caracteres");
+    const estado = document.getElementById("mensaje-estado");
+    const submitBtn = document.getElementById("btn-enviar") as HTMLButtonElement | null;
+    const lista = document.getElementById("lista-comentarios");
+    const sinComentarios = document.getElementById("sin-comentarios");
+
+    if (cuerpoTextarea && contador) {
+      cuerpoTextarea.addEventListener("input", () => {
+        contador.textContent = `${cuerpoTextarea.value.length} / 1000`;
+      });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!slug || !submitBtn) return;
+
+      const formData = new FormData(form);
+      const nombre = (formData.get("nombre") as string)?.trim();
+      const correo = (formData.get("correo") as string)?.trim();
+      const cuerpo = (formData.get("cuerpo") as string)?.trim();
+      const website = formData.get("website") as string;
+
+      if (!nombre || !cuerpo) return;
+
+      const payload: { nombre: string; cuerpo: string; website: string; correo?: string } = {
+        nombre,
+        cuerpo,
+        website: website || "",
+      };
+      if (correo) {
+        payload.correo = correo;
+      }
+
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "Enviando...";
+      if (estado) {
+        estado.textContent = "";
+        estado.style.color = "var(--color-text)";
+      }
+
+      const apiBase = import.meta.env.PUBLIC_API_BASE_URL || "";
+
+      try {
+        const res = await fetch(`${apiBase}/posts/public/${encodeURIComponent(slug)}/comentarios`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          const msg = data?.message || "No pudimos enviar tu comentario.";
+          if (estado) {
+            estado.textContent = msg;
+            estado.style.color = "#ef4444";
+          }
+          return;
+        }
+
+        const estadoComentario = (data?.estado || data?.status || data?.comentario?.estado || "").toLowerCase();
+
+        if (estadoComentario === "publicado") {
+          if (estado) {
+            estado.textContent = "Comentario publicado.";
+            estado.style.color = "#10b981";
+          }
+          if (sinComentarios) {
+            sinComentarios.classList.add("hidden");
+          }
+          if (lista) {
+            const nuevo = data?.comentario || {
+              id: Date.now(),
+              nombre,
+              cuerpo,
+              createdAt: new Date().toISOString(),
+            };
+            const li = document.createElement("li");
+            li.className = "hairline p-5 rounded-[2px] space-y-2";
+            li.style.backgroundColor = "var(--surface-2)";
+
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "flex items-center justify-between gap-4 flex-wrap";
+
+            const strong = document.createElement("strong");
+            strong.className = "font-semibold text-base";
+            strong.style.color = "var(--color-text)";
+            strong.textContent = nuevo.nombre;
+
+            const time = document.createElement("time");
+            time.className = "label text-xs";
+            time.style.color = "color-mix(in srgb, var(--color-text) 68%, transparent)";
+            time.dateTime = nuevo.createdAt;
+            time.textContent = new Date(nuevo.createdAt).toLocaleDateString("es-PE", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            });
+
+            headerDiv.appendChild(strong);
+            headerDiv.appendChild(time);
+
+            const p = document.createElement("p");
+            p.className = "whitespace-pre-wrap text-base leading-relaxed";
+            p.style.color = "color-mix(in srgb, var(--color-text) 90%, transparent)";
+            p.textContent = nuevo.cuerpo;
+
+            li.appendChild(headerDiv);
+            li.appendChild(p);
+            lista.appendChild(li);
+          }
+          form.reset();
+          if (contador) contador.textContent = "0 / 1000";
+        } else {
+          // 'pendiente' u otro estado
+          if (estado) {
+            estado.textContent = "Gracias. Tu comentario se publicará tras revisión.";
+            estado.style.color = "var(--color-text)";
+          }
+          form.reset();
+          if (contador) contador.textContent = "0 / 1000";
+        }
+      } catch (err) {
+        if (estado) {
+          estado.textContent = "Error de conexión. Inténtalo de nuevo.";
+          estado.style.color = "#ef4444";
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+  }
+
+  setupComentarios();
+  document.addEventListener("astro:page-load", setupComentarios);
+</script>
