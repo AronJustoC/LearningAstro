@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import ImageUploadField from "./ImageUploadField";
 import {
   Card,
   CardHeader,
@@ -28,6 +29,7 @@ export default function PostsManager() {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -50,7 +52,12 @@ export default function PostsManager() {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ title, slug, content }),
+        body: JSON.stringify({
+          title,
+          slug,
+          content,
+          imageUrl: imageUrl || undefined,
+        }),
       });
       if (!response.ok) {
         setError("No se pudo crear el post. Revisá los datos.");
@@ -59,6 +66,7 @@ export default function PostsManager() {
       setTitle("");
       setSlug("");
       setContent("");
+      setImageUrl("");
       loadPosts();
     } catch {
       setError("No se pudo conectar con el servidor.");
@@ -133,6 +141,11 @@ export default function PostsManager() {
                 className="transition-colors focus-visible:ring-2 focus-visible:ring-ring"
               />
             </div>
+            <ImageUploadField
+              value={imageUrl}
+              onChange={setImageUrl}
+              label="Imagen"
+            />
             <Button
               type="submit"
               disabled={loading}

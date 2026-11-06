@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import ImageUploadField from "./ImageUploadField";
 import {
   Card,
   CardHeader,
@@ -29,6 +30,7 @@ export default function ProjectsManager() {
   const [description, setDescription] = useState("");
   const [repoUrl, setRepoUrl] = useState("");
   const [liveUrl, setLiveUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -51,7 +53,13 @@ export default function ProjectsManager() {
       const response = await fetch(API_URL, {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ title, description, repoUrl, liveUrl }),
+        body: JSON.stringify({
+          title,
+          description,
+          repoUrl,
+          liveUrl,
+          imageUrl: imageUrl || undefined,
+        }),
       });
       if (!response.ok) {
         setError("No se pudo crear el proyecto. Revisá los datos.");
@@ -61,6 +69,7 @@ export default function ProjectsManager() {
       setDescription("");
       setRepoUrl("");
       setLiveUrl("");
+      setImageUrl("");
       loadProjects();
     } catch {
       setError("No se pudo conectar con el servidor.");
@@ -145,6 +154,11 @@ export default function ProjectsManager() {
                 className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
               />
             </div>
+            <ImageUploadField
+              value={imageUrl}
+              onChange={setImageUrl}
+              label="Imagen"
+            />
             <Button
               type="submit"
               disabled={loading}
