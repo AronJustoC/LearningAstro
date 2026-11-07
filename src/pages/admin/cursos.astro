@@ -1,0 +1,14 @@
+---
+import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
+import CoursesManager from "../../components/admin/CoursesManager";
+
+const token = Astro.cookies.get("token")?.value;
+if (!token) {
+  return Astro.redirect("/auth/login");
+}
+---
+
+<LayoutDashboard title="Gestionar Cursos">
+  <h1 class="text-2xl font-bold mb-6">Gestionar Cursos</h1>
+  <CoursesManager client:load />
+</LayoutDashboard>
