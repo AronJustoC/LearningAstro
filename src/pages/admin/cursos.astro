@@ -2,10 +2,15 @@
 import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
 import CoursesManager from "../../components/admin/CoursesManager";
 import PageHeader from "../../components/admin/PageHeader.astro";
+import { readRole } from "../../lib/session";
 
 const token = Astro.cookies.get("token")?.value;
-if (!token) {
+const role = readRole(token);
+if (!role) {
   return Astro.redirect("/auth/login");
+}
+if (role !== "ADMIN") {
+  return Astro.redirect("/mis-cursos");
 }
 ---
 
