@@ -52,6 +52,20 @@ const pathname = Astro.url.pathname;
       </li>
       <li>
         <a
+          href="/admin/cursos"
+          aria-current={pathname.startsWith("/admin/cursos") ? "page" : undefined}
+          class:list={[
+            "sidebar-link flex items-center min-h-10 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            pathname.startsWith("/admin/cursos")
+              ? "bg-[var(--color-action)] text-[var(--color-on-action)] shadow-[var(--shadow-soft)]"
+              : "text-foreground hover:bg-accent/60 hover:-translate-y-px"
+          ]}
+        >
+          Gestionar Cursos
+        </a>
+      </li>
+      <li>
+        <a
           href="/"
           class="sidebar-link flex items-center min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 hover:-translate-y-px transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >

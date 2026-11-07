@@ -24,9 +24,19 @@ type Props = {
   value: string;
   onChange: (url: string) => void;
   label: string;
+  resourceType?: "image" | "video" | "raw";
+  accept?: string;
+  idPrefix?: string;
 };
 
-export default function ImageUploadField({ value, onChange, label }: Props) {
+export default function ImageUploadField({
+  value,
+  onChange,
+  label,
+  resourceType = "image",
+  accept = "image/*",
+  idPrefix = "",
+}: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -56,7 +66,7 @@ export default function ImageUploadField({ value, onChange, label }: Props) {
       formData.append("folder", folder);
 
       const uploadResponse = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
         {
           method: "POST",
           body: formData,
@@ -78,9 +88,9 @@ export default function ImageUploadField({ value, onChange, label }: Props) {
 
   return (
     <div className="space-y-1.5">
-      <Label htmlFor="imageUrl">{label}</Label>
+      <Label htmlFor={`${idPrefix}imageUrl`}>{label}</Label>
       <Input
-        id="imageUrl"
+        id={`${idPrefix}imageUrl`}
         type="url"
         disabled={loading}
         value={value}
@@ -89,9 +99,9 @@ export default function ImageUploadField({ value, onChange, label }: Props) {
         className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
       />
       <Input
-        id="imageFile"
+        id={`${idPrefix}imageFile`}
         type="file"
-        accept="image/*"
+        accept={accept}
         disabled={loading}
         onChange={handleFile}
         className="min-h-10 cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-ring file:mr-3 file:rounded-md file:border-0 file:bg-[var(--color-action)] file:px-3 file:py-1.5 file:text-[var(--color-on-action)]"
