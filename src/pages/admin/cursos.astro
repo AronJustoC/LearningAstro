@@ -1,14 +1,23 @@
 ---
 import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
 import CoursesManager from "../../components/admin/CoursesManager";
+import PageHeader from "../../components/admin/PageHeader.astro";
+import { readRole } from "../../lib/session";
 
 const token = Astro.cookies.get("token")?.value;
-if (!token) {
+const role = readRole(token);
+if (!role) {
   return Astro.redirect("/auth/login");
+}
+if (role !== "ADMIN") {
+  return Astro.redirect("/mis-cursos");
 }
 ---
 
 <LayoutDashboard title="Gestionar Cursos">
-  <h1 class="text-2xl font-bold mb-6">Gestionar Cursos</h1>
+  <PageHeader
+    title="Cursos"
+    description="Crea cursos con lecciones, video, capítulos y adjuntos."
+  />
   <CoursesManager client:load />
 </LayoutDashboard>

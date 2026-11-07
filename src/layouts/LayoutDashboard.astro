@@ -25,12 +25,26 @@ const { title, description } = Astro.props;
       })();
     </script>
   </head>
-  <body class="bg-background text-foreground font-sans">
-    <div class="flex min-h-screen">
+  <body class="admin-shell bg-background text-foreground font-sans antialiased">
+    <div class="flex min-h-screen flex-col md:flex-row">
       <Sidebar />
-      <main class="flex-1 p-8 max-w-6xl">
-        <slot />
+      <main class="min-w-0 flex-1 px-5 py-8 md:px-10 md:py-12">
+        <div class="mx-auto w-full max-w-5xl">
+          <slot />
+        </div>
       </main>
     </div>
   </body>
 </html>
+
+<style is:global>
+  .admin-shell :focus-visible {
+    outline: 2px solid var(--focus-color);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .admin-shell ::selection {
+    background: color-mix(in srgb, var(--color-action) 28%, transparent);
+  }
+</style>

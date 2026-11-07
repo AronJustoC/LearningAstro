@@ -3,7 +3,6 @@ import LayoutBase from "../../layouts/LayoutBase.astro";
 import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import PostCard from "../../components/shared/PostCard.astro";
-import AuthDialog from "../../components/auth/AuthDialog";
 import type { Post } from "../../types/Post";
 import { getCollection } from "astro:content";
 
@@ -51,7 +50,7 @@ try {
           <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left text-[var(--color-text)]">
             Blog
           </h1>
-          <AuthDialog client:load />
+          <a href="/auth/login" class="link-arrow text-sm">Entrar</a>
         </div>
         {
           episodios.length > 0 && (

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { readRole } from "@/lib/session";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -43,7 +44,8 @@ export default function LoginForm() {
       localStorage.setItem("accessToken", accessToken);
       document.cookie = `token=${accessToken}; path=/; max-age=3600`;
 
-      window.location.href = "/admin/dashboard";
+      window.location.href =
+        readRole(accessToken) === "ADMIN" ? "/admin/dashboard" : "/mis-cursos";
     } catch {
       setError("No se pudo conectar con el servidor");
     } finally {

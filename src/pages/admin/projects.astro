@@ -1,14 +1,23 @@
 ---
 import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
 import ProjectsManager from "../../components/admin/ProjectsManager";
+import PageHeader from "../../components/admin/PageHeader.astro";
+import { readRole } from "../../lib/session";
 
 const token = Astro.cookies.get("token")?.value;
-if (!token) {
+const role = readRole(token);
+if (!role) {
   return Astro.redirect("/auth/login");
+}
+if (role !== "ADMIN") {
+  return Astro.redirect("/mis-cursos");
 }
 ---
 
 <LayoutDashboard title="Gestionar Proyectos">
-  <h1 class="text-2xl font-bold mb-6">Gestionar Proyectos</h1>
+  <PageHeader
+    title="Proyectos"
+    description="Proyectos que aparecen en la sección pública de proyectos."
+  />
   <ProjectsManager client:load />
 </LayoutDashboard>

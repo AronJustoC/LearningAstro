@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -39,6 +40,7 @@ export default function ImageUploadField({
 }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [uploadedHere, setUploadedHere] = useState(false);
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -73,10 +75,12 @@ export default function ImageUploadField({
         },
       );
       if (!uploadResponse.ok) {
-        setError("No se pudo subir la imagen.");
+        const errorBody = await uploadResponse.json().catch(() => null);
+        setError(errorBody?.error?.message || "No se pudo subir la imagen.");
         return;
       }
       const uploadData = await uploadResponse.json();
+      setUploadedHere(true);
       onChange(uploadData.secure_url);
     } catch {
       setError("No se pudo conectar con el servidor.");
@@ -94,7 +98,10 @@ export default function ImageUploadField({
         type="url"
         disabled={loading}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          setUploadedHere(false);
+          onChange(e.target.value);
+        }}
         placeholder="https://..."
         className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
       />
@@ -104,8 +111,24 @@ export default function ImageUploadField({
         accept={accept}
         disabled={loading}
         onChange={handleFile}
-        className="min-h-10 cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-ring file:mr-3 file:rounded-md file:border-0 file:bg-[var(--color-action)] file:px-3 file:py-1.5 file:text-[var(--color-on-action)]"
+        className="min-h-10 cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-ring file:mr-3 file:h-8 file:rounded-[2px] file:border-0 file:bg-[var(--color-action)] file:px-3 file:text-sm file:font-semibold file:text-[var(--color-on-action)]"
       />
+      {uploadedHere && value && (
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">Archivo listo</span>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              onChange("");
+              setUploadedHere(false);
+            }}
+          >
+            Quitar
+          </Button>
+        </div>
+      )}
       {loading && (
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="size-4 animate-spin" />

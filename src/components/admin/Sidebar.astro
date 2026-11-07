@@ -1,85 +1,68 @@
 ---
 const pathname = Astro.url.pathname;
+
+const items = [
+  { href: "/admin/dashboard", label: "Dashboard" },
+  { href: "/admin/posts", label: "Posts" },
+  { href: "/admin/projects", label: "Proyectos" },
+  { href: "/admin/cursos", label: "Cursos" },
+];
+
+const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+const linkBase =
+  "flex min-h-10 items-center rounded-[2px] px-3 text-sm font-semibold transition-colors duration-200 whitespace-nowrap";
+const linkIdle =
+  "text-[var(--color-text)] hover:bg-[var(--hairline)]";
+const linkActive =
+  "bg-[color-mix(in_srgb,var(--color-action)_14%,transparent)] text-[var(--color-action)]";
 ---
 
 <aside
-  class="w-64 min-h-screen border-r border-border bg-card p-4 flex flex-col shadow-[var(--shadow-soft)]"
+  class="flex flex-col gap-6 border-b border-[var(--hairline)] bg-[var(--surface-2)] px-4 py-5 md:sticky md:top-0 md:min-h-screen md:w-60 md:border-b-0 md:border-r"
 >
-  <nav class="flex flex-col flex-1">
-    <h2 class="text-xl font-semibold mb-6 px-2 text-foreground tracking-tight">Admin Panel</h2>
-    <ul class="flex flex-col gap-1 list-none p-0 m-0">
-      <li>
-        <a
-          href="/admin/dashboard"
-          aria-current={pathname === "/admin/dashboard" ? "page" : undefined}
-          class:list={[
-            "sidebar-link flex items-center min-h-10 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            pathname === "/admin/dashboard"
-              ? "bg-[var(--color-action)] text-[var(--color-on-action)] shadow-[var(--shadow-soft)]"
-              : "text-foreground hover:bg-accent/60 hover:-translate-y-px"
-          ]}
-        >
-          Dashboard
-        </a>
-      </li>
-      <li>
-        <a
-          href="/admin/posts"
-          aria-current={pathname.startsWith("/admin/posts") ? "page" : undefined}
-          class:list={[
-            "sidebar-link flex items-center min-h-10 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            pathname.startsWith("/admin/posts")
-              ? "bg-[var(--color-action)] text-[var(--color-on-action)] shadow-[var(--shadow-soft)]"
-              : "text-foreground hover:bg-accent/60 hover:-translate-y-px"
-          ]}
-        >
-          Gestionar Posts
-        </a>
-      </li>
-      <li>
-        <a
-          href="/admin/projects"
-          aria-current={pathname.startsWith("/admin/projects") ? "page" : undefined}
-          class:list={[
-            "sidebar-link flex items-center min-h-10 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            pathname.startsWith("/admin/projects")
-              ? "bg-[var(--color-action)] text-[var(--color-on-action)] shadow-[var(--shadow-soft)]"
-              : "text-foreground hover:bg-accent/60 hover:-translate-y-px"
-          ]}
-        >
-          Gestionar Proyectos
-        </a>
-      </li>
-      <li>
-        <a
-          href="/admin/cursos"
-          aria-current={pathname.startsWith("/admin/cursos") ? "page" : undefined}
-          class:list={[
-            "sidebar-link flex items-center min-h-10 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            pathname.startsWith("/admin/cursos")
-              ? "bg-[var(--color-action)] text-[var(--color-on-action)] shadow-[var(--shadow-soft)]"
-              : "text-foreground hover:bg-accent/60 hover:-translate-y-px"
-          ]}
-        >
-          Gestionar Cursos
-        </a>
-      </li>
-      <li>
-        <a
-          href="/"
-          class="sidebar-link flex items-center min-h-10 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent/60 hover:-translate-y-px transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          Volver al sitio
-        </a>
-      </li>
-    </ul>
-    <button
-      id="logoutBtn"
-      type="button"
-      class="mt-auto flex items-center w-full min-h-10 text-left rounded-lg px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 hover:-translate-y-px transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:translate-y-0"
+  <div class="flex items-center justify-between gap-3 px-2">
+    <a
+      href="/admin/dashboard"
+      class="display text-xl leading-none tracking-tight text-[var(--color-text)]"
     >
-      Cerrar sesión
-    </button>
+      ARON J. CHOQUE
+    </a>
+    <span class="label text-[var(--color-action)]">Admin</span>
+  </div>
+
+  <nav aria-label="Administración" class="flex flex-1 flex-col gap-4">
+    <ul class="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
+      {
+        items.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class:list={[linkBase, isActive(item.href) ? linkActive : linkIdle]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex flex-col gap-1 border-t border-[var(--hairline)] pt-4 md:mt-auto">
+      <a
+        href="/"
+        class={`${linkBase} ${linkIdle} text-[var(--color-text)]/70`}
+      >
+        Volver al sitio
+      </a>
+      <button
+        id="logoutBtn"
+        type="button"
+        class={`${linkBase} w-full text-left text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)]`}
+      >
+        Cerrar sesión
+      </button>
+    </div>
   </nav>
 </aside>
 
