@@ -30,28 +30,30 @@ export default function RegisterForm() {
 
       if (!response.ok) {
         const data = await response.json().catch(() => null);
-        setError(data?.message ?? `No se pudo crear la cuenta (${response.status})`);
+        setError(data?.message ?? `No pudimos crear tu cuenta (error ${response.status}).`);
         return;
       }
 
       window.location.href = "/auth/login";
     } catch {
-      setError("No se pudo conectar con el servidor");
+      setError("No se pudo conectar con el servidor. Revisa tu conexión.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} aria-busy={loading} className="space-y-5">
+    <form onSubmit={handleSubmit} aria-busy={loading} className="flex flex-col gap-5">
       {error && (
         <Alert variant="destructive" role="alert">
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
-      <div className="space-y-1.5">
-        <Label htmlFor="username">Nombre de usuario</Label>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="username" className="text-sm font-semibold">
+          Nombre de usuario
+        </Label>
         <Input
           id="username"
           name="username"
@@ -62,12 +64,14 @@ export default function RegisterForm() {
           disabled={loading}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+          className="min-h-11 rounded-[2px] border-[var(--hairline)] bg-transparent px-3 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
-      <div className="space-y-1.5">
-        <Label htmlFor="email">Email</Label>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="email" className="text-sm font-semibold">
+          Email
+        </Label>
         <Input
           id="email"
           name="email"
@@ -78,12 +82,14 @@ export default function RegisterForm() {
           disabled={loading}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+          className="min-h-11 rounded-[2px] border-[var(--hairline)] bg-transparent px-3 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
-      <div className="space-y-1.5">
-        <Label htmlFor="password">Contraseña</Label>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="password" className="text-sm font-semibold">
+          Contraseña
+        </Label>
         <div className="relative">
           <Input
             id="password"
@@ -95,14 +101,14 @@ export default function RegisterForm() {
             disabled={loading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="min-h-10 pr-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+            className="min-h-11 rounded-[2px] border-[var(--hairline)] bg-transparent px-3 pr-12 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
             disabled={loading}
-            className="absolute right-1 top-1/2 -translate-y-1/2 size-8 flex items-center justify-center text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring rounded-md transition-colors disabled:opacity-50"
+            className="absolute right-1 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-[2px] text-[var(--color-text)]/70 transition-colors hover:text-[var(--color-text)] focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
           >
             {showPassword ? (
               <EyeOff className="size-4" />
@@ -116,15 +122,15 @@ export default function RegisterForm() {
       <Button
         type="submit"
         disabled={loading}
-        className="w-full min-h-10 text-[var(--color-on-action)] font-medium bg-[var(--color-action)] hover:bg-[var(--color-action)]/90 hover:-translate-y-px shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring active:translate-y-0"
+        className="display mt-1 min-h-11 w-full rounded-[2px] bg-[var(--color-action)] text-base uppercase tracking-wide text-[var(--color-on-action)] transition-colors hover:bg-[var(--color-action)]/90 focus-visible:ring-2 focus-visible:ring-ring"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
             <Loader2 className="size-4 animate-spin" />
-            Creando cuenta...
+            Creando cuenta…
           </span>
         ) : (
-          "Crear Cuenta"
+          "Crear cuenta"
         )}
       </Button>
     </form>

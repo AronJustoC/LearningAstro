@@ -1,31 +1,33 @@
 ---
 import LayoutBase from "../../layouts/LayoutBase.astro";
 import LoginForm from "../../components/auth/LoginForm";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "../../components/ui/card";
 ---
 
 <LayoutBase title="Iniciar sesión | Aron J. Choque" noindex>
-  <div class="flex flex-col items-center justify-center min-h-screen px-4">
-    <Card className="w-full max-w-md border-primary/20 shadow-[var(--shadow-lift)]">
-      <CardHeader>
-        <CardTitle className="text-2xl text-center">
-          Iniciar Sesión
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+  <main id="main" class="flex min-h-screen flex-col items-center justify-center px-5 py-12">
+    <div class="w-full max-w-sm">
+      <a
+        href="/"
+        class="display text-xl leading-none tracking-tight text-[var(--color-text)] rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        ARON J. CHOQUE
+      </a>
+
+      <h1 class="display mt-12 text-5xl leading-none tracking-tight text-[var(--color-text)]">
+        Iniciar sesión
+      </h1>
+      <p class="mt-3 text-[var(--color-text)]/70">
+        Entra para ver tus cursos o administrar el sitio.
+      </p>
+
+      <div class="mt-8">
         <LoginForm client:load />
-        <p class="text-sm text-center text-muted-foreground">
-          ¿No tienes una cuenta?<br />
-          <a href="/auth/register" class="font-medium text-primary">
-            Regístrate
-          </a>
-        </p>
-      </CardContent>
-    </Card>
-  </div>
+      </div>
+
+      <p class="mt-8 text-sm text-[var(--color-text)]/70">
+        ¿No tienes cuenta?
+        <a href="/auth/register" class="link-arrow ml-1 font-semibold">Crear cuenta</a>
+      </p>
+    </div>
+  </main>
 </LayoutBase>
