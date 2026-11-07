@@ -81,8 +81,17 @@ export default function CoursesManager() {
   async function loadCourses() {
     try {
       const response = await fetch(API_URL, { headers: authHeaders() });
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          setError("Tu sesión expiró. Vuelve a iniciar sesión.");
+          return;
+        }
+        setError("No se pudo cargar los cursos.");
+        return;
+      }
       const data = await response.json();
       setCourses(data.courses ?? []);
+      setError("");
     } catch {
       setError("No se pudo conectar con el servidor.");
     }
@@ -476,9 +485,10 @@ export default function CoursesManager() {
                       </Button>
                       <Button
                         type="button"
-                        variant="destructive"
+                        variant="ghost"
                         size="sm"
                         disabled={isActing}
+                        className="text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)]"
                         onClick={() => handleDeleteCourse(course.id)}
                         className="min-h-9 px-3 hover:-translate-y-px transition-all duration-200 active:translate-y-0"
                       >
@@ -538,9 +548,10 @@ export default function CoursesManager() {
                                   </div>
                                   <Button
                                     type="button"
-                                    variant="destructive"
+                                    variant="ghost"
                                     size="sm"
                                     disabled={deletingLessonId === lesson.id}
+                                    className="text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)]"
                                     onClick={() => handleDeleteLesson(lesson.id)}
                                     className="min-h-8 px-2.5 text-xs hover:-translate-y-px transition-all duration-200 active:translate-y-0"
                                   >
@@ -664,9 +675,10 @@ export default function CoursesManager() {
                                     </div>
                                     <Button
                                       type="button"
-                                      variant="destructive"
+                                      variant="ghost"
                                       size="sm"
                                       disabled={lessonLoading}
+                                      className="text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)]"
                                       onClick={() => removeChapterRow(index)}
                                       className="min-h-9 px-3 hover:-translate-y-px transition-all duration-200 active:translate-y-0"
                                     >

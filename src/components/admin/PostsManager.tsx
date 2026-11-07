@@ -174,15 +174,15 @@ export default function PostsManager() {
           </div>
         ) : (
           posts.map((post) => (
-            <Card key={post.id} className="shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] hover:-translate-y-px transition-all duration-200 border-border">
-              <CardContent className="flex items-center justify-between p-4">
-                <span className="text-sm font-medium text-foreground">{post.title}</span>
+            <Card key={post.id} className="rounded-[2px] border-[var(--hairline)] shadow-none">
+              <CardContent className="flex items-center justify-between gap-4 p-4">
+                <span className="font-semibold text-foreground">{post.title}</span>
                 <Button
-                  variant="destructive"
+                  variant="ghost"
                   size="sm"
                   disabled={deletingId === post.id}
                   onClick={() => handleDelete(post.id)}
-                  className="min-h-9 px-3 hover:-translate-y-px transition-all duration-200 active:translate-y-0"
+                  className="min-h-9 px-3 text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)]"
                 >
                   {deletingId === post.id ? (
                     <span className="flex items-center gap-1.5">
