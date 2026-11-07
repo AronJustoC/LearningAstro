@@ -77,6 +77,18 @@ export default function CoursesManager() {
   const [lessonError, setLessonError] = useState("");
   const [lessonLoading, setLessonLoading] = useState(false);
   const [deletingLessonId, setDeletingLessonId] = useState<number | null>(null);
+  const [editingLessonId, setEditingLessonId] = useState<number | null>(null);
+
+  const [editingCourseId, setEditingCourseId] = useState<number | null>(null);
+  const [courseEdit, setCourseEdit] = useState({
+    title: "",
+    slug: "",
+    description: "",
+    imageUrl: "",
+    publicado: false,
+  });
+  const [courseEditError, setCourseEditError] = useState("");
+  const [savingCourse, setSavingCourse] = useState(false);
 
   async function loadCourses() {
     try {
@@ -128,7 +140,8 @@ export default function CoursesManager() {
       setExpandedId(id);
       loadCourseDetails(id);
     }
-    setLessonError("");
+    resetLessonForm();
+    setEditingCourseId(null);
   }
 
   async function handleCreate(e: React.FormEvent) {
@@ -276,13 +289,24 @@ export default function CoursesManager() {
         orden: Number(lessonOrden),
         content: lessonContent,
       };
-      if (lessonVideoUrl) body.videoUrl = lessonVideoUrl;
-      if (lessonAttachmentUrl) body.attachmentUrl = lessonAttachmentUrl;
-      if (duration !== undefined) body.duration = duration;
-      if (chapters.length > 0) body.chapters = chapters;
+      if (editingLessonId !== null) {
+        // En edición, vacío significa borrar el valor: se envía null.
+        body.videoUrl = lessonVideoUrl || null;
+        body.attachmentUrl = lessonAttachmentUrl || null;
+        body.duration = duration ?? null;
+      } else {
+        if (lessonVideoUrl) body.videoUrl = lessonVideoUrl;
+        if (lessonAttachmentUrl) body.attachmentUrl = lessonAttachmentUrl;
+        if (duration !== undefined) body.duration = duration;
+      }
+      if (editingLessonId !== null || chapters.length > 0) body.chapters = chapters;
 
-      const response = await fetch(`${API_URL}/${expandedId}/lessons`, {
-        method: "POST",
+      const lessonUrl =
+        editingLessonId !== null
+          ? `${API_URL}/${expandedId}/lessons/${editingLessonId}`
+          : `${API_URL}/${expandedId}/lessons`;
+      const response = await fetch(lessonUrl, {
+        method: editingLessonId !== null ? "PATCH" : "POST",
         headers: authHeaders(),
         body: JSON.stringify(body),
       });
@@ -296,13 +320,7 @@ export default function CoursesManager() {
         return;
       }
 
-      setLessonTitle("");
-      setLessonOrden("");
-      setLessonContent("");
-      setLessonVideoUrl("");
-      setLessonAttachmentUrl("");
-      setLessonDuration("");
-      setLessonChapters([]);
+      resetLessonForm();
       await loadCourseDetails(expandedId);
       loadCourses();
     } catch {
@@ -330,6 +348,90 @@ export default function CoursesManager() {
       setLessonError("No se pudo conectar con el servidor.");
     } finally {
       setDeletingLessonId(null);
+    }
+  }
+
+  function resetLessonForm() {
+    setEditingLessonId(null);
+    setLessonTitle("");
+    setLessonOrden("");
+    setLessonContent("");
+    setLessonVideoUrl("");
+    setLessonAttachmentUrl("");
+    setLessonDuration("");
+    setLessonChapters([]);
+    setLessonError("");
+  }
+
+  function startEditLesson(lesson: Lesson) {
+    setEditingLessonId(lesson.id);
+    setLessonTitle(lesson.title);
+    setLessonOrden(String(lesson.orden));
+    setLessonContent(lesson.content ?? "");
+    setLessonVideoUrl(lesson.videoUrl ?? "");
+    setLessonAttachmentUrl(lesson.attachmentUrl ?? "");
+    setLessonDuration(lesson.duration != null ? formatDuration(lesson.duration) : "");
+    setLessonChapters(
+      (lesson.chapters ?? []).map((chapter) => ({
+        time: formatDuration(chapter.time),
+        title: chapter.title,
+      })),
+    );
+    setLessonError("");
+  }
+
+  function startEditCourse(course: Course) {
+    setEditingCourseId(course.id);
+    setCourseEdit({
+      title: course.title,
+      slug: course.slug,
+      description: course.description ?? "",
+      imageUrl: course.imageUrl ?? "",
+      publicado: course.publicado,
+    });
+    setCourseEditError("");
+  }
+
+  async function handleSaveCourse(e: React.FormEvent) {
+    e.preventDefault();
+    if (editingCourseId === null) return;
+    setCourseEditError("");
+    setSavingCourse(true);
+
+    try {
+      const body: Record<string, unknown> = {
+        title: courseEdit.title,
+        slug: courseEdit.slug,
+        description: courseEdit.description,
+        publicado: courseEdit.publicado,
+      };
+      body.imageUrl = courseEdit.imageUrl || null;
+
+      const response = await fetch(`${API_URL}/${editingCourseId}`, {
+        method: "PATCH",
+        headers: authHeaders(),
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setCourseEditError("Ya existe un curso con ese slug.");
+        } else {
+          setCourseEditError("No se pudieron guardar los cambios. Revisa los datos.");
+        }
+        return;
+      }
+
+      const id = editingCourseId;
+      setEditingCourseId(null);
+      await loadCourses();
+      if (expandedId === id) {
+        await loadCourseDetails(id);
+      }
+    } catch {
+      setCourseEditError("No se pudo conectar con el servidor.");
+    } finally {
+      setSavingCourse(false);
     }
   }
 
@@ -472,6 +574,16 @@ export default function CoursesManager() {
                         variant="outline"
                         size="sm"
                         disabled={isActing}
+                        onClick={() => startEditCourse(course)}
+                        className="min-h-9 px-3 hover:-translate-y-px transition-all duration-200 active:translate-y-0"
+                      >
+                        Editar
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={isActing}
                         onClick={() => handleTogglePublish(course)}
                         className="min-h-9 px-3 hover:-translate-y-px transition-all duration-200 active:translate-y-0"
                       >
@@ -488,9 +600,8 @@ export default function CoursesManager() {
                         variant="ghost"
                         size="sm"
                         disabled={isActing}
-                        className="text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)]"
                         onClick={() => handleDeleteCourse(course.id)}
-                        className="min-h-9 px-3 hover:-translate-y-px transition-all duration-200 active:translate-y-0"
+                        className="min-h-9 px-3 text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)] hover:-translate-y-px transition-all duration-200 active:translate-y-0"
                       >
                         {isActing ? (
                           <span className="flex items-center gap-1.5">
@@ -503,6 +614,112 @@ export default function CoursesManager() {
                       </Button>
                     </div>
                   </div>
+
+                  {editingCourseId === course.id && (
+                    <form onSubmit={handleSaveCourse} aria-busy={savingCourse} className="space-y-4 rounded-lg border border-border p-4 bg-card">
+                      <h4 className="text-sm font-semibold text-foreground">Editar curso</h4>
+                      {courseEditError && (
+                        <Alert variant="destructive" role="alert">
+                          <AlertDescription>{courseEditError}</AlertDescription>
+                        </Alert>
+                      )}
+                      <div className="space-y-1.5">
+                        <Label htmlFor={`edit-course-title-${course.id}`}>Título</Label>
+                        <Input
+                          id={`edit-course-title-${course.id}`}
+                          required
+                          disabled={savingCourse}
+                          value={courseEdit.title}
+                          onChange={(e) =>
+                            setCourseEdit((p) => ({ ...p, title: e.target.value }))
+                          }
+                          className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor={`edit-course-slug-${course.id}`}>Slug</Label>
+                        <Input
+                          id={`edit-course-slug-${course.id}`}
+                          required
+                          disabled={savingCourse}
+                          value={courseEdit.slug}
+                          onChange={(e) =>
+                            setCourseEdit((p) => ({ ...p, slug: e.target.value }))
+                          }
+                          className="min-h-10 transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor={`edit-course-desc-${course.id}`}>Descripción</Label>
+                        <Textarea
+                          id={`edit-course-desc-${course.id}`}
+                          disabled={savingCourse}
+                          rows={3}
+                          value={courseEdit.description}
+                          onChange={(e) =>
+                            setCourseEdit((p) => ({
+                              ...p,
+                              description: e.target.value,
+                            }))
+                          }
+                          className="transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+                        />
+                      </div>
+                      <ImageUploadField
+                        idPrefix={`edit-course-${course.id}-`}
+                        value={courseEdit.imageUrl}
+                        onChange={(url) =>
+                          setCourseEdit((p) => ({ ...p, imageUrl: url }))
+                        }
+                        label="Imagen"
+                      />
+                      <div className="flex items-center gap-2 pt-1">
+                        <input
+                          id={`edit-course-publicado-${course.id}`}
+                          type="checkbox"
+                          checked={courseEdit.publicado}
+                          onChange={(e) =>
+                            setCourseEdit((p) => ({
+                              ...p,
+                              publicado: e.target.checked,
+                            }))
+                          }
+                          disabled={savingCourse}
+                          className="size-4 rounded border-border text-[var(--color-action)] focus:ring-ring"
+                        />
+                        <Label
+                          htmlFor={`edit-course-publicado-${course.id}`}
+                          className="cursor-pointer text-sm font-medium"
+                        >
+                          Publicado
+                        </Label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="submit"
+                          disabled={savingCourse}
+                          className="min-h-10 px-5 text-[var(--color-on-action)] font-medium bg-[var(--color-action)] hover:bg-[var(--color-action)]/90 hover:-translate-y-px shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring active:translate-y-0"
+                        >
+                          {savingCourse ? (
+                            <span className="flex items-center gap-2">
+                              <Loader2 className="size-4 animate-spin" />
+                              Guardando...
+                            </span>
+                          ) : (
+                            "Guardar cambios"
+                          )}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          onClick={() => setEditingCourseId(null)}
+                          className="min-h-10 px-4"
+                        >
+                          Cancelar
+                        </Button>
+                      </div>
+                    </form>
+                  )}
 
                   {isExpanded && (
                     <div className="pt-4 border-t border-border space-y-6">
@@ -546,21 +763,32 @@ export default function CoursesManager() {
                                       </span>
                                     )}
                                   </div>
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    disabled={deletingLessonId === lesson.id}
-                                    className="text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)]"
-                                    onClick={() => handleDeleteLesson(lesson.id)}
-                                    className="min-h-8 px-2.5 text-xs hover:-translate-y-px transition-all duration-200 active:translate-y-0"
-                                  >
-                                    {deletingLessonId === lesson.id ? (
-                                      <Loader2 className="size-3 animate-spin" />
-                                    ) : (
-                                      "Borrar"
-                                    )}
-                                  </Button>
+                                  <div className="flex items-center gap-1">
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      disabled={deletingLessonId === lesson.id}
+                                      onClick={() => startEditLesson(lesson)}
+                                      className="min-h-8 px-2.5 text-xs hover:-translate-y-px transition-all duration-200 active:translate-y-0"
+                                    >
+                                      Editar
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      disabled={deletingLessonId === lesson.id}
+                                      onClick={() => handleDeleteLesson(lesson.id)}
+                                      className="min-h-8 px-2.5 text-xs text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)] hover:-translate-y-px transition-all duration-200 active:translate-y-0"
+                                    >
+                                      {deletingLessonId === lesson.id ? (
+                                        <Loader2 className="size-3 animate-spin" />
+                                      ) : (
+                                        "Borrar"
+                                      )}
+                                    </Button>
+                                  </div>
                                 </div>
                               ))}
                             </div>
@@ -569,7 +797,9 @@ export default function CoursesManager() {
                       )}
 
                       <div className="rounded-lg border border-border p-4 bg-card space-y-4">
-                        <h4 className="text-sm font-semibold text-foreground">Nueva lección</h4>
+                        <h4 className="text-sm font-semibold text-foreground">
+                          {editingLessonId !== null ? "Editar lección" : "Nueva lección"}
+                        </h4>
                         <form onSubmit={handleCreateLesson} aria-busy={lessonLoading} className="space-y-3">
                           {lessonError && (
                             <Alert variant="destructive" role="alert">
@@ -678,9 +908,8 @@ export default function CoursesManager() {
                                       variant="ghost"
                                       size="sm"
                                       disabled={lessonLoading}
-                                      className="text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)]"
                                       onClick={() => removeChapterRow(index)}
-                                      className="min-h-9 px-3 hover:-translate-y-px transition-all duration-200 active:translate-y-0"
+                                      className="min-h-9 px-3 text-[var(--destructive)] hover:bg-[color-mix(in_srgb,var(--destructive)_10%,transparent)] hover:text-[var(--destructive)] hover:-translate-y-px transition-all duration-200 active:translate-y-0"
                                     >
                                       Quitar
                                     </Button>
@@ -717,20 +946,34 @@ export default function CoursesManager() {
                             resourceType="raw"
                             accept="application/pdf"
                           />
-                          <Button
-                            type="submit"
-                            disabled={lessonLoading}
-                            className="min-h-10 px-5 text-[var(--color-on-action)] font-medium bg-[var(--color-action)] hover:bg-[var(--color-action)]/90 hover:-translate-y-px shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring active:translate-y-0"
-                          >
-                            {lessonLoading ? (
-                              <span className="flex items-center gap-2">
-                                <Loader2 className="size-4 animate-spin" />
-                                Guardando...
-                              </span>
-                            ) : (
-                              "Crear lección"
+                          <div className="flex items-center gap-2">
+                            <Button
+                              type="submit"
+                              disabled={lessonLoading}
+                              className="min-h-10 px-5 text-[var(--color-on-action)] font-medium bg-[var(--color-action)] hover:bg-[var(--color-action)]/90 hover:-translate-y-px shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-lift)] transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring active:translate-y-0"
+                            >
+                              {lessonLoading ? (
+                                <span className="flex items-center gap-2">
+                                  <Loader2 className="size-4 animate-spin" />
+                                  Guardando...
+                                </span>
+                              ) : editingLessonId !== null ? (
+                                "Guardar cambios"
+                              ) : (
+                                "Crear lección"
+                              )}
+                            </Button>
+                            {editingLessonId !== null && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={resetLessonForm}
+                              >
+                                Cancelar edición
+                              </Button>
                             )}
-                          </Button>
+                          </div>
                         </form>
                       </div>
                     </div>
