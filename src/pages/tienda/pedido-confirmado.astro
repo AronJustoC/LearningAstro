@@ -1,0 +1,27 @@
+---
+import LayoutBase from "../../layouts/LayoutBase.astro";
+import Header from "../../components/sections/Header.astro";
+import Footer from "../../components/sections/Footer.astro";
+import OrderConfirmation from "../../components/store/OrderConfirmation";
+---
+
+<LayoutBase title="Pedido recibido" description="Detalle del pedido confirmado.">
+  <Header />
+  <main id="main" class="flex-1">
+    <section class="py-16 lg:py-20 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <OrderConfirmation client:only="react">
+          <div slot="fallback">
+            <div class="space-y-3" aria-hidden="true">
+              <div class="h-24 animate-pulse rounded-xl bg-muted"></div>
+              <div class="h-24 animate-pulse rounded-xl bg-muted"></div>
+              <div class="h-32 animate-pulse rounded-xl bg-muted"></div>
+            </div>
+            <p class="sr-only">Cargando pedido</p>
+          </div>
+        </OrderConfirmation>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>

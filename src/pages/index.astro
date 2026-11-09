@@ -7,7 +7,7 @@ import Projects from "../components/sections/Projects.astro";
 import TechCarousel from "../components/sections/TechCarousel.astro";
 import Footer from "../components/sections/Footer.astro";
 import Posts from "../components/sections/Posts.astro";
-import { CONTACT_EMAIL } from "../lib/contact";
+import { CONTACT_EMAIL, TIKTOK_URL } from "../lib/contact";
 
 const site = "https://aronjusto.site";
 // Datos estructurados: quién es y qué ofrece, para que buscadores y asistentes lo entiendan.
@@ -26,7 +26,7 @@ const jsonLd = [
     email: CONTACT_EMAIL,
     address: { "@type": "PostalAddress", addressLocality: "Cusco", addressCountry: "PE" },
     knowsAbout: ["Desarrollo web", "Automatización de procesos", "Agentes de IA", "Android", "Astro", "React"],
-    sameAs: ["https://github.com/AronJustoC", "https://www.linkedin.com/in/aronjusto/"],
+    sameAs: ["https://github.com/AronJustoC", "https://www.linkedin.com/in/aronjusto/", TIKTOK_URL],
   },
   {
     "@context": "https://schema.org",

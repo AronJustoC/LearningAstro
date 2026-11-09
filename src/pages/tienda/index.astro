@@ -1,0 +1,48 @@
+---
+import LayoutBase from "../../layouts/LayoutBase.astro";
+import Header from "../../components/sections/Header.astro";
+import Footer from "../../components/sections/Footer.astro";
+import ProductCard from "../../components/store/ProductCard.astro";
+import CategoryNav from "../../components/store/CategoryNav.astro";
+import EmptyState from "../../components/store/EmptyState.astro";
+import { products } from "../../data/catalog";
+---
+
+<LayoutBase title="Tienda | Aron J. Choque" description="Piezas impresas en 3D: figuras, organizadores, macetas y más.">
+  <Header />
+  <main id="main" class="flex-1">
+    <section class="py-16 lg:py-20 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <header class="mb-8">
+          <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left mb-8 text-[var(--color-text)]">
+            Catálogo
+          </h1>
+          <p class="text-sm text-muted-foreground mt-2">
+            Explora todas nuestras piezas impresas en 3D de diseño exclusivo.
+          </p>
+          <div class="mt-6">
+            <CategoryNav />
+          </div>
+        </header>
+
+        {
+          products.length > 0 ? (
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <ProductCard product={product} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title="No hay productos disponibles"
+              text="Actualmente no encontramos productos en el catálogo."
+              ctaHref="/"
+              ctaLabel="Volver al inicio"
+            />
+          )
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>

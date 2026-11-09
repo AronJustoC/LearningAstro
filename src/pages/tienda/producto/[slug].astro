@@ -1,0 +1,52 @@
+---
+export const prerender = true;
+
+import LayoutBase from "../../../layouts/LayoutBase.astro";
+import Header from "../../../components/sections/Header.astro";
+import Footer from "../../../components/sections/Footer.astro";
+import Gallery from "../../../components/store/Gallery";
+import ProductBuy from "../../../components/store/ProductBuy";
+import { products, getCategory, type Product } from "../../../data/catalog";
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props as { product: Product };
+const category = getCategory(product.categorySlug);
+---
+
+<LayoutBase title={product.name} description={product.description}>
+  <Header />
+  <main id="main" class="flex-1">
+    <section class="py-16 lg:py-20 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <nav aria-label="Ruta" class="mb-6 text-sm text-muted-foreground">
+          <ol class="flex flex-wrap items-center gap-2">
+            <li><a class="rounded hover:underline focus-visible:ring-3 focus-visible:ring-ring/50" href="/">Inicio</a></li>
+            <li aria-hidden="true">/</li>
+            <li><a class="rounded hover:underline focus-visible:ring-3 focus-visible:ring-ring/50" href="/tienda">Catálogo</a></li>
+            <li aria-hidden="true">/</li>
+            <li>{category?.name ?? product.categorySlug}</li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" class="text-foreground">{product.name}</li>
+          </ol>
+        </nav>
+
+        <div class="grid gap-8 lg:grid-cols-2">
+          <Gallery client:visible images={product.images} />
+
+          <div class="space-y-5">
+            <h1 class="text-3xl font-semibold tracking-tight">{product.name}</h1>
+            <p class="text-muted-foreground">{product.description}</p>
+            <ProductBuy client:only="react" product={product} />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>

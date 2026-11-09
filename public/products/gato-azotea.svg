@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#ece6dc"/>
+  <circle cx="400" cy="450" r="130" fill="#1f4e5f"/>
+  <circle cx="400" cy="270" r="85" fill="#1f4e5f"/>
+  <polygon points="340,210 330,140 390,195" fill="#1f4e5f"/>
+  <polygon points="460,210 470,140 410,195" fill="#1f4e5f"/>
+  <text x="400" y="720" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#5b534b" text-anchor="middle" font-weight="500">Imagen de ejemplo</text>
+</svg>

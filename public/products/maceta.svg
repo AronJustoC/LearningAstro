@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#ece6dc"/>
+  <polygon points="260,280 540,280 480,540 320,540" fill="#1f4e5f"/>
+  <rect x="240" y="250" width="320" height="40" rx="10" fill="#1f4e5f"/>
+  <text x="400" y="720" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#5b534b" text-anchor="middle" font-weight="500">Imagen de ejemplo</text>
+</svg>

@@ -4,7 +4,7 @@ import Header from "../components/sections/Header.astro";
 import Footer from "../components/sections/Footer.astro";
 import Icon from "../components/shared/Icon.astro";
 import ContactForm from "../components/sections/ContactForm";
-import { CONTACT_EMAIL, WHATSAPP_DISPLAY, whatsappUrl } from "../lib/contact";
+import { CONTACT_EMAIL, TIKTOK_URL, WHATSAPP_DISPLAY, whatsappUrl } from "../lib/contact";
 
 // Canales directos, en orden de preferencia: WhatsApp y correo primero.
 const channels = [
@@ -12,6 +12,7 @@ const channels = [
   { label: "Correo", value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}`, icon: "email" },
   { label: "GitHub", value: "AronJustoC", href: "https://github.com/AronJustoC", icon: "github" },
   { label: "LinkedIn", value: "aronjusto", href: "https://www.linkedin.com/in/aronjusto/", icon: "linkedin" },
+  { label: "TikTok", value: "@aron_js_", href: TIKTOK_URL, icon: "tiktok" },
 ];
 const isExternal = (href: string) => href.startsWith("http");
 ---
