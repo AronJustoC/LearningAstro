@@ -1,6 +1,6 @@
 ---
 import Icon from "../shared/Icon.astro";
-import { CONTACT_EMAIL, whatsappUrl } from "../../lib/contact";
+import { CONTACT_EMAIL, TIKTOK_URL, whatsappUrl } from "../../lib/contact";
 
 const currentYear = new Date().getFullYear();
 
@@ -11,6 +11,7 @@ const footerLinks = [
     href: "https://www.linkedin.com/in/aronjusto/",
     icon: "linkedin",
   },
+  { name: "TikTok", href: TIKTOK_URL, icon: "tiktok" },
   { name: "WhatsApp", href: whatsappUrl(), icon: "whatsapp" },
   { name: "Email", href: `mailto:${CONTACT_EMAIL}`, icon: "email" },
 ];
@@ -91,8 +92,8 @@ const sections = [
           footerLinks.map((link) => (
             <a
               href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
               class="w-9 h-9 flex items-center justify-center transition-colors duration-200 text-[color-mix(in_srgb,var(--color-text)_68%,transparent)] hover:text-[var(--focus-color)]"
               aria-label={link.name}
             >

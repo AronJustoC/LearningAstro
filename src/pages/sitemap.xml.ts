@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { featuredProjects } from "../data/projects";
+import { categories, products } from "../data/catalog";
 
 const SITE = "https://aronjusto.site";
 
@@ -18,9 +19,12 @@ export const GET: APIRoute = async () => {
     { path: "/proyectos" },
     { path: "/blog" },
     { path: "/contacto" },
+    { path: "/tienda" },
     ...featuredProjects
       .filter((project) => project.slug)
       .map((project) => ({ path: `/proyectos/${project.slug}` })),
+    ...categories.map((category) => ({ path: `/tienda/${category.slug}` })),
+    ...products.map((product) => ({ path: `/tienda/producto/${product.slug}` })),
   ];
 
   for (const articulo of await getCollection("serie")) {

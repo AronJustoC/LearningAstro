@@ -1,6 +1,7 @@
 // Datos de contacto oficiales: única fuente para Hero, Footer, Contacto y ContactForm.
 export const CONTACT_EMAIL = "aronchoque727@gmail.com";
 export const WHATSAPP_DISPLAY = "+51 983 731 782";
+export const TIKTOK_URL = "https://www.tiktok.com/@aron_js_";
 
 const WHATSAPP_NUMBER = "51983731782"; // formato wa.me: país + número, sin "+"
 

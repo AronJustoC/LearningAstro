@@ -1,0 +1,66 @@
+---
+export const prerender = true;
+
+import LayoutBase from "../../layouts/LayoutBase.astro";
+import Header from "../../components/sections/Header.astro";
+import Footer from "../../components/sections/Footer.astro";
+import ProductCard from "../../components/store/ProductCard.astro";
+import CategoryNav from "../../components/store/CategoryNav.astro";
+import EmptyState from "../../components/store/EmptyState.astro";
+import { categories, productsByCategory, type Category } from "../../data/catalog";
+
+export const getStaticPaths = () =>
+  categories.map((c) => ({
+    params: { categoria: c.slug },
+    props: { category: c },
+  }));
+
+interface Props {
+  category: Category;
+}
+
+const { category } = Astro.props;
+const categoryProducts = productsByCategory(category.slug);
+---
+
+<LayoutBase
+  title={`${category.name} | Tienda`}
+  description={`Categoría ${category.name}: ${category.description}`}
+>
+  <Header />
+  <main id="main" class="flex-1">
+    <section class="py-16 lg:py-20 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <header class="mb-8">
+          <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left mb-8 text-[var(--color-text)]">
+            {category.name}
+          </h1>
+          <p class="text-sm text-muted-foreground mt-2">
+            {category.description}
+          </p>
+          <div class="mt-6">
+            <CategoryNav current={category.slug} />
+          </div>
+        </header>
+
+        {
+          categoryProducts.length > 0 ? (
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categoryProducts.map((product) => (
+                <ProductCard product={product} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              title={`No hay productos en ${category.name}`}
+              text="Por el momento no hay piezas disponibles en esta categoría."
+              ctaHref="/tienda"
+              ctaLabel="Ver todo el catálogo"
+            />
+          )
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LayoutBase>
