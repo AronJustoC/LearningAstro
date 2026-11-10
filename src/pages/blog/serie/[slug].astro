@@ -65,10 +65,14 @@ const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
     <article class="py-16 lg:py-20">
       <div class="max-w-3xl mx-auto px-6 space-y-8">
         <header class="space-y-5">
-          <p class="label" style="color: var(--color-action);">
-            {esResumen ? "Resumen de la serie" : `Episodio ${episodio}`} · Creando una app desde cero
-          </p>
-          <h1 class="display" style="font-size: clamp(2.25rem, 5vw, 3.5rem);">{title}</h1>
+          <div class="home-section-head motion-reveal-row">
+            <div>
+              <p class="label mb-3" style="color: var(--color-action);">
+                {esResumen ? "Resumen de la serie" : `Episodio ${episodio}`} · Creando una app desde cero
+              </p>
+              <h1 class="display" style="font-size: clamp(2.25rem, 5vw, 3.5rem);">{title}</h1>
+            </div>
+          </div>
           <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
             {descripcion}
           </p>
@@ -141,6 +145,16 @@ const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
   .serie-body :global(ol) { list-style: decimal; }
   .serie-body :global(li) { margin-bottom: 0.4rem; }
   .serie-body :global(strong) { color: var(--color-text); }
+  .serie-body :global(pre) {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    padding: 1rem;
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: 2px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
   .serie-body :global(code) {
     font-family: var(--font-mono);
     font-size: 0.85em;
@@ -149,6 +163,11 @@ const siguiente = idx < episodios.length - 1 ? episodios[idx + 1] : null;
     border: 1px solid var(--hairline);
     border-radius: 2px;
     overflow-wrap: anywhere;
+  }
+  .serie-body :global(pre code) {
+    padding: 0;
+    background: transparent;
+    border: none;
   }
   /* Todos los fotogramas son 9:16: reservar el espacio evita saltos de diseño al cargar. */
   .serie-body :global(img) {

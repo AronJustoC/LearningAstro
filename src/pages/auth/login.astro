@@ -1,33 +1,25 @@
 ---
 import LayoutBase from "../../layouts/LayoutBase.astro";
+import AuthModal from "../../components/auth/AuthModal.astro";
 import LoginForm from "../../components/auth/LoginForm";
 ---
 
 <LayoutBase title="Iniciar sesión | Aron J." noindex>
-  <main id="main" class="flex min-h-screen flex-col items-center justify-center px-5 py-12">
-    <div class="w-full max-w-sm">
-      <a
-        href="/"
-        class="display text-xl leading-none tracking-tight text-[var(--color-text)] rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        ARON J.
-      </a>
-
-      <h1 class="display mt-16 text-6xl leading-none tracking-tight text-[var(--color-text)]">
-        INICIAR SESIÓN
+  <main id="main" class="min-h-screen">
+    <AuthModal titleId="auth-title">
+      <h1 id="auth-title" class="display pr-10 text-4xl leading-none tracking-tight text-[var(--color-text)]">
+        Iniciar sesión
       </h1>
-      <p class="mt-4 text-[var(--color-text)]/70">
+      <p class="mt-3 text-base text-[var(--color-text)]/70">
         Entra para ver tus cursos o administrar el sitio.
       </p>
-
-      <div class="mt-10">
+      <div class="mt-7">
         <LoginForm client:load />
       </div>
-
-      <p class="mt-10 text-sm text-[var(--color-text)]/70">
+      <p class="mt-6 text-sm text-[var(--color-text)]/70">
         ¿No tienes cuenta?
         <a href="/auth/register" class="link-arrow ml-1">Crear cuenta</a>
       </p>
-    </div>
+    </AuthModal>
   </main>
 </LayoutBase>

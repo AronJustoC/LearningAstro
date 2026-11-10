@@ -1,11 +1,23 @@
 ---
+import { getNavTabs } from "../../lib/navSettings";
+
+const navTabs = await getNavTabs();
+const tabKeyByHref: Record<string, "proyectos" | "tienda" | "blog" | "cursos"> = {
+  "/proyectos": "proyectos",
+  "/tienda": "tienda",
+  "/blog": "blog",
+  "/cursos": "cursos",
+};
 const links = [
   { name: "Inicio", href: "/" },
   { name: "Proyectos", href: "/proyectos" },
   { name: "Tienda", href: "/tienda" },
   { name: "Blog", href: "/blog" },
   { name: "Cursos", href: "/cursos" },
-];
+].filter((link) => {
+  const key = tabKeyByHref[link.href];
+  return key ? navTabs[key] : true;
+});
 const current = Astro.url.pathname;
 const isCurrent = (href: string) =>
   href === "/" ? current === "/" : current.startsWith(href);

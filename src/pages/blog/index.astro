@@ -46,7 +46,8 @@ try {
   <main id="main" class="flex-1">
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-8">
+        <div class="home-section-head motion-reveal-row">
+          <p class="label">01 · BLOG</p>
           <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left text-[var(--color-text)]">
             Blog
           </h1>
@@ -72,7 +73,7 @@ try {
               </div>
               <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {episodios.map((ep) => (
-                  <li>
+                  <li class="motion-reveal-row">
                     <a
                       href={`/blog/serie/${ep.id}`}
                       class="serie-card group flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"

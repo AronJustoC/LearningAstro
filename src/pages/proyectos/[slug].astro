@@ -30,9 +30,14 @@ const arrow = "M7 17L17 7M8 7h9v9";
 
         <div class="grid lg:grid-cols-[1fr_1.2fr] gap-10 lg:gap-16 items-start">
           <div class="space-y-6">
-            <h1 class="display" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">
-              {project.title}
-            </h1>
+            <div class="home-section-head motion-reveal-row">
+              <div>
+                <span class="label home-muted block mb-3">01 · Trabajo real</span>
+                <h1 class="display text-[clamp(2.25rem,5vw,3.5rem)]">
+                  {project.title}
+                </h1>
+              </div>
+            </div>
             <p class="text-lg leading-relaxed max-w-xl" style="color: color-mix(in srgb, var(--color-text) 82%, transparent);">
               {project.description}
             </p>
@@ -42,7 +47,7 @@ const arrow = "M7 17L17 7M8 7h9v9";
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={arrow}></path></svg>
               </a>
               {project.liveUrl && (
-                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" class="link-arrow">
+                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" class="btn-glass">
                   Ver sitio
                   <span class="sr-only">(se abre en otra pestaña)</span>
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={arrow}></path></svg>
@@ -52,7 +57,7 @@ const arrow = "M7 17L17 7M8 7h9v9";
                 href={whatsappUrl(`Hola Aron, vi el proyecto ${project.title} y quiero conversar sobre algo similar para mi empresa.`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="link-arrow"
+                class="btn-glass"
               >
                 WhatsApp
                 <span class="sr-only">(se abre en otra pestaña)</span>

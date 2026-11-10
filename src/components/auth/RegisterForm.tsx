@@ -51,7 +51,7 @@ export default function RegisterForm() {
       )}
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="username" className="text-sm font-semibold">
+        <Label htmlFor="username" className="label text-[var(--color-text)]/70">
           Nombre de usuario
         </Label>
         <Input
@@ -64,12 +64,12 @@ export default function RegisterForm() {
           disabled={loading}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="min-h-11 rounded-[2px] border-[var(--hairline)] bg-transparent px-3 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+          className="min-h-11 rounded-[10px] border-[var(--hairline)] bg-transparent px-3 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email" className="text-sm font-semibold">
+        <Label htmlFor="email" className="label text-[var(--color-text)]/70">
           Email
         </Label>
         <Input
@@ -82,12 +82,12 @@ export default function RegisterForm() {
           disabled={loading}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="min-h-11 rounded-[2px] border-[var(--hairline)] bg-transparent px-3 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+          className="min-h-11 rounded-[10px] border-[var(--hairline)] bg-transparent px-3 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="password" className="text-sm font-semibold">
+        <Label htmlFor="password" className="label text-[var(--color-text)]/70">
           Contraseña
         </Label>
         <div className="relative">
@@ -101,14 +101,14 @@ export default function RegisterForm() {
             disabled={loading}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="min-h-11 rounded-[2px] border-[var(--hairline)] bg-transparent px-3 pr-12 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+            className="min-h-11 rounded-[10px] border-[var(--hairline)] bg-transparent px-3 pr-12 text-base transition-colors focus-visible:ring-2 focus-visible:ring-ring"
           />
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
             aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
             disabled={loading}
-            className="absolute right-1 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-[2px] text-[var(--color-text)]/70 transition-colors hover:text-[var(--color-text)] focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+            className="absolute right-1 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-[10px] text-[var(--color-text)]/70 transition-colors hover:text-[var(--color-text)] focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
           >
             {showPassword ? (
               <EyeOff className="size-4" />
@@ -122,7 +122,7 @@ export default function RegisterForm() {
       <Button
         type="submit"
         disabled={loading}
-        className="display mt-1 min-h-11 w-full rounded-[2px] bg-[var(--color-action)] text-base uppercase tracking-wide text-[var(--color-on-action)] transition-colors hover:bg-[var(--color-action)]/90 focus-visible:ring-2 focus-visible:ring-ring"
+        className="btn-block mt-2 w-full"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
