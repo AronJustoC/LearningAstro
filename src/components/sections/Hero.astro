@@ -32,7 +32,6 @@ const [devHtml, stackHtml] = await Promise.all([
   codeToHtml(stackCode, { lang: "json", ...opts }),
 ]);
 
-const ticker = ["Astro", "TypeScript", "Node.js", "PostgreSQL", "Docker", "Claude Code"];
 const focus = [
   { word: "Plataformas web", text: "Sitios, tiendas y sistemas a tu medida.", href: "/#proyectos" },
   { word: "Automatización", text: "Menos tareas manuales en tus procesos.", href: "/#proyectos" },
@@ -41,51 +40,36 @@ const focus = [
 ---
 
 <section aria-labelledby="hero-title" data-hero-motion>
-  <!-- Ticker de stack -->
-  <div class="hairline-b">
-    <div
-      class="ticker max-w-7xl mx-auto px-6 lg:px-8 h-9 flex items-center gap-x-6 overflow-x-auto label whitespace-nowrap"
-      style="color: color-mix(in srgb, var(--color-text) 72%, transparent);"
-    >
-      <span class="ticker-item inline-flex items-center gap-2" style="color: color-mix(in srgb, var(--color-text) 60%, transparent);">
-        <span class="inline-block w-1.5 h-1.5" style="background: var(--color-action);" aria-hidden="true"></span>
-        Stack
-      </span>
-      {ticker.map((name) => <span class="ticker-item">{name}</span>)}
-    </div>
-  </div>
-
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
-    <div class="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 lg:pt-32 lg:pb-24">
+    <div class="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center">
       <!-- Texto -->
-      <div class="space-y-8">
+      <div class="hero-rise space-y-8">
+        <p class="label home-muted inline-flex items-center gap-2">
+          <span class="inline-block w-1.5 h-1.5" style="background: var(--color-action);" aria-hidden="true"></span>
+          Desarrollo de software · Cusco, Perú
+        </p>
+
         <h1 id="hero-title" class="display" style="font-size: clamp(2.5rem, 5.6vw, 5rem); overflow-wrap: anywhere; hyphens: auto;">
-          <span class="hero-line block">
-            <span class="hero-line-inner block">Software a medida</span>
-          </span>
-          <span class="hero-line block">
-            <span class="hero-line-inner hero-outline-sweep outline-text block" data-text="para tu empresa.">para tu empresa.</span>
-          </span>
+          <span class="block">Software a medida</span>
+          <span class="outline-text block">para tu empresa.</span>
         </h1>
 
-        <div class="space-y-4 max-w-xl">
-          <p class="text-lg font-medium">
-            Desarrollo de software para empresas
-            <span style="color: color-mix(in srgb, var(--color-text) 70%, transparent);" class="font-normal">
-              · Cusco, Perú
-            </span>
-          </p>
-          <p class="text-base leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 80%, transparent);">
-            Desarrollo soluciones de software para empresas y negocios:
-            plataformas web, sistemas a medida, automatización de procesos y
-            agentes de IA. Te acompaño desde la idea hasta que funciona.
-          </p>
-        </div>
+        <p class="text-base sm:text-lg leading-relaxed max-w-xl home-muted">
+          Plataformas web, sistemas a medida, automatización de procesos y
+          agentes de IA para empresas y negocios. Te acompaño desde la idea hasta
+          que funciona.
+        </p>
 
         <div class="hero-actions">
-          <a href="/contacto" class="hero-primary">Hablemos de tu proyecto</a>
-          <a href="/#proyectos" class="hero-secondary">Ver proyectos</a>
-          <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" class="hero-tertiary label">
+          <a href="/contacto" class="btn-block">
+            Hablemos de tu proyecto
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
+          </a>
+          <a href="/#proyectos" class="link-arrow text-sm min-h-11">
+            Ver proyectos
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+          <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" class="hero-quiet label min-h-11">
             <Icon icon="whatsapp" class="w-4 h-4" aria-hidden="true" />
             WhatsApp
             <span class="sr-only">(se abre en otra pestaña)</span>
@@ -94,7 +78,7 @@ const focus = [
       </div>
 
       <!-- Panel terminal -->
-      <div class="terminal min-w-0">
+      <div class="hero-rise terminal min-w-0" style="animation-delay: 120ms;">
         <div class="flex items-center hairline-b-dark">
           <div role="tablist" aria-label="Archivos" class="flex">
             <button role="tab" id="tab-dev" aria-controls="panel-dev" aria-selected="true" class="tab">developer.ts</button>
@@ -117,56 +101,42 @@ const focus = [
     </div>
   </div>
 
-  <!-- Fila de foco -->
+  <!-- Fila de foco: tres celdas sobre la retícula -->
   <div class="hairline-t hairline-b">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-3">
+    <ul class="max-w-7xl mx-auto grid md:grid-cols-3 list-none m-0 p-0">
       {
         focus.map((item, i) => (
-          <a
-            href={item.href}
-            class:list={["focus-cell px-6 lg:px-8 py-8 flex flex-col gap-2 transition-colors duration-150", i > 0 && "md:border-l border-t md:border-t-0"]}
-            style="border-color: var(--hairline);"
-          >
-            <span class="display" style="font-size: 1.75rem; font-weight: 700;">{item.word}</span>
-            <span style="color: color-mix(in srgb, var(--color-text) 78%, transparent);" class="text-sm">{item.text}</span>
-          </a>
+          <li class:list={[i > 0 && "md:border-l border-t md:border-t-0"]} style="border-color: var(--hairline);">
+            <a href={item.href} class="focus-cell block px-4 sm:px-6 lg:px-8 py-8 transition-colors duration-150">
+              <span class="label home-muted block mb-4">0{i + 1}</span>
+              <span class="display block" style="font-size: 1.5rem; font-weight: 700;">{item.word}</span>
+              <span class="block mt-2 text-sm home-muted">{item.text}</span>
+            </a>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </div>
 </section>
 
 <style>
-  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; }
-  .hero-actions > a { display: inline-flex; align-items: center; min-height: 2.75rem; transition: color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease; }
-  .hero-primary { padding: 0 0.5rem 0 0.75rem; border-left: 2px solid var(--color-action); font: 700 1.0625rem var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; }
-  .hero-secondary { color: color-mix(in srgb, var(--color-text) 72%, transparent); padding: 0 0.25rem; text-underline-offset: 6px; }
-  .hero-secondary:hover { color: var(--color-text); text-decoration: underline; }
-  .hero-tertiary { gap: 0.5rem; color: color-mix(in srgb, var(--color-text) 68%, transparent); }
-  .hero-primary:hover { color: var(--color-action); background: color-mix(in srgb, var(--color-action) 6%, transparent); }
-  .hero-tertiary:hover { color: var(--color-text); }
-  .hero-actions > a:active { opacity: 0.68; }
-  @media (max-width: 480px) {
-    .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 1rem; }
-    .hero-primary { grid-column: 1 / -1; width: max-content; }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
+  .hero-quiet {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: color-mix(in srgb, var(--color-text) 70%, transparent);
+    transition: color 0.15s ease;
   }
+  .hero-quiet:hover { color: var(--color-text); }
   .focus-cell:hover { background-color: var(--surface-2); }
-  .hero-outline-sweep { position: relative; }
-  .hero-outline-sweep::after {
-    content: attr(data-text);
-    position: absolute;
-    inset: 0;
-    color: var(--color-text);
-    -webkit-text-stroke: 0 transparent;
-    clip-path: inset(0 0 0 100%);
-  }
-  .ticker { -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); }
+
   .terminal {
     background-color: #0b1220;
     border: 1px solid var(--hairline);
     border-radius: 2px;
     color: #e2e8f0;
-    box-shadow: var(--shadow-lift);
+    box-shadow: var(--shadow-soft);
   }
   .hairline-b-dark { border-bottom: 1px solid rgb(226 232 240 / 0.14); }
   .hairline-t-dark { border-top: 1px solid rgb(226 232 240 / 0.14); }
@@ -178,7 +148,7 @@ const focus = [
     color: #94a3b8;
     border-right: 1px solid rgb(226 232 240 / 0.14);
     border-bottom: 2px solid transparent;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease;
   }
   .tab:hover { color: #e2e8f0; }
   .tab[aria-selected="true"] {
@@ -199,16 +169,7 @@ const focus = [
     line-height: 1.7;
     display: block;
   }
-  #panel-dev :global(.line) { display: inline-block; min-width: 100%; }
   .code-wrapper { scrollbar-width: thin; }
-  :global(.terminal-caret) {
-    display: inline-block;
-    width: 0.58em;
-    height: 1em;
-    margin-left: 0.2em;
-    vertical-align: -0.14em;
-    background: #e2e8f0;
-  }
 </style>
 
 <script>
