@@ -21,7 +21,7 @@ export default function AdminStoreOrders() {
         const items = order.lines.reduce((sum, line) => sum + line.qty, 0);
         return (
           <li key={order.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm text-[var(--color-text)]">
-            <span className="font-mono text-xs text-[var(--color-text)]/70">{order.id}</span>
+            <span className="font-display text-xs text-[var(--color-text)]/70">{order.id}</span>
             <span className="text-[var(--color-text)]/70">{new Date(order.createdAt).toLocaleString()}</span>
             <span>{items} artículo{items === 1 ? "" : "s"}</span>
             <span className="tabular-nums">{formatMoney(order.totalCents)}</span>
