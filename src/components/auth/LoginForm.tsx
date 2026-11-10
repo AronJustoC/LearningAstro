@@ -54,7 +54,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} aria-busy={loading} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} aria-busy={loading} className="flex flex-col gap-6">
       {error && (
         <Alert variant="destructive" role="alert">
           <AlertDescription>{error}</AlertDescription>
@@ -62,7 +62,7 @@ export default function LoginForm() {
       )}
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email" className="text-sm font-semibold">
+        <Label htmlFor="email" className="label text-[var(--color-text)]/70">
           Email
         </Label>
         <Input
@@ -80,7 +80,7 @@ export default function LoginForm() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="password" className="text-sm font-semibold">
+        <Label htmlFor="password" className="label text-[var(--color-text)]/70">
           Contraseña
         </Label>
         <div className="relative">
@@ -115,7 +115,7 @@ export default function LoginForm() {
       <Button
         type="submit"
         disabled={loading}
-        className="display mt-1 min-h-11 w-full rounded-[2px] bg-[var(--color-action)] text-base uppercase tracking-wide text-[var(--color-on-action)] transition-colors hover:bg-[var(--color-action)]/90 focus-visible:ring-2 focus-visible:ring-ring"
+        className="mt-2 min-h-11 w-full rounded-[2px] bg-[var(--color-action)] text-base uppercase tracking-[0.06em] text-[var(--color-on-action)] transition-colors hover:bg-[var(--color-action)]/90 focus-visible:ring-2 focus-visible:ring-ring"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
