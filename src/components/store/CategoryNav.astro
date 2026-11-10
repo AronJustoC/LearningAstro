@@ -15,8 +15,7 @@ const { current } = Astro.props;
         href="/tienda"
         aria-current={!current ? "page" : undefined}
         class:list={[
-          "btn-glass",
-          !current ? "border-primary bg-primary text-primary-foreground" : undefined,
+          !current ? "btn-block border-primary bg-primary text-primary-foreground" : "chip",
         ]}
       >
         Todos
@@ -31,8 +30,7 @@ const { current } = Astro.props;
               href={`/tienda/${cat.slug}`}
               aria-current={isActive ? "page" : undefined}
               class:list={[
-                "btn-glass",
-                isActive ? "border-primary bg-primary text-primary-foreground" : undefined,
+                isActive ? "btn-block border-primary bg-primary text-primary-foreground" : "chip",
               ]}
             >
               {cat.name}
