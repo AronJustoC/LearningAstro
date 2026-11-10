@@ -26,9 +26,14 @@ const isExternal = (href: string) => href.startsWith("http");
     <section class="py-16 lg:py-20">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="max-w-2xl mb-12 lg:mb-16">
-          <h1 class="display mb-5" style="font-size: clamp(2.5rem, 6vw, 4.5rem);">
-            Hablemos de tu proyecto
-          </h1>
+          <div class="home-section-head motion-reveal-row">
+            <div>
+              <span class="label home-muted block mb-3">04 · Contacto</span>
+              <h1 class="display text-[clamp(2.25rem,5vw,3.5rem)]">
+                Hablemos de tu proyecto
+              </h1>
+            </div>
+          </div>
           <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
             Cuéntame qué necesitas resolver en tu empresa o negocio. Te respondo
             con una propuesta clara y los siguientes pasos.
@@ -49,7 +54,7 @@ const isExternal = (href: string) => href.startsWith("http");
             <ul class="hairline-t">
               {
                 channels.map((c) => (
-                  <li class="hairline-b">
+                  <li class="hairline-b motion-reveal-row">
                     <a
                       href={c.href}
                       target={isExternal(c.href) ? "_blank" : undefined}

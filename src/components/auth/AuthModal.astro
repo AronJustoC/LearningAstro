@@ -1,0 +1,61 @@
+---
+interface Props { titleId: string }
+const { titleId } = Astro.props;
+---
+<div class="auth-backdrop fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto px-4 py-8">
+  <div
+    id="auth-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby={titleId}
+    class="auth-card relative w-full max-w-[26rem] p-6 sm:p-8"
+  >
+    <a
+      href="/"
+      id="auth-close"
+      aria-label="Cerrar"
+      class="absolute right-3 top-3 flex size-10 items-center justify-center rounded-[10px] text-[var(--color-text)]/70 transition-colors duration-200 hover:text-[var(--color-text)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-color)]"
+    >
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </a>
+    <slot />
+  </div>
+</div>
+<style is:global>
+  .auth-backdrop {
+    background: color-mix(in srgb, var(--color-bg) 62%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  .auth-card {
+    background: color-mix(in srgb, var(--color-bg) 78%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid color-mix(in srgb, var(--color-text) 16%, transparent);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.45);
+    color: var(--color-text);
+    animation: auth-in 0.25s ease both;
+  }
+  @keyframes auth-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
+  @media (prefers-reduced-motion: reduce) { .auth-card { animation: none; } }
+</style>
+<script>
+  const card = document.getElementById("auth-card")!;
+  const sel = 'a[href],button:not([disabled]),input:not([disabled])';
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { window.location.href = "/"; return; }
+    if (e.key !== "Tab") return;
+    const f = [...card.querySelectorAll<HTMLElement>(sel)];
+    const first = f[0], last = f[f.length - 1];
+    if (!card.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  // El formulario se hidrata (client:load); reintentar hasta que exista el input.
+  let n = 0;
+  const t = setInterval(() => {
+    const i = card.querySelector<HTMLElement>("input");
+    if (i) { i.focus(); clearInterval(t); } else if (++n > 40) clearInterval(t);
+  }, 50);
+</script>

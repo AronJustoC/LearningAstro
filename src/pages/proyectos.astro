@@ -32,9 +32,13 @@ const projects: Project[] = [
   <main id="main" class="flex-1">
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left mb-8 text-[var(--color-text)]">
-          Proyectos
-        </h1>
+        <div class="home-section-head motion-reveal-row">
+          <div>
+            <span class="label home-muted block mb-3">01 · Trabajo real</span>
+            <h1 class="display text-[clamp(2.25rem,5vw,3.5rem)]">Proyectos</h1>
+          </div>
+          <span class="label home-muted">{projects.length} registros</span>
+        </div>
         <ul class="hairline-t">
           {projects.map((project, i) => <ProjectRow project={project} eager={i < 3} />)}
         </ul>

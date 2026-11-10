@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import RevealOnScroll from "../components/shared/RevealOnScroll.astro";
 
 interface Props {
   title: string;
@@ -98,5 +99,6 @@ const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
       >Saltar al contenido</a
     >
     <slot />
+    <RevealOnScroll />
   </body>
 </html>

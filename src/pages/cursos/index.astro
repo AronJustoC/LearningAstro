@@ -27,7 +27,8 @@ try {
   <main id="main" class="flex-1">
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-8">
+        <div class="home-section-head motion-reveal-row">
+          <p class="label">01 · CURSOS</p>
           <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left text-[var(--color-text)]">
             Cursos
           </h1>
@@ -38,7 +39,7 @@ try {
               {courses.map((course) => (
                 <a
                   href={`/cursos/${course.slug}`}
-                  class="serie-card group flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"
+                  class="motion-reveal-row serie-card group flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"
                 >
                   {course.imageUrl && (
                     <img
