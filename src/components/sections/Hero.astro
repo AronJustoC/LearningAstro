@@ -1,7 +1,7 @@
 ---
 import "@fontsource/jost/500.css";
 import "@fontsource/jost/700.css";
-import { CONTACT_EMAIL, whatsappUrl } from "../../lib/contact";
+import { whatsappUrl } from "../../lib/contact";
 import { featuredProjects } from "../../data/projects";
 import Icon from "../shared/Icon.astro";
 import AccentPicker from "./AccentPicker";
@@ -22,9 +22,6 @@ const stack = [
 
 <section aria-labelledby="hero-title" data-hero-motion class="hero-wrap hairline-b">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 lg:pt-10 lg:pb-16 text-center">
-    <p class="hero-rise hero-loc m-0">Cusco, Perú</p>
-    <a href={`mailto:${CONTACT_EMAIL}`} class="hero-rise hero-mail">{CONTACT_EMAIL}</a>
-
     <h1 id="hero-title" class="hero-rise hero-name">Aron J. Choque</h1>
 
     <div class="hero-rise hero-fan" data-hero-fan aria-hidden="true" style="animation-delay: 80ms;">
