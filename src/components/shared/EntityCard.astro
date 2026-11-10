@@ -19,9 +19,9 @@ const {
 ---
 
 <article
-  class="entity-card group flex flex-col justify-between rounded-[2px] hairline overflow-hidden transition-all duration-150 bg-[var(--color-bg)]"
+  class="entity-card group flex flex-col justify-between rounded-[18px] overflow-hidden bg-[var(--color-bg)]"
 >
-  <div class="image-wrapper relative overflow-hidden">
+  <div class="image-wrapper relative overflow-hidden p-3 pb-0">
     {
       imageUrl ? (
         <img
@@ -29,11 +29,11 @@ const {
           alt={imageAlt}
           loading="lazy"
           width="400"
-          height="192"
-          class="w-full object-cover h-48 hairline-b"
+          height="250"
+          class="w-full object-cover aspect-[16/10] rounded-[18px]"
         />
       ) : (
-        <div class="image-placeholder w-full h-48 hairline-b flex items-center justify-center bg-[var(--surface-2)]">
+        <div class="image-placeholder w-full aspect-[16/10] rounded-[18px] flex items-center justify-center bg-[var(--surface-2)]">
           <span aria-hidden="true" class="label text-xl text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
             {title.slice(0, 2).toUpperCase()}
           </span>
@@ -44,8 +44,8 @@ const {
 
   <div class="flex flex-col p-5 space-y-3 flex-1 justify-between">
     <div>
-      <h2 class="text-xl font-bold leading-snug text-[var(--color-text)]">{title}</h2>
-      <p class="text-sm leading-relaxed mt-2 text-[color-mix(in_srgb,var(--color-text)_75%,transparent)] line-clamp-3">
+      <h2 class="display uppercase font-bold text-xl leading-snug text-[var(--color-text)]">{title}</h2>
+      <p class="text-sm leading-relaxed mt-2 text-[var(--color-text)]/70 line-clamp-3">
         {description}
       </p>
     </div>
@@ -69,9 +69,16 @@ const {
 </article>
 
 <style>
+  .entity-card {
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
   .entity-card:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-lift);
-    border-color: var(--focus-color);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .entity-card { transition: none; }
+    .entity-card:hover { transform: none; }
   }
 </style>
