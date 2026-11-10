@@ -5,6 +5,7 @@ import Footer from "../../components/sections/Footer.astro";
 import ProductCard from "../../components/store/ProductCard.astro";
 import CategoryNav from "../../components/store/CategoryNav.astro";
 import EmptyState from "../../components/store/EmptyState.astro";
+import StoreHeader from "../../components/store/StoreHeader.astro";
 import { products } from "../../data/catalog";
 ---
 
@@ -13,17 +14,15 @@ import { products } from "../../data/catalog";
   <main id="main" class="flex-1">
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <header class="mb-8">
-          <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left mb-8 text-[var(--color-text)]">
-            Catálogo
-          </h1>
+        <div class="mb-8">
+          <StoreHeader num="01" label="TIENDA" title="Catálogo" />
           <p class="text-sm text-muted-foreground mt-2">
             Explora todas nuestras piezas impresas en 3D de diseño exclusivo.
           </p>
           <div class="mt-6">
             <CategoryNav />
           </div>
-        </header>
+        </div>
 
         {
           products.length > 0 ? (

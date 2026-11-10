@@ -13,12 +13,12 @@ const soldOut = isSoldOut(product);
 const minPrice = formatMoney(minPriceCents(product));
 ---
 
-<article class="group rounded-xl border border-border bg-card text-foreground overflow-hidden shadow-xs hover:shadow-md transition-shadow">
+<article class="store-card group overflow-hidden">
   <a
     href={`/tienda/producto/${product.slug}`}
     class="flex flex-col h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl"
   >
-    <div class="relative aspect-square w-full bg-secondary/30 overflow-hidden">
+    <div class="relative overflow-hidden">
       {
         firstImage && (
           <img
@@ -27,7 +27,7 @@ const minPrice = formatMoney(minPriceCents(product));
             width={400}
             height={400}
             loading="lazy"
-            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            class="store-media"
           />
         )
       }
@@ -41,12 +41,10 @@ const minPrice = formatMoney(minPriceCents(product));
     </div>
 
     <div class="p-4 flex flex-col flex-1 justify-between gap-2">
-      <h2 class="font-display font-medium text-base text-foreground group-hover:text-primary transition-colors">
+      <h2 class="store-title">
         {product.name}
       </h2>
-      <p class="text-sm text-muted-foreground font-sans">
-        desde <span class="font-medium text-foreground">{minPrice}</span>
-      </p>
+      <p class="store-price">{minPrice}</p>
     </div>
   </a>
 </article>

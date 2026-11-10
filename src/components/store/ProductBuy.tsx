@@ -60,8 +60,8 @@ export default function ProductBuy({ product }: Props) {
               <label
                 key={variant.id}
                 className={[
-                  "flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-lg border px-3 py-2",
-                  checked ? "border-ring ring-2 ring-ring/40" : "border-border",
+                  "btn-glass flex min-h-11 cursor-pointer items-center justify-between gap-3 px-3 py-2",
+                  checked ? "ring-2 ring-ring/40" : "",
                   out ? "cursor-not-allowed opacity-60" : "",
                 ].join(" ")}
               >
@@ -89,7 +89,7 @@ export default function ProductBuy({ product }: Props) {
 
       {selected ? (
         <div className="space-y-1">
-          <p className="text-2xl font-semibold tabular-nums">
+          <p className="store-price text-2xl">
             {formatMoney(selected.priceCents)}
           </p>
           {stock > 0 ? (
@@ -141,7 +141,7 @@ export default function ProductBuy({ product }: Props) {
 
       <Button
         type="button"
-        className="h-11 w-full px-5 sm:w-auto"
+        className="btn-block h-11"
         onClick={handleAdd}
         disabled={soldOut}
       >

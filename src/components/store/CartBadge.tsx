@@ -39,7 +39,8 @@ export default function CartBadge() {
       {count > 0 ? (
         <span
           aria-hidden="true"
-          className="absolute -top-0.5 -right-0.5 inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1 text-xs font-medium text-primary-foreground tabular-nums"
+          style={{ borderRadius: "9999px" }}
+          className="absolute -top-0.5 -right-0.5 inline-flex min-w-5 items-center justify-center bg-primary px-1 text-xs font-medium text-primary-foreground tabular-nums"
         >
           {count > 99 ? "99+" : count}
         </span>

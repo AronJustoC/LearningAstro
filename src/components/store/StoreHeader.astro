@@ -1,0 +1,10 @@
+---
+interface Props { num: string; label: string; title: string }
+const { num, label, title } = Astro.props;
+---
+<header class="home-section-head motion-reveal-row">
+  <div>
+    <p class="label home-muted block mb-3">{num} · {label}</p>
+    <h1 class="display text-[clamp(2.25rem,5vw,3.5rem)]">{title}</h1>
+  </div>
+</header>

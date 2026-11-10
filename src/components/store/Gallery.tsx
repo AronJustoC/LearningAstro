@@ -14,11 +14,11 @@ export default function Gallery({ images }: Props) {
 
   return (
     <div className="space-y-3">
-      <div className="overflow-hidden rounded-xl bg-muted">
+      <div className="overflow-hidden">
         <img
           src={current.src}
           alt={current.alt}
-          className="aspect-square w-full object-cover"
+          className="store-media"
         />
       </div>
       {images.length > 1 ? (
