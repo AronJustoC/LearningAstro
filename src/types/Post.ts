@@ -6,6 +6,7 @@ export interface Post {
   content: string;
   slug: string;
   imageUrl?: string | null;
+  publicado: boolean;
   createdAt?: string;
   updatedAt?: string;
   userId?: number;
