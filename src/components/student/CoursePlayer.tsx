@@ -253,7 +253,7 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
       pre.style.position = "relative";
       const button = document.createElement("button");
       button.className =
-        "code-copy-btn absolute top-2 right-2 px-2.5 py-1 text-xs font-mono rounded bg-[var(--surface-2)] text-[var(--color-text)] border border-[var(--hairline)] hover:border-[var(--focus-color)] transition-colors";
+        "code-copy-btn absolute top-2 right-2 px-2.5 py-1 text-xs font-display rounded bg-[var(--surface-2)] text-[var(--color-text)] border border-[var(--hairline)] hover:border-[var(--focus-color)] transition-colors";
       button.innerText = "Copiar";
 
       button.addEventListener("click", () => {
@@ -421,7 +421,7 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
                             onClick={() => seekChapter(ch.time)}
                             className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-[2px] hairline bg-[var(--color-bg)] hover:border-[var(--focus-color)] transition-colors"
                           >
-                            <span className="font-mono text-[var(--color-action)]">
+                            <span className="font-display text-[var(--color-action)]">
                               {formatDuration(ch.time)}
                             </span>
                             <span>{ch.title}</span>
@@ -478,11 +478,11 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="text-xs uppercase tracking-wide font-mono" style={{ color: "var(--color-action)" }}>
+                          <p className="text-xs uppercase tracking-wide font-display" style={{ color: "var(--color-action)" }}>
                             Lección {lesson.orden}
                           </p>
                           {lesson.duration != null && (
-                            <span className="text-xs font-mono" style={{ color: "color-mix(in srgb, var(--color-text) 60%, transparent)" }}>
+                            <span className="text-xs font-display" style={{ color: "color-mix(in srgb, var(--color-text) 60%, transparent)" }}>
                               {formatDuration(lesson.duration)}
                             </span>
                           )}
