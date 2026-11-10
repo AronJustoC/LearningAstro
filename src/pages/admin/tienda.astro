@@ -1,10 +1,8 @@
 ---
 import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
-import StatCard from "../../components/admin/StatCard.astro";
 import PageHeader from "../../components/admin/PageHeader.astro";
+import StoreManager from "../../components/admin/StoreManager";
 import AdminStoreOrders from "../../components/store/AdminStoreOrders";
-import { categories, products, minPriceCents, isSoldOut } from "../../data/catalog";
-import { formatMoney } from "../../lib/store/pricing";
 import { readRole } from "../../lib/session";
 
 const token = Astro.cookies.get("token")?.value;
@@ -15,45 +13,16 @@ if (!role) {
 if (role !== "ADMIN") {
   return Astro.redirect("/mis-cursos");
 }
-
-const categoryName = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? slug;
 ---
 
 <LayoutDashboard title="Admin Tienda">
   <PageHeader
     title="Tienda"
-    description="Catálogo y pedidos de la tienda (solo lectura)."
+    description="Productos, categorías y stock de la tienda."
   />
-  <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 mt-8">
-    <StatCard title="Total Productos" value={products.length} />
-    <StatCard title="Total Categorías" value={categories.length} />
-  </div>
 
-  <div class="mt-10 overflow-x-auto border border-[var(--hairline)] bg-[var(--color-bg)]">
-    <table class="w-full text-left text-sm">
-      <thead class="label text-[var(--color-text)]/70">
-        <tr class="border-b border-[var(--hairline)]">
-          <th class="px-4 py-3 font-normal">Producto</th>
-          <th class="px-4 py-3 font-normal">Categoría</th>
-          <th class="px-4 py-3 font-normal">Desde</th>
-          <th class="px-4 py-3 font-normal">Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          products.map((product) => (
-            <tr class="border-b border-[var(--hairline)] last:border-b-0 text-[var(--color-text)]">
-              <td class="px-4 py-3">{product.name}</td>
-              <td class="px-4 py-3 text-[var(--color-text)]/70">{categoryName(product.categorySlug)}</td>
-              <td class="px-4 py-3 tabular-nums">{formatMoney(minPriceCents(product))}</td>
-              <td class="px-4 py-3 text-[var(--color-text)]/70">
-                {isSoldOut(product) ? "Agotado" : "Disponible"}
-              </td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+  <div class="mt-8">
+    <StoreManager client:load />
   </div>
 
   <section class="mt-10">
