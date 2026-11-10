@@ -7,6 +7,7 @@ import Footer from "../../components/sections/Footer.astro";
 import ProductCard from "../../components/store/ProductCard.astro";
 import CategoryNav from "../../components/store/CategoryNav.astro";
 import EmptyState from "../../components/store/EmptyState.astro";
+import StoreHeader from "../../components/store/StoreHeader.astro";
 import { categories, productsByCategory, type Category } from "../../data/catalog";
 
 export const getStaticPaths = () =>
@@ -31,17 +32,15 @@ const categoryProducts = productsByCategory(category.slug);
   <main id="main" class="flex-1">
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <header class="mb-8">
-          <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left mb-8 text-[var(--color-text)]">
-            {category.name}
-          </h1>
+        <div class="mb-8">
+          <StoreHeader num="01" label="TIENDA" title={category.name} />
           <p class="text-sm text-muted-foreground mt-2">
             {category.description}
           </p>
           <div class="mt-6">
             <CategoryNav current={category.slug} />
           </div>
-        </header>
+        </div>
 
         {
           categoryProducts.length > 0 ? (

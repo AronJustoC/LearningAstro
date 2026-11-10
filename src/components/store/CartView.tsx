@@ -68,12 +68,12 @@ export default function CartView() {
             return (
               <li
                 key={`${line.productSlug}-${line.variantId}`}
-                className="flex flex-col gap-4 rounded-xl border border-border p-4 sm:flex-row sm:items-center"
+                className="store-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium">{line.productName}</p>
+                  <p className="store-title">{line.productName}</p>
                   <p className="text-sm text-muted-foreground">{line.variantLabel}</p>
-                  <p className="mt-1 text-sm tabular-nums">
+                  <p className="store-price mt-1 text-sm tabular-nums">
                     {formatMoney(line.unitPriceCents)} c/u
                   </p>
                 </div>
@@ -98,14 +98,14 @@ export default function CartView() {
                   <Button
                     type="button"
                     variant="ghost"
-                    className="h-11 px-3"
+                    className="btn-glass h-11 px-3"
                     onClick={() => removeFromCart(line.productSlug, line.variantId)}
                   >
                     Quitar
                   </Button>
                 </div>
 
-                <p className="text-sm font-medium tabular-nums sm:w-28 sm:text-right">
+                <p className="store-price text-sm tabular-nums sm:w-28 sm:text-right">
                   {formatMoney(line.lineTotalCents)}
                 </p>
               </li>
@@ -146,7 +146,7 @@ export default function CartView() {
             aria-disabled={lines.length === 0}
             tabIndex={lines.length === 0 ? -1 : undefined}
             className={[
-              "inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground outline-none hover:bg-primary/80 focus-visible:ring-3 focus-visible:ring-ring/50",
+              "btn-block inline-flex h-11 w-full items-center justify-center px-5 text-sm font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
               lines.length === 0 ? "pointer-events-none opacity-50" : "",
             ].join(" ")}
           >

@@ -352,3 +352,48 @@ html:not(.dark) .btn-block, html:not(.dark) [data-slot="button"][class*="bg-prim
 }
 [data-slot="button"]:disabled { opacity: 0.5; }
 html:not(.dark) [data-slot="button"]:not([class*="bg-primary"]) { border-color: color-mix(in srgb, #000000 10%, transparent); }
+
+/* Store building blocks */
+.store-card {
+  border-radius: 18px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-text) 4%, var(--color-bg));
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+}
+.store-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+@media (prefers-reduced-motion: reduce) { .store-card:hover { transform: none; } }
+.store-media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  padding: 1rem;
+  background: color-mix(in srgb, currentColor 6%, transparent);
+}
+.store-price { font-variant-numeric: tabular-nums; font-weight: 500; }
+.store-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+.store-input {
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
+  background: color-mix(in srgb, var(--color-text) 5%, transparent);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+}
+.store-input:focus-visible { outline: 2px solid var(--focus-color); outline-offset: 2px; }
+
+/* Selects nativos: el menú desplegable toma los colores del tema */
+select {
+  color-scheme: light dark;
+}
+select option {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}

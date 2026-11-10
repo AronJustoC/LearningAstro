@@ -8,17 +8,15 @@ interface Props {
 const { current } = Astro.props;
 ---
 
-<nav aria-label="Categorías" class="overflow-x-auto py-2">
-  <ul class="flex items-center gap-2 whitespace-nowrap text-sm">
+<nav aria-label="Categorías" class="py-2">
+  <ul class="flex flex-wrap items-center gap-2 text-sm">
     <li>
       <a
         href="/tienda"
         aria-current={!current ? "page" : undefined}
         class:list={[
-          "px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-          !current
-            ? "border-primary bg-primary text-primary-foreground"
-            : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-secondary",
+          "btn-glass",
+          !current ? "border-primary bg-primary text-primary-foreground" : undefined,
         ]}
       >
         Todos
@@ -33,10 +31,8 @@ const { current } = Astro.props;
               href={`/tienda/${cat.slug}`}
               aria-current={isActive ? "page" : undefined}
               class:list={[
-                "px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                isActive
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-secondary",
+                "btn-glass",
+                isActive ? "border-primary bg-primary text-primary-foreground" : undefined,
               ]}
             >
               {cat.name}

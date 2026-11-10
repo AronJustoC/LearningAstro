@@ -37,14 +37,14 @@ export default function OrderConfirmation() {
 
   if (!order) {
     return (
-      <div className="mx-auto max-w-xl rounded-xl border border-border bg-card p-8 text-center">
-        <h1 className="text-lg font-medium">No encontramos ese pedido</h1>
+      <div className="store-card mx-auto max-w-xl p-6 text-center">
+        <h1 className="display text-lg font-medium">No encontramos ese pedido</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Puede que el enlace esté incompleto o que el pedido ya no exista.
         </p>
         <a
           href="/tienda"
-          className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 text-sm font-medium text-primary-foreground outline-none hover:bg-primary/80 focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="btn-glass btn-block mt-6"
         >
           Ver catálogo
         </a>
@@ -58,7 +58,7 @@ export default function OrderConfirmation() {
         <h1
           ref={headingRef}
           tabIndex={-1}
-          className="rounded text-3xl font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="display rounded text-3xl font-semibold tracking-tight outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           Pedido recibido
         </h1>
@@ -89,7 +89,7 @@ export default function OrderConfirmation() {
         </section>
 
         <aside className="space-y-4">
-          <div className="rounded-xl border border-border bg-card p-5">
+          <div className="store-card p-6">
             <h2 className="mb-3 text-lg font-medium">Totales</h2>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -109,7 +109,7 @@ export default function OrderConfirmation() {
             </dl>
           </div>
 
-          <div className="rounded-xl border border-border bg-card p-5">
+          <div className="store-card p-6">
             <h2 className="mb-3 text-lg font-medium">Datos de envío</h2>
             <address className="space-y-1 text-sm not-italic">
               <p>{order.shipping.name}</p>

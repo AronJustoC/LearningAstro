@@ -184,7 +184,7 @@ export default function CheckoutForm() {
                 key={field.key}
                 className={field.key === "address" ? "sm:col-span-2" : undefined}
               >
-                <Label htmlFor={field.key} className="mb-1.5">
+                <Label htmlFor={field.key} className="label mb-1.5">
                   {field.label}
                   {field.required ? (
                     <span aria-hidden="true" className="text-destructive">
@@ -202,7 +202,7 @@ export default function CheckoutForm() {
                   onChange={(event) => update(field.key, event.target.value)}
                   aria-invalid={error ? true : undefined}
                   aria-describedby={describedBy}
-                  className="h-11"
+                  className="store-input h-11"
                 />
                 {error ? (
                   <p id={`${field.key}-error`} className="mt-1 text-sm text-destructive">
@@ -214,7 +214,7 @@ export default function CheckoutForm() {
           })}
 
           <div className="sm:col-span-2">
-            <Label htmlFor="reference" className="mb-1.5">
+            <Label htmlFor="reference" className="label mb-1.5">
               Referencia (opcional)
             </Label>
             <Textarea
@@ -222,12 +222,12 @@ export default function CheckoutForm() {
               name="reference"
               value={values.reference ?? ""}
               onChange={(event) => update("reference", event.target.value)}
-              className="min-h-11"
+              className="store-input min-h-11"
             />
           </div>
         </div>
 
-        <Button type="submit" disabled={saving} aria-busy={saving} className="h-11 px-5">
+        <Button type="submit" disabled={saving} aria-busy={saving} className="btn-block h-11">
           {saving ? "Confirmando…" : "Confirmar pedido"}
         </Button>
 
@@ -236,7 +236,7 @@ export default function CheckoutForm() {
         </p>
       </form>
 
-      <aside className="h-fit space-y-4 rounded-xl border border-border bg-card p-5">
+      <aside className="store-card h-fit space-y-4 p-5">
         <h2 className="text-lg font-medium">Resumen del pedido</h2>
         <ul className="space-y-2 text-sm">
           {lines.map((line) => (
