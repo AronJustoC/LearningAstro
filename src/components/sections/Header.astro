@@ -154,9 +154,9 @@ const isCurrent = (href: string) =>
     justify-content: center;
     width: 2.5rem;
     height: 2.5rem;
-    border: 1px solid transparent;
+    border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
     border-radius: 10px;
-    background: linear-gradient(180deg, color-mix(in srgb, var(--color-action) 92%, white 8%), var(--color-action));
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 8px 24px -12px rgb(0 0 0 / 0.35);
