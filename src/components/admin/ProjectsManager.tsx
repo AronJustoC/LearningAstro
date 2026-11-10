@@ -78,6 +78,29 @@ export default function ProjectsManager() {
     }
   }
 
+  async function savePortada(project: Project, destacadoPortada: boolean, ordenPortada: number) {
+    setError("");
+    const others = projects.filter((p) => p.id !== project.id && p.destacadoPortada).length;
+    if (destacadoPortada && others >= 3) {
+      setError("Máximo 3 proyectos en la portada.");
+      return;
+    }
+    try {
+      const response = await fetch(`${API_URL}/${project.id}`, {
+        method: "PATCH",
+        headers: authHeaders(),
+        body: JSON.stringify({ destacadoPortada, ordenPortada: destacadoPortada ? ordenPortada : null }),
+      });
+      if (!response.ok) {
+        setError("No se pudo guardar la portada.");
+        return;
+      }
+      loadProjects();
+    } catch {
+      setError("No se pudo conectar con el servidor.");
+    }
+  }
+
   async function handleDelete(id: number) {
     setDeletingId(id);
     try {
@@ -179,6 +202,11 @@ export default function ProjectsManager() {
 
       <div className="space-y-3">
         <h2 className="text-lg font-semibold text-foreground">Proyectos existentes</h2>
+        {error && (
+          <Alert variant="destructive" role="alert">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         {projects.length === 0 ? (
           <div className="rounded-lg border border-dashed border-border p-6 text-center">
             <p className="text-muted-foreground text-sm">
@@ -190,6 +218,33 @@ export default function ProjectsManager() {
             <Card key={project.id} className="rounded-[2px] border-[var(--hairline)] shadow-none">
               <CardContent className="flex items-center justify-between gap-4 p-4">
                 <span className="font-semibold text-foreground">{project.title}</span>
+                <div className="flex items-center gap-2 ml-auto">
+                  <span className="text-sm text-muted-foreground">En portada</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    aria-pressed={!!project.destacadoPortada}
+                    onClick={() => savePortada(project, !project.destacadoPortada, project.ordenPortada ?? 1)}
+                  >
+                    {project.destacadoPortada ? "Sí" : "No"}
+                  </Button>
+                  {project.destacadoPortada && (
+                    <Input
+                      type="number"
+                      min={1}
+                      max={3}
+                      aria-label="Orden"
+                      title="Orden"
+                      defaultValue={project.ordenPortada ?? 1}
+                      onBlur={(e) => {
+                        const n = Math.min(3, Math.max(1, Number(e.target.value) || 1));
+                        if (n !== project.ordenPortada) savePortada(project, true, n);
+                      }}
+                      className="w-16 min-h-9"
+                    />
+                  )}
+                </div>
                 <Button
                   variant="ghost"
                   size="sm"

@@ -8,6 +8,8 @@ export interface Project {
   liveUrl?: string | null;
   createdAt?: string; // string si proviene del backend como ISO date
   userId?: number;
+  destacadoPortada?: boolean;
+  ordenPortada?: number | null;
 
   // Relación opcional (si alguna vez incluyes el usuario dueño)
   owner?: {
