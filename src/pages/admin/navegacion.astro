@@ -1,0 +1,26 @@
+---
+import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
+import PageHeader from "../../components/admin/PageHeader.astro";
+import NavToggles from "../../components/admin/NavToggles";
+import { readRole } from "../../lib/session";
+
+const token = Astro.cookies.get("token")?.value;
+const role = readRole(token);
+if (!role) {
+  return Astro.redirect("/auth/login");
+}
+if (role !== "ADMIN") {
+  return Astro.redirect("/mis-cursos");
+}
+---
+
+<LayoutDashboard title="Admin Navegación">
+  <PageHeader
+    title="Navegación"
+    description="Muestra u oculta las pestañas del menú público."
+  />
+
+  <div class="mt-8">
+    <NavToggles client:load />
+  </div>
+</LayoutDashboard>

@@ -1,8 +1,10 @@
 ---
 import Icon from "../shared/Icon.astro";
 import { CONTACT_EMAIL, TIKTOK_URL, whatsappUrl } from "../../lib/contact";
+import { getNavTabs } from "../../lib/navSettings";
 
 const currentYear = new Date().getFullYear();
+const navTabs = await getNavTabs();
 
 const footerLinks = [
   { name: "GitHub", href: "https://github.com/AronJustoC", icon: "github" },
@@ -33,7 +35,18 @@ const sections = [
       { name: "GitHub", href: "https://github.com/AronJustoC" },
     ],
   },
-];
+].map((section) => ({
+  ...section,
+  links: section.links.filter((link) => {
+    const key =
+      link.href === "/proyectos"
+        ? "proyectos"
+        : link.href === "/blog"
+          ? "blog"
+          : undefined;
+    return key ? navTabs[key] : true;
+  }),
+}));
 ---
 
 <footer class="hairline-t bg-[var(--color-bg)] transition-colors duration-200">
@@ -69,7 +82,7 @@ const sections = [
                   <li>
                     <a
                       href={link.href}
-                      class="link-arrow text-sm"
+                      class="footer-link text-sm"
                     >
                       {link.name}{link.href.startsWith("http") &&  <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>}
                     </a>
@@ -105,3 +118,40 @@ const sections = [
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    color: var(--color-text);
+    transition: color 200ms ease-out;
+  }
+  .footer-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .footer-link:hover,
+  .footer-link:focus-visible {
+    color: var(--focus-color);
+  }
+  .footer-link:hover::after,
+  .footer-link:focus-visible::after {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .footer-link,
+    .footer-link::after {
+      transition: none;
+    }
+  }
+</style>
