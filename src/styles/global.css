@@ -255,8 +255,12 @@ html.dark {
     gap: 0.75rem;
     min-height: 2.75rem;
     padding: 0 1.25rem;
-    border-radius: 2px;
-    background: var(--color-action);
+    border-radius: 999px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--color-action) 62%, white 12%) 0%, color-mix(in srgb, var(--color-action) 74%, transparent) 100%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgb(255 255 255 / 0.28);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 10px 30px -12px color-mix(in srgb, var(--color-action) 70%, transparent);
     color: var(--color-on-action);
     font-family: var(--font-display);
     font-weight: 700;
@@ -265,7 +269,8 @@ html.dark {
     text-transform: uppercase;
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   }
-  .btn-block:hover { filter: brightness(0.96); }
+  .btn-block:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .btn-block:focus-visible { outline: 2px solid var(--focus-color); outline-offset: 2px; }
   .btn-block:active { transform: translateY(0); filter: brightness(0.96); }
   .btn-block[aria-disabled="true"], .btn-block:disabled { opacity: 0.5; pointer-events: none; }
   .link-arrow {
@@ -296,6 +301,10 @@ html.dark {
     letter-spacing: 0.02em;
   }
   [data-slot="button"] {
+    border-radius: 999px;
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 10px 30px -12px color-mix(in srgb, var(--color-action) 70%, transparent);
     font-family: var(--font-display);
     font-weight: 700;
     text-transform: uppercase;
@@ -304,8 +313,12 @@ html.dark {
 }
 
 /* Modo claro: todo lo relleno de azul lleva un borde negro fino para sentirse menos saturado */
-html:not(.dark) .btn-block,
 html:not(.dark) [class*="bg-[var(--color-action)]"],
 html:not(.dark) [data-slot="button"][class*="bg-primary"] {
-  border: 1px solid #0b1220;
+  border: 1px solid rgb(255 255 255 / 0.28);
 }
+html:not(.dark) .btn-block { color: #ffffff; }
+.btn-block, [data-slot="button"][class*="bg-primary"] { border-radius: 999px; }
+[data-slot="button"][class*="bg-primary"] { background: linear-gradient(180deg, color-mix(in srgb, var(--color-action) 62%, white 12%) 0%, color-mix(in srgb, var(--color-action) 74%, transparent) 100%); border: 1px solid rgb(255 255 255 / 0.28); }
+[data-slot="button"]:hover { filter: brightness(1.08); transform: translateY(-1px); }
+html:not(.dark) [data-slot="button"]:not([class*="bg-primary"]) { border-color: color-mix(in srgb, #000000 10%, transparent); }
