@@ -366,3 +366,10 @@ select option {
   background-color: var(--color-bg);
   color: var(--color-text);
 }
+
+.chip { display:inline-flex; align-items:center; height:2.25rem; padding:0 1rem; border-radius:10px; border:1px solid color-mix(in srgb, var(--color-text) 14%, transparent); background:transparent; color:var(--color-text); font-family:var(--font-sans); font-weight:500; font-size:0.9375rem; transition: background-color 200ms ease-out, border-color 200ms ease-out; }
+.chip:hover { background: color-mix(in srgb, var(--color-text) 6%, transparent); }
+.chip:focus-visible { outline:2px solid var(--focus-color); outline-offset:2px; }
+
+html:not(.dark) .store-card { background:#ffffff; box-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 8px 24px -12px rgb(15 23 42 / 0.18); }
+html:not(.dark) .store-card .store-media { background:#f1f5f9; }
