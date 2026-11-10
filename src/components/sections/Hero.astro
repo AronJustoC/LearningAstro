@@ -1,203 +1,183 @@
 ---
-import { codeToHtml } from "shiki";
-import { whatsappUrl } from "../../lib/contact";
+import "@fontsource/jost/500.css";
+import "@fontsource/jost/700.css";
+import { CONTACT_EMAIL, whatsappUrl } from "../../lib/contact";
+import { featuredProjects } from "../../data/projects";
 import Icon from "../shared/Icon.astro";
+import AccentPicker from "./AccentPicker";
 
-const devCode = `interface Developer {
-  name: string;
-  role: string;
-  focus: string[];
-  location: string;
-}
+// Abanico: tres proyectos reales (centro = el primero destacado).
+const [a, b, c] = featuredProjects;
+const cards = [
+  { ...b, x: "-62%", r: "-7deg", z: 1 },
+  { ...a, x: "0%", r: "0deg", z: 3 },
+  { ...c, x: "62%", r: "7deg", z: 2 },
+];
 
-const aron: Developer = {
-  name: "Aron Choque",
-  role: "Developer",
-  focus: ["Infra", "Automatización", "IA"],
-  location: "Cusco, Perú"
-};
-
-export default aron;`;
-
-const stackCode = `{
-  "infra": ["Docker", "GitHub Actions", "PostgreSQL"],
-  "backend": ["Node.js", "Express", "NestJS", "Prisma"],
-  "frontend": ["Astro", "React", "Tailwind CSS"],
-  "ia": ["Claude Code", "MCP", "Agentes"]
-}`;
-
-const opts = { theme: "github-dark" } as const;
-const [devHtml, stackHtml] = await Promise.all([
-  codeToHtml(devCode, { lang: "typescript", ...opts }),
-  codeToHtml(stackCode, { lang: "json", ...opts }),
-]);
-
-const focus = [
-  { word: "Plataformas web", text: "Sitios, tiendas y sistemas a tu medida.", href: "/#proyectos" },
-  { word: "Automatización", text: "Menos tareas manuales en tus procesos.", href: "/#proyectos" },
-  { word: "Agentes de IA", text: "Asistentes que ejecutan tareas por ti.", href: "/contacto" },
+const stack = [
+  "Astro", "React", "Tailwind CSS", "Node.js", "NestJS", "Prisma",
+  "PostgreSQL", "Docker", "GitHub Actions", "Claude Code", "MCP",
 ];
 ---
 
-<section aria-labelledby="hero-title" data-hero-motion>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 lg:pt-32 lg:pb-24">
-    <div class="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center">
-      <!-- Texto -->
-      <div class="hero-rise space-y-8">
-        <p class="label home-muted inline-flex items-center gap-2">
-          <span class="inline-block w-1.5 h-1.5" style="background: var(--color-action);" aria-hidden="true"></span>
-          Desarrollo de software · Cusco, Perú
-        </p>
+<section aria-labelledby="hero-title" data-hero-motion class="hero-wrap hairline-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 lg:pt-10 lg:pb-16 text-center">
+    <p class="hero-rise hero-loc m-0">Cusco, Perú</p>
+    <a href={`mailto:${CONTACT_EMAIL}`} class="hero-rise hero-mail">{CONTACT_EMAIL}</a>
 
-        <h1 id="hero-title" class="display" style="font-size: clamp(2.5rem, 5.6vw, 5rem); overflow-wrap: anywhere; hyphens: auto;">
-          <span class="block">Software a medida</span>
-          <span class="outline-text block">para tu empresa.</span>
-        </h1>
+    <h1 id="hero-title" class="hero-rise hero-name">Aron J. Choque</h1>
 
-        <p class="text-base sm:text-lg leading-relaxed max-w-xl home-muted">
-          Plataformas web, sistemas a medida, automatización de procesos y
-          agentes de IA para empresas y negocios. Te acompaño desde la idea hasta
-          que funciona.
-        </p>
-
-        <div class="hero-actions">
-          <a href="/contacto" class="btn-block">
-            Hablemos de tu proyecto
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
-          </a>
-          <a href="/#proyectos" class="link-arrow text-sm min-h-11">
-            Ver proyectos
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-          <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" class="hero-quiet label min-h-11">
-            <Icon icon="whatsapp" class="w-4 h-4" aria-hidden="true" />
-            WhatsApp
-            <span class="sr-only">(se abre en otra pestaña)</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Panel terminal -->
-      <div class="hero-rise terminal min-w-0" style="animation-delay: 120ms;">
-        <div class="flex items-center hairline-b-dark">
-          <div role="tablist" aria-label="Archivos" class="flex">
-            <button role="tab" id="tab-dev" aria-controls="panel-dev" aria-selected="true" class="tab">developer.ts</button>
-            <button role="tab" id="tab-stack" aria-controls="panel-stack" aria-selected="false" tabindex="-1" class="tab">stack.json</button>
-          </div>
-        </div>
-
-        <div id="panel-dev" role="tabpanel" aria-labelledby="tab-dev" tabindex="0" class="code-wrapper p-5 overflow-x-auto">
-          <Fragment set:html={devHtml} />
-        </div>
-        <div id="panel-stack" role="tabpanel" aria-labelledby="tab-stack" tabindex="0" hidden class="code-wrapper p-5 overflow-x-auto">
-          <Fragment set:html={stackHtml} />
-        </div>
-
-        <div class="flex items-center justify-between hairline-t-dark px-4 h-9 label" style="color: #94a3b8;">
-          <span id="panel-lang">TypeScript</span>
-          <span>UTF-8 · LF</span>
-        </div>
-      </div>
+    <div class="hero-rise hero-fan" data-hero-fan aria-hidden="true" style="animation-delay: 80ms;">
+      {cards.map((card) => (
+        <a
+          href={`/proyectos/${card.slug}`}
+          tabindex="-1"
+          class="hero-card"
+          style={`--x:${card.x}; --r:${card.r}; z-index:${card.z};`}
+        >
+          <img src={card.imageUrl} alt="" width="200" height="250" loading="eager" decoding="async" />
+        </a>
+      ))}
     </div>
+
+    <p class="hero-rise hero-tag m-0" style="animation-delay: 160ms;">
+      Software a medida<br />para empresas.
+    </p>
+
+    <div class="hero-rise hero-actions" style="animation-delay: 220ms;">
+      <a href="/contacto" class="btn-block">
+        Hablemos de tu proyecto
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
+      </a>
+      <a href="/#proyectos" class="hero-quiet">Proyectos</a>
+      <a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" class="hero-quiet">
+        <Icon icon="whatsapp" class="w-3.5 h-3.5" aria-hidden="true" />
+        WhatsApp
+        <span class="sr-only">(se abre en otra pestaña)</span>
+      </a>
+    </div>
+
+    <p class="hero-rise hero-clients-label label m-0" style="animation-delay: 280ms;">Stack habitual</p>
+    <p class="hero-rise hero-clients m-0" style="animation-delay: 280ms;">{stack.join(" · ")}</p>
   </div>
 
-  <!-- Fila de foco: tres celdas sobre la retícula -->
-  <div class="hairline-t hairline-b">
-    <ul class="max-w-7xl mx-auto grid md:grid-cols-3 list-none m-0 p-0">
-      {
-        focus.map((item, i) => (
-          <li class:list={[i > 0 && "md:border-l border-t md:border-t-0"]} style="border-color: var(--hairline);">
-            <a href={item.href} class="focus-cell block px-4 sm:px-6 lg:px-8 py-8 transition-colors duration-150">
-              <span class="label home-muted block mb-4">0{i + 1}</span>
-              <span class="display block" style="font-size: 1.5rem; font-weight: 700;">{item.word}</span>
-              <span class="block mt-2 text-sm home-muted">{item.text}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+  <AccentPicker client:idle />
 </section>
 
 <style>
-  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
+  .hero-wrap { overflow-x: clip; --font-hero: "Jost", "Futura", "Barlow Condensed", sans-serif; }
+
+  .hero-loc {
+    font-family: var(--font-hero);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .hero-mail {
+    display: inline-block;
+    margin-top: 0.15rem;
+    font-size: 0.8125rem;
+    color: color-mix(in srgb, var(--color-text) 50%, transparent);
+  }
+  .hero-mail:hover { color: var(--color-text); }
+
+  .hero-name {
+    font-family: var(--font-hero);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 7.6vw, 6.3rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    margin: 1.25rem 0 0;
+  }
+
+  /* Abanico: 3 tarjetas redondeadas, superpuestas y giradas; el puntero las inclina (--mx/--my en [-1,1]). */
+  .hero-fan {
+    --mx: 0; --my: 0;
+    position: relative;
+    height: clamp(10rem, 21vw, 15rem);
+    margin-top: clamp(0.75rem, 2vw, 1.5rem);
+  }
+  .hero-card {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: clamp(7rem, 16vw, 12rem);
+    aspect-ratio: 4 / 5;
+    margin-left: calc(clamp(7rem, 16vw, 12rem) / -2);
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--surface-2);
+    box-shadow: 0 2px 6px rgb(15 23 42 / 0.08), 0 18px 40px -12px rgb(15 23 42 / 0.3);
+    transform:
+      translate(calc(var(--x) + var(--mx) * 10px), calc(var(--my) * 8px))
+      rotate(calc(var(--r) + var(--mx) * 3deg));
+    transition: transform 0.6s var(--ease-out-expo);
+  }
+  html.dark .hero-card { box-shadow: 0 2px 6px rgb(0 0 0 / 0.5), 0 18px 40px -12px rgb(0 0 0 / 0.7); }
+  .hero-card img { width: 100%; height: 100%; object-fit: cover; object-position: left top; display: block; }
+
+  .hero-tag {
+    font-family: var(--font-hero);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 6.2vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-text) 22%, transparent);
+    margin-top: clamp(0.75rem, 2vw, 1.5rem);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: 2rem;
+  }
   .hero-quiet {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: color-mix(in srgb, var(--color-text) 70%, transparent);
+    gap: 0.4rem;
+    min-height: 1.75rem;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--color-text) 72%, transparent);
     transition: color 0.15s ease;
   }
   .hero-quiet:hover { color: var(--color-text); }
-  .focus-cell:hover { background-color: var(--surface-2); }
 
-  .terminal {
-    background-color: #0b1220;
-    border: 1px solid var(--hairline);
-    border-radius: 2px;
-    color: #e2e8f0;
-    box-shadow: var(--shadow-soft);
+  .hero-clients-label { margin-top: 3rem; color: var(--color-text); }
+  .hero-clients {
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: color-mix(in srgb, var(--color-text) 50%, transparent);
   }
-  .hairline-b-dark { border-bottom: 1px solid rgb(226 232 240 / 0.14); }
-  .hairline-t-dark { border-top: 1px solid rgb(226 232 240 / 0.14); }
-  .tab {
-    height: 2.25rem;
-    padding: 0 1rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: #94a3b8;
-    border-right: 1px solid rgb(226 232 240 / 0.14);
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s ease;
-  }
-  .tab:hover { color: #e2e8f0; }
-  .tab[aria-selected="true"] {
-    color: #e2e8f0;
-    border-bottom-color: #0e9be6;
-  }
-  .tab:focus-visible { outline: 2px solid #0e9be6; outline-offset: -2px; }
-
-  .code-wrapper :global(.shiki),
-  .code-wrapper :global(pre) {
-    background-color: transparent !important;
-    padding: 0;
-    margin: 0;
-  }
-  .code-wrapper :global(code) {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    line-height: 1.7;
-    display: block;
-  }
-  .code-wrapper { scrollbar-width: thin; }
 </style>
 
 <script>
-  const tabs = document.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-  const langs: Record<string, string> = { "tab-dev": "TypeScript", "tab-stack": "JSON" };
-  const select = (tab: HTMLButtonElement) => {
-    tabs.forEach((t) => {
-      const on = t === tab;
-      t.setAttribute("aria-selected", String(on));
-      t.tabIndex = on ? 0 : -1;
-      const panel = document.getElementById(t.getAttribute("aria-controls") ?? "");
-      if (panel) panel.hidden = !on;
+  // Inclinación amortiguada con el puntero. Nada si el usuario prefiere menos movimiento.
+  const fan = document.querySelector<HTMLElement>("[data-hero-fan]");
+  const section = fan?.closest("section");
+  if (fan && section && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    const tick = () => {
+      cx += (tx - cx) * 0.12;
+      cy += (ty - cy) * 0.12;
+      fan.style.setProperty("--mx", cx.toFixed(3));
+      fan.style.setProperty("--my", cy.toFixed(3));
+      raf = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.002 ? requestAnimationFrame(tick) : 0;
+    };
+    const aim = (x: number, y: number) => {
+      tx = x; ty = y;
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    section.addEventListener("pointermove", (e) => {
+      const r = section.getBoundingClientRect();
+      aim(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1);
     });
-    const lang = document.getElementById("panel-lang");
-    if (lang) lang.textContent = langs[tab.id] ?? "";
-  };
-  tabs.forEach((tab, i) => {
-    tab.addEventListener("click", () => select(tab));
-    tab.addEventListener("keydown", (e) => {
-      const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
-      if (!keys.includes(e.key)) return;
-      e.preventDefault();
-      const next =
-        e.key === "Home" ? tabs[0]
-        : e.key === "End" ? tabs[tabs.length - 1]
-        : tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
-      next.focus();
-      select(next);
-    });
-  });
+    section.addEventListener("pointerleave", () => aim(0, 0));
+  }
 </script>

@@ -7,9 +7,9 @@ interface Props {
 const { title, description } = Astro.props;
 ---
 
-<header class="mb-10 flex flex-col gap-3 border-b border-[var(--hairline)] pb-6">
-  <h1 class="display text-4xl leading-none tracking-tight text-[var(--color-text)] md:text-5xl">
+<header class="mb-10 flex flex-col gap-2 border-b border-[var(--hairline)] pb-6">
+  <h1 class="display text-4xl uppercase leading-none tracking-tight text-[var(--color-text)] md:text-5xl">
     {title}
   </h1>
-  {description && <p class="max-w-prose text-[var(--color-text)]/70">{description}</p>}
+  {description && <p class="max-w-prose text-sm text-[var(--color-text)]/70">{description}</p>}
 </header>

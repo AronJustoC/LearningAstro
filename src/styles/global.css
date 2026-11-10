@@ -6,8 +6,8 @@
 @import "@fontsource/barlow/600.css";
 @import "@fontsource/barlow/700.css";
 @import "@fontsource-variable/jetbrains-mono";
-@import "@fontsource/barlow-condensed/700.css";
-@import "@fontsource/barlow-condensed/800.css";
+@import "@fontsource/jost/500.css";
+@import "@fontsource/jost/700.css";
 
 @custom-variant dark (&:is(.dark *));
 @layer base {
@@ -145,7 +145,7 @@
 
 @theme inline {
   --font-heading: var(--font-display);
-  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-display: 'Jost', 'Futura', 'Arial Narrow', sans-serif;
   --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
