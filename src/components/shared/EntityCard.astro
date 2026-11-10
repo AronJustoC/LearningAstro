@@ -71,14 +71,5 @@ const {
 <style>
   .entity-card {
     box-shadow: 0 1px 3px rgb(15 23 42 / 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .entity-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lift);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .entity-card { transition: none; }
-    .entity-card:hover { transform: none; }
   }
 </style>

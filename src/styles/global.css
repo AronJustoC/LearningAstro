@@ -29,6 +29,11 @@
     --motion-fast: 180ms;
     --motion-base: 420ms;
     --motion-slow: 700ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-fast: 180ms;
+    --dur-base: 260ms;
+    --dur-slow: 560ms;
+    --rise: 14px;
   }
 
   html.dark {
@@ -107,6 +112,8 @@
       transition: none !important;
       scroll-behavior: auto !important;
     }
+    .btn-block:hover, .btn-block:active, .btn-glass:hover, .btn-glass:active,
+    [data-slot="button"]:hover, [data-slot="button"]:active { transform: none !important; }
   }
 
   /* El autofill de Chrome fuerza un fondo amarillo que rompe el dark theme */
@@ -124,13 +131,27 @@
 @media (prefers-reduced-motion: no-preference) {
   html.js [data-home-motion] .motion-reveal-row:not(.motion-revealed) {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(var(--rise));
   }
 
   /* Hero: una sola subida suave, solo CSS. */
   html.js [data-hero-motion] .hero-rise {
     animation: home-rise var(--motion-base) var(--ease-out-expo) both;
   }
+
+  /* Hover/press global: tarjetas suben 3px, botones 1px y se hunden al pulsar. */
+  .project-row, .entity-card {
+    transition: transform var(--dur-base) ease-out, box-shadow var(--dur-base) ease-out;
+  }
+  .project-row:hover, .entity-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+  }
+  .btn-block, .btn-glass, [data-slot="button"] {
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out, filter 150ms ease-out, background 150ms ease-out;
+  }
+  .btn-block:hover, .btn-glass:hover, [data-slot="button"]:hover { transform: translateY(-1px); }
+  .btn-block:active, .btn-glass:active, [data-slot="button"]:active { transform: scale(0.98); }
 }
 
 @keyframes home-rise {

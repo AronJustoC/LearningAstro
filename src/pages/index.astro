@@ -70,10 +70,10 @@ const jsonLd = [
 
       const rowAnimation = row.animate(
         [
-          { opacity: 0, transform: "translateY(10px)" },
+          { opacity: 0, transform: "translateY(var(--rise, 14px))" },
           { opacity: 1, transform: "translateY(0)" },
         ],
-        { duration: 380, delay, easing: easeOutExpo, fill: "forwards" },
+        { duration: 560, delay, easing: easeOutExpo, fill: "forwards" },
       );
 
       rowAnimation.finished
@@ -106,7 +106,7 @@ const jsonLd = [
               revealRow(row, index * 60);
             });
         },
-        { threshold: 0.15 },
+        { threshold: 0.15, rootMargin: "0px 0px -80px 0px" },
       );
       revealRows.forEach((row) => observer?.observe(row));
     } else {

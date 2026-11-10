@@ -38,7 +38,7 @@ const formatDate = (isoString?: string) => {
 
 <section id="blog" class="py-20 lg:py-28 scroll-mt-24" aria-labelledby="blog-title">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="home-section-head">
+    <div class="home-section-head motion-reveal-row">
       <div>
         <span class="label home-muted block mb-3">03 · Notas y serie</span>
         <h2 id="blog-title" class="display text-[clamp(2.25rem,5vw,3.5rem)]">Blog</h2>
@@ -91,7 +91,7 @@ const formatDate = (isoString?: string) => {
             {posts.map((post) => {
               const formattedDate = formatDate(post.createdAt);
               return (
-                <li class="post-row hairline-b grid grid-cols-1 md:grid-cols-[9rem_1fr_auto] gap-2 md:gap-6 md:items-center py-5 transition-colors duration-150">
+                <li class="post-row motion-reveal-row hairline-b grid grid-cols-1 md:grid-cols-[9rem_1fr_auto] gap-2 md:gap-6 md:items-center py-5 transition-colors duration-150">
                   <span class="label home-muted whitespace-nowrap">{formattedDate}</span>
                   <h3 class="text-[1.5rem] font-bold leading-tight min-w-0">{post.title}</h3>
                   <a href={`/blog/${post.slug}`} class="link-arrow text-sm min-h-11 md:justify-self-end" aria-label={`Leer post ${post.title}`}>
