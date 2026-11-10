@@ -269,7 +269,7 @@ html.dark {
   .hairline-t { border-top: 1px solid var(--hairline); }
   .hairline { border: 1px solid var(--hairline); }
   .project-row, .entity-card, .store-card { border-radius: 18px; box-shadow: var(--shadow-soft); }
-  .btn-block, .btn-glass {
+  .btn-block, .btn-glass, [data-slot="button"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -277,29 +277,19 @@ html.dark {
     height: 2.75rem;
     padding: 0 1.5rem;
     border-radius: 10px;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--color-action) 92%, white 8%), var(--color-action));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25), 0 10px 28px -14px color-mix(in srgb, var(--color-action) 80%, transparent);
+    color: var(--color-on-action);
     font-family: 'Jost', sans-serif;
     font-weight: 500;
     font-size: 0.9375rem;
     letter-spacing: 0.01em;
     text-transform: none;
   }
-  .btn-block {
-    background: linear-gradient(180deg, color-mix(in srgb, var(--color-action) 92%, white 8%), var(--color-action));
-    border: 1px solid rgb(255 255 255 / 0.18);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25), 0 10px 28px -14px color-mix(in srgb, var(--color-action) 80%, transparent);
-    color: var(--color-on-action);
-  }
-  .btn-glass {
-    background: linear-gradient(180deg, color-mix(in srgb, var(--color-text) 10%, transparent), color-mix(in srgb, var(--color-text) 4%, transparent));
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2), 0 8px 24px -14px rgb(0 0 0 / 0.4);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
-    backdrop-filter: blur(12px) saturate(140%);
-    border: 1px solid color-mix(in srgb, var(--color-text) 14%, transparent);
-    color: var(--color-text);
-  }
   .btn-block:hover, .btn-glass:hover, [data-slot="button"]:hover { filter: brightness(1.06); }
   .btn-block:focus-visible, .btn-glass:focus-visible, [data-slot="button"]:focus-visible { outline: 2px solid var(--focus-color); outline-offset: 2px; }
-  .btn-block[aria-disabled="true"], .btn-block:disabled { opacity: 0.5; pointer-events: none; }
+  .btn-block[aria-disabled="true"], .btn-block:disabled, .btn-glass[aria-disabled="true"], .btn-glass:disabled, [data-slot="button"]:disabled { opacity: 0.5; pointer-events: none; }
   .link-arrow {
     display: inline-flex;
     align-items: center;
@@ -327,31 +317,10 @@ html.dark {
     text-transform: uppercase;
     letter-spacing: 0.02em;
   }
-  [data-slot="button"] {
-    border-radius: 10px;
-    font-family: 'Jost', sans-serif;
-    font-weight: 500;
-    font-size: 0.9375rem;
-    letter-spacing: 0.01em;
-    text-transform: none;
-  }
 }
 
-/* Modo claro: todo lo relleno de azul lleva un borde negro fino para sentirse menos saturado */
-html:not(.dark) [class*="bg-[var(--color-action)]"],
-html:not(.dark) [data-slot="button"][class*="bg-primary"] {
-  border: 1px solid rgb(255 255 255 / 0.18);
-}
-html:not(.dark) .btn-block, html:not(.dark) [data-slot="button"][class*="bg-primary"] { color: #ffffff; }
-[data-slot="button"][class*="bg-primary"] {
-  display: inline-flex; align-items: center; gap: 0.5rem; height: 2.75rem; padding: 0 1.5rem;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--color-action) 92%, white 8%), var(--color-action));
-  border: 1px solid rgb(255 255 255 / 0.18);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25), 0 10px 28px -14px color-mix(in srgb, var(--color-action) 80%, transparent);
-  color: var(--color-on-action);
-}
-[data-slot="button"]:disabled { opacity: 0.5; }
-html:not(.dark) [data-slot="button"]:not([class*="bg-primary"]) { border-color: color-mix(in srgb, #000000 10%, transparent); }
+/* Modo claro: el botón estándar mantiene texto blanco sobre el relleno azul */
+html:not(.dark) .btn-block, html:not(.dark) .btn-glass, html:not(.dark) [data-slot="button"] { color: #ffffff; }
 
 /* Store building blocks */
 .store-card {
