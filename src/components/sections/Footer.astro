@@ -24,7 +24,9 @@ const sections = [
     links: [
       { name: "Inicio", href: "/" },
       { name: "Proyectos", href: "/proyectos" },
+      { name: "Tienda", href: "/tienda" },
       { name: "Blog", href: "/blog" },
+      { name: "Cursos", href: "/cursos" },
     ],
   },
   {
@@ -38,12 +40,13 @@ const sections = [
 ].map((section) => ({
   ...section,
   links: section.links.filter((link) => {
-    const key =
-      link.href === "/proyectos"
-        ? "proyectos"
-        : link.href === "/blog"
-          ? "blog"
-          : undefined;
+    const tabKeys: Record<string, keyof typeof navTabs> = {
+      "/proyectos": "proyectos",
+      "/tienda": "tienda",
+      "/blog": "blog",
+      "/cursos": "cursos",
+    };
+    const key = tabKeys[link.href];
     return key ? navTabs[key] : true;
   }),
 }));
