@@ -72,7 +72,7 @@ const isCurrent = (href: string) =>
           <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
         <a href="/auth/login" class="inline-flex size-9 items-center justify-center rounded-[2px] text-[var(--color-text)] transition-colors hover:bg-[var(--hairline)] hover:text-[var(--color-action)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="Iniciar sesión" title="Iniciar sesión"><svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></a>
-        <a href="/contacto" class="btn-block">
+        <a href="/contacto" class="btn-glass header-cta">
           Contactar
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"></path></svg>
         </a>
@@ -118,7 +118,7 @@ const isCurrent = (href: string) =>
           ))
         }
         <a href="/auth/login" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-text)]"><svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>Iniciar sesión</a>
-        <a href="/contacto" class="btn-block mt-5">Contactar</a>
+        <a href="/contacto" class="btn-glass header-cta mt-5">Contactar</a>
       </div>
     </div>
   </nav>
@@ -147,6 +147,7 @@ const isCurrent = (href: string) =>
   .mobile-link:hover {
     color: var(--focus-color);
   }
+  .btn-block { height: 2.5rem; }
   .icon-btn {
     display: inline-flex;
     align-items: center;
@@ -160,17 +161,12 @@ const isCurrent = (href: string) =>
     backdrop-filter: blur(12px);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 8px 24px -12px rgb(0 0 0 / 0.35);
     color: var(--color-text);
-    transition: transform 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+    transition: transform 150ms ease-out, filter 150ms ease-out, border-color 150ms ease-out;
   }
   :global(html:not(.dark)) .icon-btn { border-color: color-mix(in srgb, #000000 10%, transparent); }
-  .icon-btn:hover {
-    filter: brightness(1.06);
-    transform: translateY(-1px);
-  }
+  .icon-btn:hover { filter: brightness(1.06); }
   .icon-btn:focus-visible { outline: 2px solid var(--focus-color); outline-offset: 2px; }
-  .icon-btn:active {
-    transform: translateY(1px);
-  }
+  .header-cta { color: var(--color-action); border-color: color-mix(in srgb, var(--color-action) 45%, transparent); }
 </style>
 
 <script>
