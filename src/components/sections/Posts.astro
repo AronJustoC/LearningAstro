@@ -36,46 +36,36 @@ const formatDate = (isoString?: string) => {
 };
 ---
 
-<section id="blog" class="py-16 lg:py-20 scroll-mt-24">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="flex items-baseline justify-between mb-8">
-      <h2 class="display text-[clamp(2.25rem,5vw,3.5rem)] text-[var(--color-text)]">
-        Blog
-      </h2>
-      {
-        posts.length > 0 && (
-          <span class="label text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
-            {posts.length} registros
-          </span>
-        )
-      }
+<section id="blog" class="py-20 lg:py-28 scroll-mt-24" aria-labelledby="blog-title">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="home-section-head">
+      <div>
+        <span class="label home-muted block mb-3">03 · Notas y serie</span>
+        <h2 id="blog-title" class="display text-[clamp(2.25rem,5vw,3.5rem)]">Blog</h2>
+      </div>
+      {posts.length > 0 && <span class="label home-muted">{posts.length} registros</span>}
     </div>
 
     {
       episodios.length > 0 && (
-        <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-          {episodios.map((ep) => (
-            <li>
-              <a
-                href={`/blog/serie/${ep.id}`}
-                class="serie-card flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"
-              >
+        <ol class="hairline grid grid-cols-1 md:grid-cols-3 list-none m-0 p-0 mb-12">
+          {episodios.map((ep, i) => (
+            <li class:list={[i > 0 && "md:border-l border-t md:border-t-0"]} style="border-color: var(--hairline);">
+              <a href={`/blog/serie/${ep.id}`} class="serie-card flex flex-col h-full transition-colors duration-150">
                 <img
                   src={ep.data.imagen}
                   alt={ep.data.imagenAlt}
                   loading="lazy"
                   width="400"
                   height="224"
-                  class="w-full h-56 object-cover object-[50%_38%] hairline-b"
+                  class="w-full h-48 object-cover object-[50%_38%] hairline-b"
                 />
                 <div class="flex flex-col flex-1 p-5 gap-3">
-                  <p class="label" style="color: var(--color-action);">
+                  <p class="label home-muted">
                     {ep.data.episodio === 0 ? "Resumen de la serie" : `Episodio ${ep.data.episodio}`}
                   </p>
-                  <h3 class="text-xl font-bold leading-snug text-[var(--color-text)]">{ep.data.title}</h3>
-                  <p class="text-sm leading-relaxed line-clamp-3" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
-                    {ep.data.descripcion}
-                  </p>
+                  <h3 class="text-xl font-bold leading-snug">{ep.data.title}</h3>
+                  <p class="text-sm leading-relaxed line-clamp-3 home-muted">{ep.data.descripcion}</p>
                 </div>
               </a>
             </li>
@@ -88,47 +78,25 @@ const formatDate = (isoString?: string) => {
       {
         loadFailed && episodios.length === 0 ? (
           <div class="hairline-b py-6">
-            <span class="label text-[var(--color-action)] block mb-1">Error de carga</span>
-            <p class="text-sm text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
-              No pudimos cargar los posts ahora. Intenta de nuevo en unos minutos.
-            </p>
+            <span class="label block mb-1" style="color: var(--color-action);">Error de carga</span>
+            <p class="text-sm home-muted">No pudimos cargar los posts ahora. Intenta de nuevo en unos minutos.</p>
           </div>
         ) : posts.length === 0 ? (
           <div class="hairline-b py-6">
-            <span class="label text-[color-mix(in_srgb,var(--color-text)_75%,transparent)] block mb-1">Sin datos</span>
-            <p class="text-sm text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
-              Todavía no hay posts publicados. ¡Vuelve pronto!
-            </p>
+            <span class="label home-muted block mb-1">Sin datos</span>
+            <p class="text-sm home-muted">Todavía no hay posts publicados. ¡Vuelve pronto!</p>
           </div>
         ) : (
-          <ul class="divide-y-0">
+          <ul class="list-none m-0 p-0">
             {posts.map((post) => {
               const formattedDate = formatDate(post.createdAt);
               return (
-                <li class="post-row hairline-b grid grid-cols-1 md:grid-cols-[auto_1fr_auto] gap-6 items-center py-5 transition-colors duration-150">
-                  <div class="whitespace-nowrap">
-                    {formattedDate && (
-                      <span class="label text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
-                        {formattedDate}
-                      </span>
-                    )}
-                  </div>
-
-                  <div class="min-w-0">
-                    <h3 class="text-[1.75rem] font-bold leading-tight text-[var(--color-text)]">
-                      {post.title}
-                    </h3>
-                  </div>
-
-                  <div class="flex items-center gap-2 shrink-0">
-                    <a
-                      href={`/blog/${post.slug}`}
-                      class="action-btn hairline rounded-[2px] min-h-11 px-4 inline-flex items-center justify-center label transition-all duration-150"
-                      aria-label={`Leer post ${post.title}`}
-                    >
-                      Leer <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
-                    </a>
-                  </div>
+                <li class="post-row hairline-b grid grid-cols-1 md:grid-cols-[9rem_1fr_auto] gap-2 md:gap-6 md:items-center py-5 transition-colors duration-150">
+                  <span class="label home-muted whitespace-nowrap">{formattedDate}</span>
+                  <h3 class="text-[1.5rem] font-bold leading-tight min-w-0">{post.title}</h3>
+                  <a href={`/blog/${post.slug}`} class="link-arrow text-sm min-h-11 md:justify-self-end" aria-label={`Leer post ${post.title}`}>
+                    Leer <svg class="inline w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                  </a>
                 </li>
               );
             })}
@@ -139,29 +107,15 @@ const formatDate = (isoString?: string) => {
 
     <div class="mt-8">
       <a href="/blog" class="link-arrow text-sm">
-        Ver todos los posts <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
+        Ver todos los posts <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
     </div>
   </div>
 </section>
 
 <style>
-  .serie-card:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lift);
-    border-color: var(--focus-color);
-  }
-
+  .serie-card:hover,
   .post-row:hover {
     background-color: var(--surface-2);
-  }
-
-  .action-btn {
-    color: var(--color-text);
-  }
-
-  .action-btn:hover {
-    border-color: var(--focus-color);
-    transform: translateY(-1px);
   }
 </style>

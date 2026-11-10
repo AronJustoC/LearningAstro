@@ -126,47 +126,21 @@
     transform: translateY(14px);
   }
 
-  html.js [data-home-motion] .motion-reveal-row:not(.motion-revealed) .motion-reveal-media {
-    clip-path: inset(0 0 100% 0);
-  }
-
-  html.js [data-hero-motion] .hero-line-inner {
-    animation: hero-line-in var(--motion-slow) var(--ease-out-expo) both;
-    clip-path: inset(100% 0 0 0);
-    transform: translateY(0.72em);
-  }
-
-  html.js [data-hero-motion] .hero-line:nth-child(2) .hero-line-inner {
-    animation-delay: 90ms;
-  }
-
-  html.js [data-hero-motion] .hero-outline-sweep::after {
-    animation: hero-fill-sweep 900ms var(--ease-out-expo) 240ms both;
-  }
-
-  html.js [data-hero-motion]:not(.hero-motion-complete) .ticker-item,
-  html.js [data-hero-motion]:not(.hero-motion-complete) #panel-dev .line,
-  html.js [data-hero-motion]:not(.hero-motion-complete) .focus-cell {
-    opacity: 0;
-  }
-
-  html.js [data-hero-motion]:not(.hero-motion-complete) #panel-dev .line,
-  html.js [data-hero-motion]:not(.hero-motion-complete) .focus-cell {
-    transform: translateY(10px);
+  /* Hero: una sola subida suave, solo CSS. */
+  html.js [data-hero-motion] .hero-rise {
+    animation: home-rise var(--motion-base) var(--ease-out-expo) both;
   }
 }
 
-@keyframes hero-line-in {
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
   to {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
     transform: translateY(0);
   }
-}
-
-@keyframes hero-fill-sweep {
-  0% { clip-path: inset(0 100% 0 0); }
-  52% { clip-path: inset(0 0 0 0); }
-  100% { clip-path: inset(0 0 0 100%); }
 }
 
 @theme inline {
@@ -303,7 +277,18 @@ html.dark {
     transition: gap 0.2s ease, color 0.2s ease;
   }
   .stack-tag svg { filter: grayscale(1); transition: filter 0.2s ease; }
-    .link-arrow:hover { gap: 0.75rem; color: var(--focus-color); }
+  .stack-tag:hover svg { filter: none; }
+  .link-arrow:hover { gap: 0.75rem; color: var(--focus-color); }
+
+  /* Home: texto secundario (regla Ink-Mix) y cabecera de sección sobre la retícula */
+  .home-muted { color: color-mix(in srgb, var(--color-text) 72%, transparent); }
+  .home-section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
 
   /* Tipografía consistente: títulos de tarjetas/diálogos y botones comparten la voz display */
   .font-heading {

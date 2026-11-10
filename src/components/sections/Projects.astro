@@ -21,30 +21,35 @@ const list: Project[] = [
 ];
 ---
 
-<section id="proyectos" class="py-16 lg:py-20 scroll-mt-24">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="flex items-baseline justify-between mb-8">
-      <h2 class="display text-[clamp(2.25rem,5vw,3.5rem)] text-[var(--color-text)]">
-        Proyectos
-      </h2>
-      {
-        <span class="label text-[color-mix(in_srgb,var(--color-text)_75%,transparent)]">
-            {list.length} registros
-          </span>
-      }
+<section id="proyectos" class="py-20 lg:py-28 scroll-mt-24" aria-labelledby="proyectos-title">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="home-section-head">
+      <div>
+        <span class="label home-muted block mb-3">01 · Trabajo real</span>
+        <h2 id="proyectos-title" class="display text-[clamp(2.25rem,5vw,3.5rem)]">Proyectos</h2>
+      </div>
+      <span class="label home-muted">{list.length} registros</span>
     </div>
 
     <div class="hairline-t">
-      <ul>
-        {list.map((project, i) => <ProjectRow project={project} eager={i < 3} />)}
-      </ul>
+      {
+        list.length === 0 ? (
+          <div class="hairline-b py-6">
+            <span class="label home-muted block mb-1">Sin datos</span>
+            <p class="text-sm home-muted">Todavía no hay proyectos publicados.</p>
+          </div>
+        ) : (
+          <ul class="list-none m-0 p-0">
+            {list.map((project, i) => <ProjectRow project={project} eager={i < 3} />)}
+          </ul>
+        )
+      }
     </div>
 
     <div class="mt-8">
       <a href="/proyectos" class="link-arrow text-sm">
-        Ver todos los proyectos <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M8 7h9v9"/></svg>
+        Ver todos los proyectos <svg class="inline w-3.5 h-3.5 align-[-1px]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
     </div>
   </div>
 </section>
-
