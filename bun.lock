@@ -13,6 +13,7 @@
         "@fontsource-variable/jetbrains-mono": "^5.3.0",
         "@fontsource/barlow": "^5.3.0",
         "@fontsource/barlow-condensed": "^5.3.0",
+        "@fontsource/jost": "^5.3.0",
         "@tailwindcss/vite": "^4.1.14",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.1",
@@ -193,6 +194,8 @@
     "@fontsource/barlow": ["@fontsource/barlow@5.3.0", "", {}, "sha512-tGR0y6QObRtKv71MOth44222+mdNFM/ZWFWDV1VLzNbG4oK9PNRlyJzmkck4vHAi9ibHBXgt4SlY51amFP55CA=="],
 
     "@fontsource/barlow-condensed": ["@fontsource/barlow-condensed@5.3.0", "", {}, "sha512-RA7MmIx0v3eQ6Gcf74qLVLOwLB0GpPOzx+eU9iG/AmCnSJGcIWYeU8y6CEMGZ210MGwGg5CZhzLkkvyZdTTk1g=="],
+
+    "@fontsource/jost": ["@fontsource/jost@5.3.0", "", {}, "sha512-lORv5y49hSoLVxjGb0qNuBzXvnaNYI3B94200uGPGJFei8fao6d6LLz2ziWbOZubGfZnibzuT6GVNX8fBw8WQQ=="],
 
     "@hono/node-server": ["@hono/node-server@1.19.15", "", { "peerDependencies": { "hono": "^4" } }, "sha512-Za2ai6TLdKjUvnur+eenO6nuYYipVAEhyCAdaV8IRvmU9kK8crOZUSYvIXn72E4f8fJqyAbpcJuTsYYmZp9Deg=="],
 
