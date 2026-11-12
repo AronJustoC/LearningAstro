@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-const API_URL = `${import.meta.env.PUBLIC_API_BASE_URL}/settings/nav`;
-
 type NavTabKey = "proyectos" | "tienda" | "blog" | "cursos";
 type NavTabs = Record<NavTabKey, boolean>;
 
@@ -33,7 +31,10 @@ function errorMessage(err: unknown): string {
   return err instanceof Error && err.message ? err.message : CONNECTION_ERROR;
 }
 
-export default function NavToggles() {
+type Props = { apiBaseUrl: string };
+
+export default function NavToggles({ apiBaseUrl }: Props) {
+  const apiUrl = `${apiBaseUrl}/settings/nav`;
   const [tabs, setTabs] = useState<NavTabs>(EMPTY_TABS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -45,7 +46,7 @@ export default function NavToggles() {
     async function load() {
       setLoading(true);
       try {
-        const response = await fetch(API_URL, { headers: authHeaders() });
+        const response = await fetch(apiUrl, { headers: authHeaders() });
         if (!response.ok) {
           throw new Error("No se pudo cargar la configuración.");
         }
@@ -65,7 +66,7 @@ export default function NavToggles() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [apiUrl]);
 
   async function handleToggle(key: NavTabKey) {
     if (savingKey !== null) return;
@@ -77,7 +78,7 @@ export default function NavToggles() {
     setError("");
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(apiUrl, {
         method: "PATCH",
         headers: authHeaders(),
         body: JSON.stringify({ tabs: { [key]: next } }),
