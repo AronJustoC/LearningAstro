@@ -14,7 +14,7 @@ const ALL_TRUE: NavTabs = {
 
 export async function getNavTabs(): Promise<NavTabs> {
   try {
-    const base = import.meta.env.PUBLIC_API_BASE_URL;
+    const base = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
     const res = await fetch(`${base}/settings/nav`, {
       signal: AbortSignal.timeout(3000),
     });
