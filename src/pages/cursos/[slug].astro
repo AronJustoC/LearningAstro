@@ -4,6 +4,7 @@ import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import CoursePlayer from "../../components/student/CoursePlayer";
 import type { Course } from "../../types/Course";
+import { optimizedImage } from "../../lib/image";
 
 const { slug } = Astro.params;
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
@@ -58,7 +59,7 @@ if (!course) Astro.response.status = 404;
           <div class="max-w-6xl mx-auto px-6 space-y-6">
             {course.imageUrl && (
               <img
-                src={course.imageUrl}
+                src={optimizedImage(course.imageUrl, 1000)}
                 alt={course.title}
                 class="w-full rounded-[2px] hairline object-cover max-h-96"
               />

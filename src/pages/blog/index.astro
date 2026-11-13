@@ -5,6 +5,7 @@ import Footer from "../../components/sections/Footer.astro";
 import PostCard from "../../components/shared/PostCard.astro";
 import type { Post } from "../../types/Post";
 import { getCollection } from "astro:content";
+import { optimizedImage } from "../../lib/image";
 
 // Serie en video: un artículo por episodio, de menor a mayor.
 const episodios = (await getCollection("serie")).sort((a, b) => a.data.episodio - b.data.episodio);
@@ -79,7 +80,7 @@ try {
                       class="serie-card group flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"
                     >
                       <img
-                        src={ep.data.imagen}
+                        src={optimizedImage(ep.data.imagen, 800)}
                         alt={ep.data.imagenAlt}
                         loading="lazy"
                         width="400"

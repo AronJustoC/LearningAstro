@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import type { ProductImage } from "@/data/catalog";
+import { optimizedImage } from "@/lib/image";
 
 type Props = {
   images: ProductImage[];
@@ -16,7 +17,7 @@ export default function Gallery({ images }: Props) {
     <div className="space-y-3">
       <div className="overflow-hidden">
         <img
-          src={current.src}
+          src={optimizedImage(current.src, 1000)}
           alt={current.alt}
           className="store-media"
         />
@@ -35,7 +36,7 @@ export default function Gallery({ images }: Props) {
                 index === active ? "border-ring" : "border-transparent",
               ].join(" ")}
             >
-              <img src={image.src} alt="" className="size-full object-cover" />
+              <img src={optimizedImage(image.src, 300)} alt="" className="size-full object-cover" />
             </button>
           ))}
         </div>

@@ -1,4 +1,6 @@
 ---
+import { optimizedImage } from "../../lib/image";
+
 interface Props {
   imageUrl?: string;
   imageAlt: string;
@@ -25,7 +27,7 @@ const {
     {
       imageUrl ? (
         <img
-          src={imageUrl}
+          src={optimizedImage(imageUrl, 800)}
           alt={imageAlt}
           loading="lazy"
           width="400"

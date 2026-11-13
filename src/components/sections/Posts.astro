@@ -1,6 +1,7 @@
 ---
 import type { Post } from "../../types/Post.ts";
 import { getCollection } from "astro:content";
+import { optimizedImage } from "../../lib/image";
 
 // Serie en video: el resumen (episodio 0) va primero; el home muestra solo 3.
 const episodios = (await getCollection("serie"))
@@ -53,7 +54,7 @@ const formatDate = (isoString?: string) => {
             <li class:list={[i > 0 && "md:border-l border-t md:border-t-0"]} style="border-color: var(--hairline);">
               <a href={`/blog/serie/${ep.id}`} class="serie-card flex flex-col h-full transition-colors duration-150">
                 <img
-                  src={ep.data.imagen}
+                  src={optimizedImage(ep.data.imagen, 800)}
                   alt={ep.data.imagenAlt}
                   loading="lazy"
                   width="400"

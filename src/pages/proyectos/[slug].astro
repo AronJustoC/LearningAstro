@@ -4,6 +4,7 @@ import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import { findFeaturedProject } from "../../data/projects";
 import { whatsappUrl } from "../../lib/contact";
+import { optimizedImage } from "../../lib/image";
 
 const project = findFeaturedProject(Astro.params.slug);
 if (!project) {
@@ -69,7 +70,7 @@ const arrow = "M7 17L17 7M8 7h9v9";
           {
             project.imageUrl && (
               <img
-                src={project.imageUrl}
+                src={optimizedImage(project.imageUrl, 1000)}
                 alt={`Captura de pantalla del proyecto ${project.title}`}
                 width="1280"
                 height="800"

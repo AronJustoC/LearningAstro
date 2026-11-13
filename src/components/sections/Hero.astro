@@ -2,6 +2,7 @@
 import "@fontsource/jost/500.css";
 import "@fontsource/jost/700.css";
 import { whatsappUrl } from "../../lib/contact";
+import { optimizedImage } from "../../lib/image";
 import { featuredProjects } from "../../data/projects";
 import Icon from "../shared/Icon.astro";
 import AccentPicker from "./AccentPicker";
@@ -52,11 +53,11 @@ const stack = [
         <Fragment>
           {card.slug ? (
             <a href={`/proyectos/${card.slug}`} tabindex="-1" class="hero-card" style={`--x:${card.x}; --r:${card.r}; z-index:${card.z};`}>
-              <img src={card.img} alt="" width="380" height="238" loading="eager" decoding="async" />
+              <img src={optimizedImage(card.img, 800)} alt="" width="380" height="238" loading="eager" decoding="async" />
             </a>
           ) : (
             <div class="hero-card" style={`--x:${card.x}; --r:${card.r}; z-index:${card.z};`}>
-              <img src={card.img} alt="" width="380" height="238" loading="eager" decoding="async" />
+              <img src={optimizedImage(card.img, 800)} alt="" width="380" height="238" loading="eager" decoding="async" />
             </div>
           )}
         </Fragment>

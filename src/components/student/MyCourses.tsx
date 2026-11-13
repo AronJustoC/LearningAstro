@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import { optimizedImage } from "@/lib/image";
 
 interface EnrolledCourse {
   id: number;
@@ -108,7 +109,7 @@ export default function MyCourses() {
           >
             {course.imageUrl && (
               <img
-                src={course.imageUrl}
+                src={optimizedImage(course.imageUrl, 800)}
                 alt={course.title}
                 loading="lazy"
                 width="400"

@@ -2,6 +2,7 @@
 import type { Product } from "../../data/catalog";
 import { minPriceCents, isSoldOut } from "../../data/catalog";
 import { formatMoney } from "../../lib/store/pricing";
+import { optimizedImage } from "../../lib/image";
 
 interface Props {
   product: Product;
@@ -22,7 +23,7 @@ const minPrice = formatMoney(minPriceCents(product));
       {
         firstImage && (
           <img
-            src={firstImage.src}
+            src={optimizedImage(firstImage.src, 600)}
             alt={firstImage.alt}
             width={400}
             height={400}
