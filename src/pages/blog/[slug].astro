@@ -5,6 +5,7 @@ import Footer from "../../components/sections/Footer.astro";
 import ComentariosBlog, { type Comentario } from "../../components/blog/ComentariosBlog.astro";
 import type { Post } from "../../types/Post";
 import { marked } from "marked";
+import { optimizedImage } from "../../lib/image";
 
 const { slug } = Astro.params;
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
@@ -51,7 +52,7 @@ try {
         {
           post.imageUrl && (
             <img
-              src={post.imageUrl}
+              src={optimizedImage(post.imageUrl, 1000)}
               alt={post.title}
               class="w-full rounded-[2px] hairline object-cover max-h-96"
             />

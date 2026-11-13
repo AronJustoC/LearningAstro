@@ -1,6 +1,7 @@
 ---
 import type { Project } from "../../types/Project";
 import { findFeaturedProject } from "../../data/projects";
+import { optimizedImage } from "../../lib/image";
 
 interface Props {
   project: Project;
@@ -27,7 +28,7 @@ const quietClass =
     {
       project.imageUrl ? (
         <img
-          src={project.imageUrl}
+          src={optimizedImage(project.imageUrl, 800)}
           alt={`Captura de pantalla del proyecto ${project.title}`}
           width="240"
           height="150"

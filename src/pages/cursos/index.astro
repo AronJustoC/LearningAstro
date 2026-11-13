@@ -3,6 +3,7 @@ import LayoutBase from "../../layouts/LayoutBase.astro";
 import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import type { Course } from "../../types/Course";
+import { optimizedImage } from "../../lib/image";
 
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
 let courses: Course[] = [];
@@ -43,7 +44,7 @@ try {
                 >
                   {course.imageUrl && (
                     <img
-                      src={course.imageUrl}
+                      src={optimizedImage(course.imageUrl, 800)}
                       alt={course.title}
                       loading="lazy"
                       width="400"
