@@ -336,9 +336,9 @@ html:not(.dark) .btn-block, html:not(.dark) .btn-glass, html:not(.dark) [data-sl
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
-  object-fit: contain;
-  padding: 1rem;
-  background: color-mix(in srgb, currentColor 6%, transparent);
+  object-fit: cover;
+  padding: 0;
+  background: none;
 }
 .store-price { font-variant-numeric: tabular-nums; font-weight: 500; }
 .store-title {
