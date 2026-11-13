@@ -9,6 +9,7 @@ import {
   setQty,
   subscribeCart,
 } from "@/lib/store/cart";
+import { whatsappUrl } from "@/lib/contact";
 import {
   clampQty,
   formatMoney,
@@ -16,9 +17,17 @@ import {
   shippingCents,
   subtotalCents,
   totalCents,
+  type ResolvedLine,
 } from "@/lib/store/pricing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+function pedidoMensaje(lines: ResolvedLine[], totalCents: number): string {
+  const detalle = lines
+    .map((l) => `- ${l.productName} (${l.variantLabel}) x${l.qty}: ${formatMoney(l.lineTotalCents)}`)
+    .join("\n");
+  return `Hola Aron, quiero pedir:\n${detalle}\nTotal: ${formatMoney(totalCents)}`;
+}
 
 export default function CartView() {
   const items = useSyncExternalStore(
