@@ -2,6 +2,7 @@
 export const prerender = true;
 
 import LayoutBase from "../../../layouts/LayoutBase.astro";
+import StoreBrand from "../../../components/store/StoreBrand.astro";
 import Header from "../../../components/sections/Header.astro";
 import Footer from "../../../components/sections/Footer.astro";
 import Gallery from "../../../components/store/Gallery";
@@ -21,7 +22,8 @@ const category = getCategory(product.categorySlug);
 
 <LayoutBase title={product.name} description={product.description}>
   <Header />
-  <main id="main" class="flex-1">
+  <main id="main" class="flex-1 tienda-brand">
+    <StoreBrand />
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <nav aria-label="Ruta" class="mb-6 text-sm text-muted-foreground">

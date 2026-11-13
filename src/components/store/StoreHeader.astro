@@ -1,10 +1,23 @@
 ---
+import { STORE_NAME } from "../../config/store";
 interface Props { num: string; label: string; title: string }
 const { num, label, title } = Astro.props;
+const isStore = title === STORE_NAME;
 ---
 <header class="home-section-head motion-reveal-row">
   <div>
     <p class="label home-muted block mb-3">{num} · {label}</p>
-    <h1 class="display text-[clamp(2.25rem,5vw,3.5rem)]">{title}</h1>
+    <h1 class="display text-[clamp(2.25rem,5vw,3.5rem)]">
+      {
+        isStore ? (
+          <>
+            <img src="/brand/musuq/logo_horizontal_color.png" alt="Musuq Studio" width="2431" height="833" class="h-16 w-auto dark:hidden" />
+            <img src="/brand/musuq/logo_horizontal_blanco.png" alt="Musuq Studio" width="2431" height="833" class="hidden h-16 w-auto dark:block" />
+          </>
+        ) : (
+          title
+        )
+      }
+    </h1>
   </div>
 </header>

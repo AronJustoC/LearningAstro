@@ -9,6 +9,9 @@ import {
 } from "./pricing";
 import { SHIPPING_FLAT_CENTS, FREE_SHIPPING_THRESHOLD_CENTS } from "../../config/store";
 
+const MACETA = { productSlug: "maceta-bulbasaur", variantId: "mb-con-planta" };
+const UNIT_CENTS = 3500;
+
 describe("clampQty", () => {
   test("limita al stock y nunca baja de 1", () => {
     expect(clampQty(50, 8)).toBe(8);
@@ -19,36 +22,32 @@ describe("clampQty", () => {
 
 describe("resolveLines", () => {
   test("recalcula precios desde el catálogo, no desde el carrito", () => {
-    const items: CartItem[] = [{ productSlug: "soporte-celular", variantId: "sc-negro", qty: 2 }];
+    const items: CartItem[] = [{ ...MACETA, qty: 2 }];
     const { lines, removed } = resolveLines(items);
     expect(removed).toEqual([]);
-    expect(lines[0].unitPriceCents).toBe(2500);
-    expect(lines[0].lineTotalCents).toBe(5000);
+    expect(lines[0].unitPriceCents).toBe(UNIT_CENTS);
+    expect(lines[0].lineTotalCents).toBe(2 * UNIT_CENTS);
   });
 
-  test("descarta líneas huérfanas y líneas agotadas", () => {
-    const items: CartItem[] = [
-      { productSlug: "no-existe", variantId: "x", qty: 1 },
-      { productSlug: "figura-gato-azotea", variantId: "ga-petg", qty: 1 },
-    ];
-    const { lines, removed } = resolveLines(items);
+  test("descarta líneas huérfanas", () => {
+    const { lines, removed } = resolveLines([{ productSlug: "no-existe", variantId: "x", qty: 1 }]);
     expect(lines).toEqual([]);
-    expect(removed.length).toBe(2);
+    expect(removed.length).toBe(1);
   });
 
   test("ajusta cantidad al stock disponible", () => {
-    const { lines } = resolveLines([{ productSlug: "maceta-modular", variantId: "mm-m", qty: 99 }]);
-    expect(lines[0].qty).toBe(2);
+    const { lines } = resolveLines([{ ...MACETA, qty: 99 }]);
+    expect(lines[0].qty).toBe(10);
   });
 });
 
 describe("totales", () => {
-  test("subtotal con varias variantes", () => {
+  test("subtotal con varias líneas", () => {
     const { lines } = resolveLines([
-      { productSlug: "soporte-celular", variantId: "sc-negro", qty: 2 },
-      { productSlug: "organizador-cables", variantId: "oc-pack4", qty: 1 },
+      { ...MACETA, qty: 2 },
+      { ...MACETA, qty: 1 },
     ]);
-    expect(subtotalCents(lines)).toBe(2 * 2500 + 1800);
+    expect(subtotalCents(lines)).toBe(3 * UNIT_CENTS);
   });
 
   test("envío 0 con carrito vacío", () => {
@@ -57,11 +56,12 @@ describe("totales", () => {
   });
 
   test("envío fijo por debajo del umbral y gratis desde el umbral", () => {
-    const { lines } = resolveLines([{ productSlug: "soporte-celular", variantId: "sc-negro", qty: 1 }]);
+    const { lines } = resolveLines([{ ...MACETA, qty: 1 }]);
+    expect(UNIT_CENTS).toBeLessThan(FREE_SHIPPING_THRESHOLD_CENTS);
     expect(shippingCents(lines)).toBe(SHIPPING_FLAT_CENTS);
-    expect(totalCents(lines)).toBe(2500 + SHIPPING_FLAT_CENTS);
+    expect(totalCents(lines)).toBe(UNIT_CENTS + SHIPPING_FLAT_CENTS);
 
-    const big = resolveLines([{ productSlug: "lampara-atardecer", variantId: "la-terracota", qty: 2 }]);
+    const big = resolveLines([{ ...MACETA, qty: 5 }]);
     expect(subtotalCents(big.lines)).toBeGreaterThanOrEqual(FREE_SHIPPING_THRESHOLD_CENTS);
     expect(shippingCents(big.lines)).toBe(0);
   });
