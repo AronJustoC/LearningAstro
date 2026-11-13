@@ -7,7 +7,8 @@ import OrderConfirmation from "../../components/store/OrderConfirmation";
 
 <LayoutBase title="Pedido recibido" description="Detalle del pedido confirmado.">
   <Header />
-  <main id="main" class="flex-1">
+  <main id="main" class="flex-1 tienda-brand">
+    <StoreBrand />
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <OrderConfirmation client:only="react">

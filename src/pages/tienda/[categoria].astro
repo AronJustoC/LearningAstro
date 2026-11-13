@@ -29,7 +29,8 @@ const categoryProducts = productsByCategory(category.slug);
   description={`Categoría ${category.name}: ${category.description}`}
 >
   <Header />
-  <main id="main" class="flex-1">
+  <main id="main" class="flex-1 tienda-brand">
+    <StoreBrand />
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="mb-8">
