@@ -27,7 +27,7 @@ export type Order = {
 
 export type PlaceOrderResult =
   | { ok: true; orderId: string }
-  | { ok: false; error: "empty" | "unavailable"; removed: CartItem[] };
+  | { ok: false; error: "empty" | "unavailable" | "storage"; removed: CartItem[] };
 
 function readOrders(): Order[] {
   try {
@@ -39,11 +39,12 @@ function readOrders(): Order[] {
   }
 }
 
-function writeOrders(orders: Order[]) {
+function writeOrders(orders: Order[]): boolean {
   try {
     window.localStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(orders));
+    return true;
   } catch {
-    // Sin persistencia: el pedido no se guarda. El llamador lo ve por el resultado.
+    return false;
   }
 }
 
@@ -61,11 +62,13 @@ export function placeOrder(shipping: ShippingInfo): PlaceOrderResult {
 
   const { lines, removed } = resolveLines(items);
   if (removed.length > 0 || lines.length === 0) {
+    // Purga los no disponibles para que el carrito no quede bloqueado.
+    removed.forEach((i) => removeFromCart(i.productSlug, i.variantId));
     return { ok: false, error: "unavailable", removed };
   }
 
   const order: Order = {
-    id: crypto.randomUUID(),
+    id: crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2),
     createdAt: new Date().toISOString(),
     lines,
     subtotalCents: subtotalCents(lines),
@@ -75,7 +78,10 @@ export function placeOrder(shipping: ShippingInfo): PlaceOrderResult {
     status: "pendiente_pago",
   };
 
-  writeOrders([order, ...readOrders()]);
+  // Si no se puede guardar, no vaciamos el carrito: el pedido no se perdió del todo.
+  if (!writeOrders([order, ...readOrders()])) {
+    return { ok: false, error: "storage", removed: [] };
+  }
   clearCart();
   return { ok: true, orderId: order.id };
 }
