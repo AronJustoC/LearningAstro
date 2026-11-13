@@ -54,116 +54,20 @@ export const categories: Category[] = [
 // PLACEHOLDER
 export const products: Product[] = [
   {
-    slug: "figura-explorador",
-    name: "Figura explorador",
-    categorySlug: "figuras",
-    description: "Producto de ejemplo. Figura impresa en 3D, pintable.",
+    slug: "maceta-bulbasaur",
+    name: "Maceta Bulbasaur",
+    categorySlug: "funcionales",
+    description: "Maceta impresa en 3D con forma de Bulbasaur, incluye planta.",
     images: [
-      { src: "/products/figura-explorador.svg", alt: "Imagen de ejemplo: figura explorador" },
+      {
+        src: "https://res.cloudinary.com/ckqk2mvr/image/upload/v1794548210/adnwebs/maceta-bulbasaur.png",
+        alt: "Maceta Bulbasaur con planta",
+      },
     ],
     variants: [
-      { id: "fe-arena", label: "Arena", kind: "color", priceCents: 4500, stock: 8 },
-      { id: "fe-terracota", label: "Terracota", kind: "color", priceCents: 4500, stock: 3 },
+      { id: "mb-con-planta", label: "Con planta", kind: "material", priceCents: 3500, stock: 10 },
     ],
     featured: true,
-    placeholder: true,
-  },
-  {
-    slug: "figura-gato-azotea",
-    name: "Gato de azotea",
-    categorySlug: "figuras",
-    description: "Producto de ejemplo. Figura pequeña de ejemplo.",
-    images: [
-      { src: "/products/gato-azotea.svg", alt: "Imagen de ejemplo: gato de azotea" },
-    ],
-    variants: [
-      { id: "ga-pla", label: "PLA", kind: "material", priceCents: 3500, stock: 12 },
-      { id: "ga-petg", label: "PETG", kind: "material", priceCents: 4200, stock: 0 },
-    ],
-    placeholder: true,
-  },
-  {
-    slug: "figura-robot",
-    name: "Robot de ejemplo",
-    categorySlug: "figuras",
-    description: "Producto de ejemplo. Figura articulada de ejemplo.",
-    images: [
-      { src: "/products/robot.svg", alt: "Imagen de ejemplo: robot" },
-    ],
-    variants: [
-      { id: "rb-gris", label: "Gris", kind: "color", priceCents: 6800, stock: 5 },
-    ],
-    placeholder: true,
-  },
-  {
-    slug: "soporte-celular",
-    name: "Soporte para celular",
-    categorySlug: "funcionales",
-    description: "Producto de ejemplo. Soporte de escritorio impreso en 3D.",
-    images: [
-      { src: "/products/soporte.svg", alt: "Imagen de ejemplo: soporte para celular" },
-    ],
-    variants: [
-      { id: "sc-negro", label: "Negro", kind: "color", priceCents: 2500, stock: 20 },
-      { id: "sc-blanco", label: "Blanco", kind: "color", priceCents: 2500, stock: 10 },
-    ],
-    featured: true,
-    placeholder: true,
-  },
-  {
-    slug: "organizador-cables",
-    name: "Organizador de cables",
-    categorySlug: "funcionales",
-    description: "Producto de ejemplo. Clips para cables de escritorio.",
-    images: [
-      { src: "/products/organizador.svg", alt: "Imagen de ejemplo: organizador de cables" },
-    ],
-    variants: [
-      { id: "oc-pack4", label: "Pack de 4", kind: "material", priceCents: 1800, stock: 15 },
-      { id: "oc-pack8", label: "Pack de 8", kind: "material", priceCents: 3200, stock: 6 },
-    ],
-    placeholder: true,
-  },
-  {
-    slug: "maceta-modular",
-    name: "Maceta modular",
-    categorySlug: "funcionales",
-    description: "Producto de ejemplo. Maceta con drenaje, apilable.",
-    images: [
-      { src: "/products/maceta.svg", alt: "Imagen de ejemplo: maceta modular" },
-    ],
-    variants: [
-      { id: "mm-s", label: "Chica", kind: "material", priceCents: 3000, stock: 4 },
-      { id: "mm-m", label: "Mediana", kind: "material", priceCents: 4500, stock: 2 },
-    ],
-    placeholder: true,
-  },
-  {
-    slug: "lampara-atardecer",
-    name: "Lámpara atardecer",
-    categorySlug: "decoracion",
-    description: "Producto de ejemplo. Lámpara de mesa con difusor.",
-    images: [
-      { src: "/products/lampara.svg", alt: "Imagen de ejemplo: lámpara atardecer" },
-    ],
-    variants: [
-      { id: "la-terracota", label: "Terracota", kind: "color", priceCents: 8900, stock: 3 },
-      { id: "la-cal", label: "Cal", kind: "color", priceCents: 8900, stock: 0 },
-    ],
-    featured: true,
-    placeholder: true,
-  },
-  {
-    slug: "macetero-cuerda",
-    name: "Macetero colgante",
-    categorySlug: "decoracion",
-    description: "Producto de ejemplo. Macetero para colgar en balcón.",
-    images: [
-      { src: "/products/macetero.svg", alt: "Imagen de ejemplo: macetero colgante" },
-    ],
-    variants: [
-      { id: "mc-pla", label: "PLA", kind: "material", priceCents: 3900, stock: 7 },
-    ],
     placeholder: true,
   },
 ];
