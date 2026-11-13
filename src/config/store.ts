@@ -1,6 +1,6 @@
-// Configuración de la tienda Rooftop. Valores PLACEHOLDER: confirmar antes de publicar.
+// Configuración de la tienda Musuq Studio. Valores PLACEHOLDER: confirmar antes de publicar.
 
-export const STORE_NAME = "Rooftop";
+export const STORE_NAME = "Musuq Studio";
 
 // PLACEHOLDER: confirmar moneda y mercado.
 export const CURRENCY = "PEN";

@@ -57,10 +57,13 @@ export const products: Product[] = [
     slug: "maceta-bulbasaur",
     name: "Maceta Bulbasaur",
     categorySlug: "funcionales",
-    description: "Maceta impresa en 3D con forma de Bulbasaur, incluye planta.",
+    description: `Macetero impreso en 3D, capa a capa. 🌿
+Un detalle que le da vida a tu escritorio, repisa o ventana. Hecho en Cusco, a medida y en el color que tú elijas.
+¿Quieres uno? Escríbenos por mensaje y lo diseñamos contigo.
+#MusuqStudio #Impresión3D #Cusco #Macetero`,
     images: [
       {
-        src: "https://res.cloudinary.com/ckqk2mvr/image/upload/v1794548210/adnwebs/maceta-bulbasaur.png",
+        src: "https://res.cloudinary.com/ckqk2mvr/image/upload/v1794586985/adnwebs/maceta-bulbasaur-planta.jpg",
         alt: "Maceta Bulbasaur con planta",
       },
     ],
