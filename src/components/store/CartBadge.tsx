@@ -6,6 +6,7 @@ import {
   getCartSnapshot,
   subscribeCart,
 } from "@/lib/store/cart";
+import { resolveLines } from "@/lib/store/pricing";
 
 export default function CartBadge() {
   const items = useSyncExternalStore(
@@ -13,7 +14,7 @@ export default function CartBadge() {
     getCartSnapshot,
     getCartServerSnapshot,
   );
-  const count = cartCount(items);
+  const count = cartCount(resolveLines(items).lines);
   const label = count > 0 ? `Carrito, ${count} ${count === 1 ? "producto" : "productos"}` : "Carrito, vacío";
 
   return (
