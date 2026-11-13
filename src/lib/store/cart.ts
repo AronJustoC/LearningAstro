@@ -19,7 +19,8 @@ function parse(raw: string | null): CartItem[] {
       (i): i is CartItem =>
         typeof i?.productSlug === "string" &&
         typeof i?.variantId === "string" &&
-        typeof i?.qty === "number",
+        Number.isInteger(i?.qty) &&
+        i.qty > 0,
     );
   } catch {
     // JSON corrupto: se trata como carrito vacío.

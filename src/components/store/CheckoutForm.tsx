@@ -108,15 +108,23 @@ export default function CheckoutForm() {
     }
 
     setSaving(true);
-    const result = placeOrder({
-      name: values.name.trim(),
-      email: values.email.trim(),
-      phone: values.phone.trim(),
-      address: values.address.trim(),
-      city: values.city.trim(),
-      region: values.region.trim(),
-      reference: values.reference?.trim() || undefined,
-    });
+    let result: PlaceOrderResult;
+    try {
+      result = placeOrder({
+        name: values.name.trim(),
+        email: values.email.trim(),
+        phone: values.phone.trim(),
+        address: values.address.trim(),
+        city: values.city.trim(),
+        region: values.region.trim(),
+        reference: values.reference?.trim() || undefined,
+      });
+    } catch {
+      // Sin este catch, "saving" quedaba en true y el botón no se podía volver a usar.
+      setSaving(false);
+      setServerError({ ok: false, error: "storage", removed: [] });
+      return;
+    }
 
     if (result.ok) {
       setRedirecting(true);
@@ -167,7 +175,9 @@ export default function CheckoutForm() {
             className="space-y-2 rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-sm text-destructive"
           >
             <p>
-              Algunos productos ya no están disponibles ({serverError.removed.length}).
+              {serverError.error === "storage"
+                ? "No pudimos guardar tu pedido en este navegador. Tu carrito sigue intacto."
+                : `Algunos productos ya no están disponibles (${serverError.removed.length}).`}
             </p>
             <a href="/tienda/carrito" className="underline underline-offset-4">
               Volver al carrito
