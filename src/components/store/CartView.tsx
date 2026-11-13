@@ -22,11 +22,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-function pedidoMensaje(lines: ResolvedLine[], totalCents: number): string {
+function pedidoMensaje(
+  lines: ResolvedLine[],
+  subtotal: number,
+  shipping: number,
+  total: number,
+): string {
   const detalle = lines
     .map((l) => `- ${l.productName} (${l.variantLabel}) x${l.qty}: ${formatMoney(l.lineTotalCents)}`)
     .join("\n");
-  return `Hola Aron, quiero pedir:\n${detalle}\nTotal: ${formatMoney(totalCents)}`;
+  const envio = shipping === 0 ? "Gratis" : formatMoney(shipping);
+  return `Hola Aron, quiero pedir:\n${detalle}\n\nSubtotal: ${formatMoney(subtotal)}\nEnvío: ${envio}\nTotal: ${formatMoney(total)}\n\n¿Me confirmas disponibilidad y cómo pagar?`;
 }
 
 export default function CartView() {
@@ -151,15 +157,12 @@ export default function CartView() {
           )}
 
           <a
-            href={lines.length > 0 ? "/tienda/checkout" : undefined}
-            aria-disabled={lines.length === 0}
-            tabIndex={lines.length === 0 ? -1 : undefined}
-            className={[
-              "btn-block inline-flex h-11 w-full items-center justify-center px-5 text-sm font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-              lines.length === 0 ? "pointer-events-none opacity-50" : "",
-            ].join(" ")}
+            href={whatsappUrl(pedidoMensaje(lines, subtotal, shipping, total))}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-block inline-flex h-11 w-full items-center justify-center px-5 text-sm font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
-            Ir al checkout
+            Pedir por WhatsApp
           </a>
         </aside>
       </div>
