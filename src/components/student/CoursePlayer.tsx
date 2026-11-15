@@ -296,6 +296,49 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
     });
   }, [activeLesson?.content, loadingEnrollment]);
 
+  // Marcas de tiempo en el texto (mm:ss o h:mm:ss) se vuelven botones que saltan al momento del video
+  useEffect(() => {
+    const container = contentContainerRef.current;
+    if (!container) return;
+
+    const pattern = /\b(?:(\d{1,2}):)?(\d{1,2}):(\d{2})\b/g;
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+      acceptNode: (node) =>
+        node.parentElement?.closest("pre, code, button, a")
+          ? NodeFilter.FILTER_REJECT
+          : NodeFilter.FILTER_ACCEPT,
+    });
+    const textNodes: Text[] = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode as Text);
+
+    textNodes.forEach((node) => {
+      const text = node.textContent ?? "";
+      pattern.lastIndex = 0;
+      if (!pattern.test(text)) return;
+      pattern.lastIndex = 0;
+
+      const frag = document.createDocumentFragment();
+      let last = 0;
+      let match: RegExpExecArray | null;
+      while ((match = pattern.exec(text)) !== null) {
+        const [label, hours, minutes, seconds] = match;
+        frag.appendChild(document.createTextNode(text.slice(last, match.index)));
+        const time =
+          (hours ? Number(hours) * 3600 : 0) + Number(minutes) * 60 + Number(seconds);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className =
+          "ts-link font-display text-[var(--color-action)] underline underline-offset-2 hover:opacity-80";
+        button.innerText = label;
+        button.addEventListener("click", () => seekChapter(time));
+        frag.appendChild(button);
+        last = match.index + label.length;
+      }
+      frag.appendChild(document.createTextNode(text.slice(last)));
+      node.parentNode?.replaceChild(frag, node);
+    });
+  }, [activeLesson?.content, loadingEnrollment]);
+
   if (loadingEnrollment) {
     return (
       <div className="flex items-center gap-2 py-12 text-sm text-[var(--color-text)]">
@@ -307,7 +350,7 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
 
   const activeProgress = activeLesson ? lessonsProgress[activeLesson.id] : null;
   const isLessonCompleted = Boolean(activeProgress?.completed);
-  const parsedMarkdown = activeLesson?.content ? marked.parse(activeLesson.content) : "";
+  const parsedMarkdown = activeLesson?.content ? marked.parse(activeLesson.content, { breaks: true }) : "";
 
   return (
     <div className="space-y-8">
