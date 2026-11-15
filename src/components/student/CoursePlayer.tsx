@@ -62,6 +62,21 @@ function formatDuration(seconds: number | null | undefined): string {
   return `${mins}:${pad(secs)}`;
 }
 
+// ID de video de YouTube (watch?v=, youtu.be/, embed/, shorts/). Null si no es YouTube.
+function youtubeId(url: string): string | null {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") return u.pathname.slice(1) || null;
+    if (host === "youtube.com" || host === "m.youtube.com") {
+      if (u.pathname === "/watch") return u.searchParams.get("v");
+      const m = u.pathname.match(/^\/(embed|shorts)\/([\w-]+)/);
+      return m ? m[2] : null;
+    }
+  } catch {}
+  return null;
+}
+
 export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
   const sortedLessons = [...(course.lessons ?? [])].sort((a, b) => a.orden - b.orden);
   const [activeLessonId, setActiveLessonId] = useState<number | null>(
@@ -76,6 +91,8 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
   const [error, setError] = useState("");
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  // YouTube no expone currentTime al iframe: el salto a capítulo se hace con ?start=.
+  const [ytSeek, setYtSeek] = useState<{ lessonId: number; time: number } | null>(null);
   const lastSavedTimeRef = useRef<number>(0);
   const contentContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -236,6 +253,10 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
   }
 
   function seekChapter(time: number) {
+    if (activeLesson && activeLesson.videoUrl && youtubeId(activeLesson.videoUrl)) {
+      setYtSeek({ lessonId: activeLesson.id, time });
+      return;
+    }
     if (!videoRef.current) return;
     videoRef.current.currentTime = time;
     videoRef.current.play().catch(() => {});
@@ -350,7 +371,23 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
                   </h2>
                 </div>
 
-                {activeLesson.videoUrl && (
+                {activeLesson.videoUrl && youtubeId(activeLesson.videoUrl) && (
+                  <div className="rounded-[2px] hairline overflow-hidden bg-black aspect-video">
+                    <iframe
+                      key={activeLesson.id}
+                      title={activeLesson.title}
+                      src={`https://www.youtube-nocookie.com/embed/${youtubeId(activeLesson.videoUrl)}?rel=0${
+                        ytSeek?.lessonId === activeLesson.id ? `&start=${Math.floor(ytSeek.time)}` : ""
+                      }`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                      className="w-full h-full"
+                    />
+                  </div>
+                )}
+
+                {activeLesson.videoUrl && !youtubeId(activeLesson.videoUrl) && (
                   <div className="rounded-[2px] hairline overflow-hidden bg-black">
                     <video
                       key={activeLesson.id}
