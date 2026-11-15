@@ -18,6 +18,7 @@ try {
   console.error("No se pudo cargar cursos:", error);
   loadFailed = true;
 }
+
 ---
 
 <LayoutBase
@@ -27,7 +28,7 @@ try {
   <Header />
   <main id="main" class="flex-1">
     <section class="py-16 lg:py-20 scroll-mt-24">
-      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="home-section-head motion-reveal-row">
           <p class="label">01 · CURSOS</p>
           <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left text-[var(--color-text)]">
@@ -36,32 +37,50 @@ try {
         </div>
         {
           courses.length > 0 && (
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="hairline-t mt-8">
               {courses.map((course) => (
                 <a
                   href={`/cursos/${course.slug}`}
-                  class="motion-reveal-row serie-card group flex flex-col h-full rounded-[2px] hairline overflow-hidden bg-[var(--color-bg)] transition-all duration-150"
+                  class="course-row motion-reveal-row group flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 py-5 hairline-b transition-colors"
                 >
-                  {course.imageUrl && (
-                    <img
-                      src={optimizedImage(course.imageUrl, 800)}
-                      alt={course.title}
-                      loading="lazy"
-                      width="400"
-                      height="224"
-                      class="w-full h-56 object-cover object-[50%_38%] hairline-b"
-                    />
-                  )}
-                  <div class="flex flex-col flex-1 p-5 gap-3">
-                    <h2 class="text-xl font-bold leading-snug text-[var(--color-text)]">{course.title}</h2>
+                  <span class="course-thumb shrink-0 w-24 h-16 sm:w-40 sm:h-24 rounded-[2px] hairline overflow-hidden bg-[var(--surface-2)]">
+                    {course.imageUrl ? (
+                      <img
+                        src={optimizedImage(course.imageUrl, 400)}
+                        alt={course.title}
+                        loading="lazy"
+                        width="160"
+                        height="96"
+                        class="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src="/brand/marca.svg"
+                        alt=""
+                        aria-hidden="true"
+                        class="w-full h-full object-contain p-3"
+                      />
+                    )}
+                  </span>
+                  <div class="min-w-0 flex-1 space-y-1">
+                    <p class="label" style="color: var(--color-action);">Curso</p>
+                    <h2 class="display text-[1.5rem] sm:text-[1.75rem] leading-tight text-[var(--color-text)]">
+                      {course.title}
+                    </h2>
                     {course.description && (
-                      <p class="text-sm leading-relaxed line-clamp-3" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
+                      <p class="text-sm leading-relaxed line-clamp-1" style="color: color-mix(in srgb, var(--color-text) 75%, transparent);">
                         {course.description}
                       </p>
                     )}
-                    <p class="label mt-auto pt-2" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
+                  </div>
+                  <div class="flex items-center justify-between sm:justify-end gap-4 shrink-0">
+                    <span class="label" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
                       {course.lessonCount ?? 0} {(course.lessonCount ?? 0) === 1 ? "lección" : "lecciones"}
-                    </p>
+                    </span>
+                    <span class="link-arrow text-sm inline-flex items-center gap-1">
+                      Ver curso
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </span>
                   </div>
                 </a>
               ))}
@@ -89,9 +108,10 @@ try {
 </LayoutBase>
 
 <style>
-  .serie-card:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lift);
-    border-color: var(--focus-color);
+  .course-row:hover {
+    background: var(--surface-2);
+  }
+  .course-row:hover .link-arrow {
+    color: var(--color-action);
   }
 </style>

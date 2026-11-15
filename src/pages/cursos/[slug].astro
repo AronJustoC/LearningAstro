@@ -4,7 +4,6 @@ import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import CoursePlayer from "../../components/student/CoursePlayer";
 import type { Course } from "../../types/Course";
-import { optimizedImage } from "../../lib/image";
 
 const { slug } = Astro.params;
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
@@ -55,26 +54,36 @@ if (!course) Astro.response.status = 404;
     <LayoutBase title={`${course.title} | Cursos`} description={course.description ?? undefined}>
       <Header />
       <main id="main" class="flex-1">
-        <article class="py-16 lg:py-20">
-          <div class="max-w-6xl mx-auto px-6 space-y-6">
-            {course.imageUrl && (
-              <img
-                src={optimizedImage(course.imageUrl, 1000)}
-                alt={course.title}
-                class="w-full rounded-[2px] hairline object-cover max-h-96"
-              />
-            )}
-            <div class="home-section-head motion-reveal-row">
-              <p class="label">Curso</p>
-              <h1 class="display" style="font-size: clamp(2.25rem, 5vw, 3.5rem);">{course.title}</h1>
+        <article>
+          <header class="course-hero hairline-b">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+              <div class="max-w-3xl space-y-5 min-w-0 text-left">
+                <p class="label" style="color: var(--color-action);">Curso</p>
+                <h1 class="display text-left" style="font-size: clamp(2.25rem, 5vw, 3.75rem);">{course.title}</h1>
+                {course.description && (
+                  <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
+                    {course.description}
+                  </p>
+                )}
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 hairline-t">
+                  <span class="label" style="color: color-mix(in srgb, var(--color-text) 68%, transparent);">
+                    {course.lessonCount ?? course.lessons?.length ?? 0} {(course.lessonCount ?? course.lessons?.length ?? 0) === 1 ? "lección" : "lecciones"}
+                  </span>
+                </div>
+                <div>
+                  <a href="#contenido" class="link-arrow text-sm inline-flex items-center gap-1">
+                    Ver lecciones
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0l-6-6m6 6l6-6"></path></svg>
+                  </a>
+                </div>
+              </div>
             </div>
-            {course.description && (
-              <p class="text-lg leading-relaxed" style="color: color-mix(in srgb, var(--color-text) 78%, transparent);">
-                {course.description}
-              </p>
-            )}
+          </header>
 
-            <CoursePlayer client:load course={course} slug={slug!} />
+          <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-6">
+            <div id="contenido" class="scroll-mt-24">
+              <CoursePlayer client:load course={course} slug={slug!} />
+            </div>
 
             <div class="flex items-center justify-between pt-6 hairline-t">
               <a href="/cursos" class="link-arrow text-sm">
@@ -91,6 +100,10 @@ if (!course) Astro.response.status = 404;
 }
 
 <style>
+  /* Hero de curso: banda sobre la retícula con superficie plana (One Signal Rule) */
+  .course-hero {
+    background: var(--surface-2);
+  }
   .post-body {
     font-size: 1.0625rem;
     line-height: 1.75;

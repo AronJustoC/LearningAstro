@@ -482,10 +482,10 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
 
           {/* Sidebar: Lessons List */}
           <div className="lg:col-span-1 rounded-[2px] hairline bg-[var(--surface-1)] p-4 space-y-4 sticky top-20">
-            <h3 className="display text-lg text-[var(--color-text)] hairline-b pb-3">
+            <h3 className="display text-xl text-[var(--color-text)] hairline-b pb-3">
               Contenido del curso
             </h3>
-            <ol className="space-y-2">
+            <ol className="space-y-1">
               {sortedLessons.map((lesson) => {
                 const isActive = lesson.id === activeLessonId;
                 const isComp = Boolean(lessonsProgress[lesson.id]?.completed);
@@ -493,41 +493,51 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
                   <li key={lesson.id}>
                     <button
                       onClick={() => switchLesson(lesson.id)}
-                      className={`w-full text-left p-3 rounded-[2px] border transition-all flex items-start gap-3 ${
+                      aria-current={isActive ? "true" : undefined}
+                      className={`w-full text-left py-2.5 pl-3 pr-2 border-l-2 rounded-[2px] flex items-center gap-3 transition-colors ${
                         isActive
-                          ? "bg-[var(--surface-2)] border-[var(--focus-color)]"
-                          : "border-transparent hover:border-[var(--hairline)]"
+                          ? "border-l-[var(--color-action)] bg-[var(--surface-2)]"
+                          : "border-l-transparent hover:bg-[var(--surface-2)]"
                       }`}
                     >
                       <span
-                        className={`w-5 h-5 mt-0.5 rounded-[2px] border flex-shrink-0 flex items-center justify-center transition-colors ${
-                          isComp
-                            ? "bg-[var(--color-action)] border-[var(--color-action)] text-white"
-                            : "border-[var(--hairline)] bg-[var(--color-bg)]"
-                        }`}
+                        className="display text-xl leading-none w-7 flex-shrink-0 tabular-nums"
+                        style={{
+                          color: isActive
+                            ? "var(--color-action)"
+                            : "color-mix(in srgb, var(--color-text) 40%, transparent)",
+                        }}
+                        aria-hidden="true"
                       >
-                        {isComp && (
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
+                        {String(lesson.orden).padStart(2, "0")}
                       </span>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <p className="text-xs uppercase tracking-wide font-display" style={{ color: "var(--color-action)" }}>
-                            Lección {lesson.orden}
-                          </p>
+                      <span className="flex-1 min-w-0">
+                        <span
+                          className={`block text-sm leading-snug truncate ${
+                            isActive
+                              ? "font-semibold text-[var(--color-text)]"
+                              : "text-[var(--color-text)]"
+                          }`}
+                        >
+                          {lesson.title}
+                        </span>
+                        <span
+                          className="mt-0.5 flex items-center gap-2 text-xs"
+                          style={{ color: "color-mix(in srgb, var(--color-text) 60%, transparent)" }}
+                        >
                           {lesson.duration != null && (
-                            <span className="text-xs font-display" style={{ color: "color-mix(in srgb, var(--color-text) 60%, transparent)" }}>
+                            <span className="font-display tabular-nums">
                               {formatDuration(lesson.duration)}
                             </span>
                           )}
-                        </div>
-                        <p className="text-sm font-semibold truncate text-[var(--color-text)]">
-                          {lesson.title}
-                        </p>
-                      </div>
+                          {isComp && (
+                            <span className="label" style={{ color: "var(--color-action)" }}>
+                              Completada
+                            </span>
+                          )}
+                        </span>
+                      </span>
                     </button>
                   </li>
                 );
