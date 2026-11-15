@@ -56,15 +56,10 @@ if (!course) Astro.response.status = 404;
       <Header />
       <main id="main" class="flex-1">
         <article>
-          <header class="course-hero hairline-b">
-            {course.imageUrl && (
-              <img
-                src={optimizedImage(course.imageUrl, 600)}
-                alt=""
-                aria-hidden="true"
-                class="hidden lg:block absolute right-10 top-1/2 -translate-y-1/2 w-56 h-56 object-contain"
-              />
-            )}
+          <header
+            class="course-hero hairline-b"
+            style={course.imageUrl ? `background-image: url("${optimizedImage(course.imageUrl, 1600)}");` : undefined}
+          >
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
               <div class="max-w-3xl space-y-5 min-w-0 text-left">
                 <p class="label" style="color: var(--color-action);">Curso</p>
