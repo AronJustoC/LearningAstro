@@ -65,8 +65,8 @@ function formatDuration(seconds: number | null | undefined): string {
 // ID de video de YouTube (watch?v=, youtu.be/, embed/, shorts/). Null si no es YouTube.
 // Convierte mm:ss o h:mm:ss en el texto en enlaces: YouTube abre el video en ese segundo;
 // video directo (Cloudinary) usa un botón que mueve el reproductor. Omite bloques de código.
-function linkTimestamps(markdown: string, videoUrl: string | null): string {
-  const yt = videoUrl ? youtubeId(videoUrl) : null;
+// Marcas de tiempo como botones: el clic salta dentro del reproductor, sea YouTube o video directo.
+function linkTimestamps(markdown: string): string {
   const pattern = /\b(?:(\d{1,2}):)?(\d{1,2}):(\d{2})\b/g;
   const style = "color: var(--color-action); text-decoration: underline;";
   return markdown
@@ -75,9 +75,6 @@ function linkTimestamps(markdown: string, videoUrl: string | null): string {
       if (i % 2 === 1) return part; // bloque de código
       return part.replace(pattern, (label, h, m, sec) => {
         const time = (h ? Number(h) * 3600 : 0) + Number(m) * 60 + Number(sec);
-        if (yt) {
-          return `<a href="https://www.youtube.com/watch?v=${yt}&t=${time}s" target="_blank" rel="noopener" class="ts-link" style="${style}">${label}</a>`;
-        }
         return `<button type="button" class="ts-link" data-time="${time}" style="${style} background: none; padding: 0; font: inherit;">${label}</button>`;
       });
     })
@@ -329,7 +326,7 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
   const activeProgress = activeLesson ? lessonsProgress[activeLesson.id] : null;
   const isLessonCompleted = Boolean(activeProgress?.completed);
   const parsedMarkdown = activeLesson?.content
-    ? marked.parse(linkTimestamps(activeLesson.content, activeLesson.videoUrl), { breaks: true })
+    ? marked.parse(linkTimestamps(activeLesson.content), { breaks: true })
     : "";
 
   return (
