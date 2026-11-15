@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" font-family="Jost, sans-serif">
+  <defs>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0 L0 0 0 64" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+    <marker id="flecha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8b98a9"/>
+    </marker>
+  </defs>
+  <rect width="1920" height="1080" fill="#0b1220"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+
+  <!-- conexiones -->
+  <g fill="none" stroke="#8b98a9" stroke-width="4" marker-end="url(#flecha)">
+    <path d="M400 540 L560 540"/>
+    <path d="M740 500 C820 420 860 340 920 320"/>
+    <path d="M740 540 L920 540"/>
+    <path d="M740 580 C820 660 860 740 920 760"/>
+    <path d="M1120 320 C1200 320 1240 420 1320 430"/>
+    <path d="M1120 760 C1200 760 1240 680 1320 660"/>
+  </g>
+  <g fill="#f9fafb" font-size="26" font-weight="500" opacity="0.85">
+    <text x="420" y="520">HTTPS 443</text>
+    <text x="1150" y="400">:5432</text>
+  </g>
+
+  <!-- cliente -->
+  <g>
+    <rect x="200" y="450" width="200" height="180" rx="22" fill="#101418" stroke="#4aa8ff" stroke-width="6"/>
+    <text x="300" y="520" fill="#4aa8ff" font-size="34" font-weight="700" text-anchor="middle">CLIENTE</text>
+    <text x="300" y="566" fill="#8b98a9" font-size="24" text-anchor="middle" font-family="JetBrains Mono, monospace">203.0.113.10</text>
+    <text x="300" y="598" fill="#8b98a9" font-size="22" text-anchor="middle">navegador</text>
+  </g>
+
+  <!-- balanceador -->
+  <g>
+    <rect x="560" y="450" width="180" height="180" rx="22" fill="#101418" stroke="#ff7a3d" stroke-width="6"/>
+    <text x="650" y="520" fill="#ff7a3d" font-size="34" font-weight="700" text-anchor="middle">LB</text>
+    <text x="650" y="566" fill="#8b98a9" font-size="24" text-anchor="middle" font-family="JetBrains Mono, monospace">10.0.0.1</text>
+    <text x="650" y="598" fill="#8b98a9" font-size="22" text-anchor="middle">balanceador</text>
+  </g>
+
+  <!-- servidores web -->
+  <g>
+    <rect x="920" y="230" width="200" height="180" rx="22" fill="#101418" stroke="#3ddc97" stroke-width="6"/>
+    <text x="1020" y="300" fill="#3ddc97" font-size="32" font-weight="700" text-anchor="middle">WEB 1</text>
+    <text x="1020" y="345" fill="#8b98a9" font-size="24" text-anchor="middle" font-family="JetBrains Mono, monospace">10.0.1.11</text>
+    <text x="1020" y="377" fill="#8b98a9" font-size="22" text-anchor="middle">nginx</text>
+  </g>
+  <g>
+    <rect x="920" y="450" width="200" height="180" rx="22" fill="#101418" stroke="#3ddc97" stroke-width="6"/>
+    <text x="1020" y="520" fill="#3ddc97" font-size="32" font-weight="700" text-anchor="middle">WEB 2</text>
+    <text x="1020" y="565" fill="#8b98a9" font-size="24" text-anchor="middle" font-family="JetBrains Mono, monospace">10.0.1.12</text>
+    <text x="1020" y="597" fill="#8b98a9" font-size="22" text-anchor="middle">nginx</text>
+  </g>
+  <g>
+    <rect x="920" y="670" width="200" height="180" rx="22" fill="#101418" stroke="#3ddc97" stroke-width="6"/>
+    <text x="1020" y="740" fill="#3ddc97" font-size="32" font-weight="700" text-anchor="middle">WEB 3</text>
+    <text x="1020" y="785" fill="#8b98a9" font-size="24" text-anchor="middle" font-family="JetBrains Mono, monospace">10.0.1.13</text>
+    <text x="1020" y="817" fill="#8b98a9" font-size="22" text-anchor="middle">nginx</text>
+  </g>
+
+  <!-- base de datos -->
+  <g>
+    <rect x="1320" y="360" width="240" height="140" rx="22" fill="#101418" stroke="#ffc83d" stroke-width="6"/>
+    <text x="1440" y="418" fill="#ffc83d" font-size="32" font-weight="700" text-anchor="middle">DB</text>
+    <text x="1440" y="460" fill="#8b98a9" font-size="24" text-anchor="middle" font-family="JetBrains Mono, monospace">10.0.2.20</text>
+  </g>
+
+  <!-- caché -->
+  <g>
+    <rect x="1320" y="590" width="240" height="140" rx="22" fill="#101418" stroke="#ff4d6d" stroke-width="6"/>
+    <text x="1440" y="648" fill="#ff4d6d" font-size="32" font-weight="700" text-anchor="middle">CACHÉ</text>
+    <text x="1440" y="690" fill="#8b98a9" font-size="24" text-anchor="middle" font-family="JetBrains Mono, monospace">10.0.2.30</text>
+  </g>
+</svg>
