@@ -26,9 +26,4 @@ Diseñar un sistema es decidir cómo se construye una app según lo que necesita
 - **Disponibilidad**: qué tan seguido el sistema responde cuando lo necesitamos. Suele expresarse como un porcentaje del tiempo en servicio.
 - **Escala**: la cantidad de trabajo que el sistema puede manejar con una calidad aceptable.
 
-## Curso
-
-Serie Diseño de sistemas escalables: capítulo 1 de N
-[enlace al curso]
-
 #DiseñoDeSistemas #Escalabilidad #Arquitectura #Entrevistas
