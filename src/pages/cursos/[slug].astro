@@ -4,7 +4,7 @@ import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import CoursePlayer from "../../components/student/CoursePlayer";
 import type { Course } from "../../types/Course";
-import { courseLogo } from "../../data/courseLogos";
+import { optimizedImage } from "../../lib/image";
 
 const { slug } = Astro.params;
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
@@ -57,12 +57,14 @@ if (!course) Astro.response.status = 404;
       <main id="main" class="flex-1">
         <article>
           <header class="course-hero hairline-b">
-            <img
-              src={courseLogo(course.slug)}
-              alt=""
-              aria-hidden="true"
-              class="hidden lg:block absolute right-10 top-1/2 -translate-y-1/2 w-56 h-56 object-contain"
-            />
+            {course.imageUrl && (
+              <img
+                src={optimizedImage(course.imageUrl, 600)}
+                alt=""
+                aria-hidden="true"
+                class="hidden lg:block absolute right-10 top-1/2 -translate-y-1/2 w-56 h-56 object-contain"
+              />
+            )}
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
               <div class="max-w-3xl space-y-5 min-w-0 text-left">
                 <p class="label" style="color: var(--color-action);">Curso</p>
@@ -111,7 +113,7 @@ if (!course) Astro.response.status = 404;
   .course-hero {
     position: relative;
     background-color: var(--surface-2);
-    background-image: url("/brand/course-hero.jpg");
+    background-image: url("/brand/course-hero-datacenter.jpg");
     background-size: cover;
     background-position: center;
     isolation: isolate;

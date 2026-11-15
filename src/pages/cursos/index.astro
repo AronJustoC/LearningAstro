@@ -4,7 +4,6 @@ import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import type { Course } from "../../types/Course";
 import { optimizedImage } from "../../lib/image";
-import { courseLogo } from "../../data/courseLogos";
 
 const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
 let courses: Course[] = [];
@@ -56,7 +55,7 @@ try {
                       />
                     ) : (
                       <img
-                        src={courseLogo(course.slug)}
+                        src="/brand/marca.svg"
                         alt=""
                         aria-hidden="true"
                         class="w-full h-full object-contain p-3"
