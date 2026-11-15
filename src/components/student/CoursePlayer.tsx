@@ -494,10 +494,10 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
                     <button
                       onClick={() => switchLesson(lesson.id)}
                       aria-current={isActive ? "true" : undefined}
-                      className={`w-full text-left py-2.5 pl-3 pr-2 border-l-2 rounded-[2px] flex items-center gap-3 transition-colors ${
+                      className={`w-full text-left py-2.5 px-3 rounded-[2px] flex items-center gap-3 transition-colors ${
                         isActive
-                          ? "border-l-[var(--color-action)] bg-[var(--surface-2)]"
-                          : "border-l-transparent hover:bg-[var(--surface-2)]"
+                          ? "bg-[color-mix(in_srgb,var(--color-action)_8%,transparent)]"
+                          : "hover:bg-[var(--surface-2)]"
                       }`}
                     >
                       <span
