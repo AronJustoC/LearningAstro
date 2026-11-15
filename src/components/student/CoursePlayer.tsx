@@ -126,6 +126,10 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
           }
         }
         setLessonsProgress(progressMap);
+      } else if (response.status === 401 || response.status === 403) {
+        // Token vencido o inválido: se trata como sesión cerrada, sin mensaje de error.
+        localStorage.removeItem("accessToken");
+        setHasToken(false);
       } else {
         setError("No se pudo obtener el estado de inscripción.");
       }
