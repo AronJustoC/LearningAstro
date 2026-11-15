@@ -100,9 +100,21 @@ if (!course) Astro.response.status = 404;
 }
 
 <style>
-  /* Hero de curso: banda sobre la retícula con superficie plana (One Signal Rule) */
+  /* Hero de curso: banda con el fondo de marca y una capa plana oscura para legibilidad (sin gradientes) */
   .course-hero {
-    background: var(--surface-2);
+    position: relative;
+    background-color: var(--surface-2);
+    background-image: url("/brand/course-hero.jpg");
+    background-size: cover;
+    background-position: center;
+    isolation: isolate;
+  }
+  .course-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgb(8 12 18 / 0.72);
+    z-index: -1;
   }
   .post-body {
     font-size: 1.0625rem;
