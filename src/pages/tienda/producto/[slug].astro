@@ -5,7 +5,7 @@ import Header from "../../../components/sections/Header.astro";
 import Footer from "../../../components/sections/Footer.astro";
 import Gallery from "../../../components/store/Gallery";
 import ProductBuy from "../../../components/store/ProductBuy";
-import CartBadge from "../../../components/store/CartBadge";
+import StoreTopbar from "../../../components/store/StoreTopbar.astro";
 import EmptyState from "../../../components/store/EmptyState.astro";
 import { loadCatalog, getProductBySlug } from "../../../lib/store/catalog";
 
@@ -25,24 +25,22 @@ const category = product
   <Header />
   <main id="main" class="flex-1 tienda-brand">
     <StoreBrand />
+    <StoreTopbar />
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         {
           product && (
-            <div class="mb-6 flex items-center justify-between gap-4">
-              <nav aria-label="Ruta" class="text-sm text-muted-foreground">
-                <ol class="flex flex-wrap items-center gap-2">
-                  <li><a class="rounded hover:underline focus-visible:ring-3 focus-visible:ring-ring/50" href="/">Inicio</a></li>
-                  <li aria-hidden="true">/</li>
-                  <li><a class="rounded hover:underline focus-visible:ring-3 focus-visible:ring-ring/50" href="/tienda">Catálogo</a></li>
-                  <li aria-hidden="true">/</li>
-                  <li>{category?.name ?? product.categoryId}</li>
-                  <li aria-hidden="true">/</li>
-                  <li aria-current="page" class="text-foreground">{product.name}</li>
-                </ol>
-              </nav>
-              <CartBadge client:load />
-            </div>
+            <nav aria-label="Ruta" class="mb-6 text-sm text-muted-foreground">
+              <ol class="flex flex-wrap items-center gap-2">
+                <li><a class="rounded hover:underline focus-visible:ring-3 focus-visible:ring-ring/50" href="/">Inicio</a></li>
+                <li aria-hidden="true">/</li>
+                <li><a class="rounded hover:underline focus-visible:ring-3 focus-visible:ring-ring/50" href="/tienda">Catálogo</a></li>
+                <li aria-hidden="true">/</li>
+                <li>{category?.name ?? product.categoryId}</li>
+                <li aria-hidden="true">/</li>
+                <li aria-current="page" class="text-foreground">{product.name}</li>
+              </ol>
+            </nav>
           )
         }
 

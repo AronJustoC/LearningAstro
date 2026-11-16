@@ -7,7 +7,7 @@ import ProductCard from "../../components/store/ProductCard.astro";
 import CategoryNav from "../../components/store/CategoryNav.astro";
 import EmptyState from "../../components/store/EmptyState.astro";
 import StoreHeader from "../../components/store/StoreHeader.astro";
-import CartBadge from "../../components/store/CartBadge";
+import StoreTopbar from "../../components/store/StoreTopbar.astro";
 import { loadCatalog, getCategoryBySlug, productsByCategorySlug } from "../../lib/store/catalog";
 
 const { categoria } = Astro.params;
@@ -24,6 +24,7 @@ const categoryProducts = category ? productsByCategorySlug(catalog, category.slu
   <Header />
   <main id="main" class="flex-1 tienda-brand">
     <StoreBrand />
+    <StoreTopbar />
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="mb-8">
@@ -31,9 +32,8 @@ const categoryProducts = category ? productsByCategorySlug(catalog, category.slu
           <p class="text-sm text-muted-foreground mt-2">
             {category?.description}
           </p>
-          <div class="mt-6 flex items-center justify-between gap-4">
+          <div class="mt-6">
             <CategoryNav categories={catalog.categories} current={category?.slug} />
-            <CartBadge client:load />
           </div>
         </div>
 
