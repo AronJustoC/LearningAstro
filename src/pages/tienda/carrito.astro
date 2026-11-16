@@ -1,6 +1,7 @@
 ---
 import LayoutBase from "../../layouts/LayoutBase.astro";
 import StoreBrand from "../../components/store/StoreBrand.astro";
+import StoreTopbar from "../../components/store/StoreTopbar.astro";
 import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import CartView from "../../components/store/CartView";
@@ -10,6 +11,7 @@ import CartView from "../../components/store/CartView";
   <Header />
   <main id="main" class="flex-1 tienda-brand">
     <StoreBrand />
+    <StoreTopbar />
     <section class="py-16 lg:py-20 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <h1 class="display text-[clamp(2.5rem,6vw,4.5rem)] text-left mb-8 text-[var(--color-text)]">Carrito</h1>

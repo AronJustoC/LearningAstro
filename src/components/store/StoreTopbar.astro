@@ -1,0 +1,14 @@
+---
+// Barra interna de la tienda: enlace a la tienda a la izquierda y carrito a la derecha.
+import CartBadge from "./CartBadge";
+---
+
+<div class="max-w-7xl mx-auto px-6 lg:px-8 pt-6 flex items-center justify-between gap-4">
+  <a
+    href="/tienda"
+    class="label rounded text-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+  >
+    Tienda
+  </a>
+  <CartBadge client:load />
+</div>
