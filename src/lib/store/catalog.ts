@@ -8,6 +8,12 @@ export type Catalog = {
   categories: StoreCategory[];
 };
 
+// Producto sin variantes: se vende como una sola opción con el precio del producto.
+function withDefaultVariant(product: StoreProduct): StoreProduct {
+  if (product.variants.length > 0) return product;
+  return { ...product, variants: [{ id: "unica", label: "Único", priceCents: product.priceCents }] };
+}
+
 // Carga productos y categorías en paralelo. Sirve en servidor y en navegador.
 export async function loadCatalog(): Promise<Catalog> {
   const [productsRes, categoriesRes] = await Promise.all([
@@ -15,7 +21,7 @@ export async function loadCatalog(): Promise<Catalog> {
     storeApi.listPublicCategories(),
   ]);
   return {
-    products: productsRes.products ?? [],
+    products: (productsRes.products ?? []).map(withDefaultVariant),
     categories: categoriesRes.categories ?? [],
   };
 }
