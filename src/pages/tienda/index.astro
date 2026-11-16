@@ -25,8 +25,9 @@ const { products, categories } = await loadCatalog();
           <p class="text-sm text-muted-foreground mt-2">
             Explora todas nuestras piezas impresas en 3D de diseño exclusivo.
           </p>
-          <div class="mt-6">
+          <div class="mt-6 flex items-center justify-between gap-4">
             <CategoryNav categories={categories} />
+            <CartBadge client:load />
           </div>
         </div>
 
