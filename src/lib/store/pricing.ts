@@ -1,5 +1,5 @@
-import { CURRENCY, LOCALE, SHIPPING_FLAT_CENTS, FREE_SHIPPING_THRESHOLD_CENTS } from "../../config/store";
-import { getProduct, getVariant, type Product, type Variant } from "../../data/catalog";
+import { CURRENCY, LOCALE, SHIPPING_FLAT_CENTS, FREE_SHIPPING_THRESHOLD_CENTS, MAX_QTY_PER_LINE } from "../../config/store";
+import { getProductBySlug, getVariant, isAvailable, type Catalog } from "./catalog";
 
 // Línea del carrito: solo identificadores y cantidad. El precio NUNCA se guarda aquí.
 export type CartItem = {
@@ -28,26 +28,26 @@ export function formatMoney(cents: number): string {
   return new Intl.NumberFormat(LOCALE, { style: "currency", currency: CURRENCY }).format(cents / 100);
 }
 
-// Cantidad válida entre 1 y el stock disponible.
-export function clampQty(qty: number, stock: number): number {
+// Cantidad válida entre 1 y el máximo por línea.
+export function clampQty(qty: number, max = MAX_QTY_PER_LINE): number {
   if (!Number.isFinite(qty)) return 1;
-  const max = Math.max(0, Math.floor(stock));
-  return Math.min(Math.max(1, Math.floor(qty)), max);
+  const limit = Math.max(0, Math.floor(max));
+  return Math.min(Math.max(1, Math.floor(qty)), limit);
 }
 
 // Cruza las líneas con el catálogo vigente. Recalcula precios desde el catálogo.
-export function resolveLines(items: CartItem[]): ResolvedCart {
+export function resolveLines(items: CartItem[], catalog: Catalog): ResolvedCart {
   const lines: ResolvedLine[] = [];
   const removed: CartItem[] = [];
 
   for (const item of items) {
-    const product: Product | undefined = getProduct(item.productSlug);
-    const variant: Variant | undefined = product ? getVariant(product, item.variantId) : undefined;
-    if (!product || !variant || variant.stock <= 0) {
+    const product = getProductBySlug(catalog, item.productSlug);
+    const variant = product ? getVariant(product, item.variantId) : undefined;
+    if (!product || !variant || !isAvailable(product)) {
       removed.push(item);
       continue;
     }
-    const qty = clampQty(item.qty, variant.stock);
+    const qty = clampQty(item.qty);
     lines.push({
       productSlug: product.slug,
       productName: product.name,

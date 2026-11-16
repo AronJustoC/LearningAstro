@@ -1,11 +1,12 @@
 ---
-import { categories } from "../../data/catalog";
+import type { StoreCategory } from "../../lib/store/types";
 
 interface Props {
+  categories: StoreCategory[];
   current?: string;
 }
 
-const { current } = Astro.props;
+const { categories, current } = Astro.props;
 ---
 
 <nav aria-label="Categorías" class="py-2">

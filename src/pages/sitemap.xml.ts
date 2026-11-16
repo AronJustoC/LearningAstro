@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { featuredProjects } from "../data/projects";
-import { categories, products } from "../data/catalog";
+import { loadCatalog, type Catalog } from "../lib/store/catalog";
 
 const SITE = "https://aronjusto.site";
 
@@ -14,6 +14,14 @@ interface Entry {
 }
 
 export const GET: APIRoute = async () => {
+  // Catálogo de la API: si el backend no responde, el mapa sigue siendo válido sin él.
+  let catalog: Catalog = { products: [], categories: [] };
+  try {
+    catalog = await loadCatalog();
+  } catch (error) {
+    console.error("Sitemap: no se pudo leer el catálogo de la tienda:", error);
+  }
+
   const entries: Entry[] = [
     { path: "/" },
     { path: "/proyectos" },
@@ -23,8 +31,8 @@ export const GET: APIRoute = async () => {
     ...featuredProjects
       .filter((project) => project.slug)
       .map((project) => ({ path: `/proyectos/${project.slug}` })),
-    ...categories.map((category) => ({ path: `/tienda/${category.slug}` })),
-    ...products.map((product) => ({ path: `/tienda/producto/${product.slug}` })),
+    ...catalog.categories.map((category) => ({ path: `/tienda/${category.slug}` })),
+    ...catalog.products.map((product) => ({ path: `/tienda/producto/${product.slug}` })),
   ];
 
   for (const articulo of await getCollection("serie")) {

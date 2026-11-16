@@ -12,6 +12,9 @@ export const SHIPPING_FLAT_CENTS = 1500;
 // Envío gratis desde este subtotal (céntimos). PLACEHOLDER.
 export const FREE_SHIPPING_THRESHOLD_CENTS = 15000;
 
+// Máximo de unidades por línea del carrito.
+export const MAX_QTY_PER_LINE = 10;
+
 // Correo de contacto: misma fuente que el resto del portafolio (nadie importa esta constante hoy).
 export { CONTACT_EMAIL } from "../lib/contact";
 
