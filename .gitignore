@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # El proyecto usa bun (bun.lock)
 package-lock.json
+
+# Recursos de marketing locales (no versionados)
+public/brand/marcom/
