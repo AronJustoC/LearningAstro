@@ -31,8 +31,9 @@ const categoryProducts = category ? productsByCategorySlug(catalog, category.slu
           <p class="text-sm text-muted-foreground mt-2">
             {category?.description}
           </p>
-          <div class="mt-6">
+          <div class="mt-6 flex items-center justify-between gap-4">
             <CategoryNav categories={catalog.categories} current={category?.slug} />
+            <CartBadge client:load />
           </div>
         </div>
 
