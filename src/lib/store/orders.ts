@@ -1,5 +1,6 @@
 import { STORAGE_KEYS } from "../../config/store";
-import { getCartSnapshot, clearCart } from "./cart";
+import { getCartSnapshot, clearCart, removeFromCart } from "./cart";
+import type { Catalog } from "./catalog";
 import { resolveLines, subtotalCents, shippingCents, totalCents, type ResolvedLine, type CartItem } from "./pricing";
 
 export type ShippingInfo = {
@@ -56,11 +57,11 @@ function writeOrders(orders: Order[]): boolean {
 //   3) crea la sesión de pago en el proveedor y devuelve su URL,
 //   4) un webhook firmado e idempotente marca la orden como pagada.
 // Ver README, sección "Integración de pagos".
-export function placeOrder(shipping: ShippingInfo): PlaceOrderResult {
+export function placeOrder(shipping: ShippingInfo, catalog: Catalog): PlaceOrderResult {
   const items = getCartSnapshot();
   if (items.length === 0) return { ok: false, error: "empty", removed: [] };
 
-  const { lines, removed } = resolveLines(items);
+  const { lines, removed } = resolveLines(items, catalog);
   if (removed.length > 0 || lines.length === 0) {
     // Purga los no disponibles para que el carrito no quede bloqueado.
     removed.forEach((i) => removeFromCart(i.productSlug, i.variantId));

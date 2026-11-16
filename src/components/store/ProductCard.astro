@@ -1,17 +1,22 @@
 ---
-import type { Product } from "../../data/catalog";
-import { minPriceCents, isSoldOut } from "../../data/catalog";
+import type { StoreProduct } from "../../lib/store/types";
+import { minPriceCents, isAvailable } from "../../lib/store/catalog";
 import { formatMoney } from "../../lib/store/pricing";
 import { optimizedImage } from "../../lib/image";
 
 interface Props {
-  product: Product;
+  product: StoreProduct;
 }
 
 const { product } = Astro.props;
 const firstImage = product.images[0];
-const soldOut = isSoldOut(product);
-const minPrice = formatMoney(minPriceCents(product));
+const imageSrc = firstImage
+  ? firstImage.startsWith("https://")
+    ? optimizedImage(firstImage, 600) ?? firstImage
+    : firstImage
+  : undefined;
+const soldOut = !isAvailable(product);
+const priceLabel = `${product.variants.length > 1 ? "Desde " : ""}${formatMoney(minPriceCents(product))}`;
 ---
 
 <article class="store-card group overflow-hidden">
@@ -21,10 +26,10 @@ const minPrice = formatMoney(minPriceCents(product));
   >
     <div class="relative overflow-hidden">
       {
-        firstImage && (
+        imageSrc && (
           <img
-            src={optimizedImage(firstImage.src, 600)}
-            alt={firstImage.alt}
+            src={imageSrc}
+            alt={product.name}
             width={400}
             height={400}
             loading="lazy"
@@ -45,7 +50,7 @@ const minPrice = formatMoney(minPriceCents(product));
       <h2 class="store-title">
         {product.name}
       </h2>
-      <p class="store-price">{minPrice}</p>
+      <p class="store-price">{priceLabel}</p>
     </div>
   </a>
 </article>

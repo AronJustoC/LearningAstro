@@ -1,50 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import type { Product } from "@/data/catalog";
+import type { StoreProduct } from "@/lib/store/types";
+import { getClientCatalog, isAvailable, type Catalog } from "@/lib/store/catalog";
 import { addToCart, getCartSnapshot } from "@/lib/store/cart";
 import { clampQty, formatMoney } from "@/lib/store/pricing";
+import { MAX_QTY_PER_LINE } from "@/config/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 type Props = {
-  product: Product;
+  product: StoreProduct;
 };
 
 export default function ProductBuy({ product }: Props) {
-  const initial = product.variants.find((v) => v.stock > 0) ?? product.variants[0];
+  const initial = product.variants[0];
   const [variantId, setVariantId] = useState(initial?.id ?? "");
   const [qty, setQty] = useState(1);
   const [status, setStatus] = useState("");
+  const [catalog, setCatalog] = useState<Catalog | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getClientCatalog()
+      .then((next) => {
+        if (!cancelled) setCatalog(next);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const selected = product.variants.find((v) => v.id === variantId);
-  const stock = selected?.stock ?? 0;
-  const soldOut = !selected || stock <= 0;
+  const soldOut = !isAvailable(product) || !selected;
 
   function changeVariant(id: string) {
     setVariantId(id);
-    const next = product.variants.find((v) => v.id === id);
-    setQty((current) => clampQty(current, next?.stock ?? 0));
+    setQty((current) => clampQty(current));
     setStatus("");
   }
 
   function changeQty(next: number) {
-    if (!selected) return;
-    setQty(clampQty(next, selected.stock));
+    setQty(clampQty(next));
   }
 
   function handleAdd() {
-    if (!selected || selected.stock <= 0) return;
+    if (!catalog || !selected || soldOut) return;
     const currentQty =
       getCartSnapshot().find(
         (i) => i.productSlug === product.slug && i.variantId === selected.id,
       )?.qty ?? 0;
-    addToCart(product.slug, selected.id, qty);
+    addToCart(catalog, product.slug, selected.id, qty);
     const nextQty =
       getCartSnapshot().find(
         (i) => i.productSlug === product.slug && i.variantId === selected.id,
       )?.qty ?? 0;
     setStatus(
-      nextQty < currentQty + qty ? "Ya tienes el máximo disponible" : "Agregado al carrito",
+      nextQty < currentQty + qty ? "Ya tienes el máximo por línea" : "Agregado al carrito",
     );
   }
 
@@ -54,7 +66,7 @@ export default function ProductBuy({ product }: Props) {
         <legend className="mb-2 text-sm font-medium">Variante</legend>
         <div className="space-y-2">
           {product.variants.map((variant) => {
-            const out = variant.stock <= 0;
+            const out = soldOut;
             const checked = variant.id === variantId;
             return (
               <label
@@ -92,13 +104,9 @@ export default function ProductBuy({ product }: Props) {
           <p className="store-price text-2xl">
             {formatMoney(selected.priceCents)}
           </p>
-          {stock > 0 ? (
-            <p className="text-sm text-muted-foreground">
-              {stock <= 3 ? `Últimas ${stock} unidades` : `Quedan ${stock}`}
-            </p>
-          ) : (
+          {soldOut ? (
             <p className="text-sm text-muted-foreground">Agotado</p>
-          )}
+          ) : null}
         </div>
       ) : null}
 
@@ -119,7 +127,7 @@ export default function ProductBuy({ product }: Props) {
           type="number"
           inputMode="numeric"
           min={1}
-          max={Math.max(1, stock)}
+          max={MAX_QTY_PER_LINE}
           value={qty}
           aria-label="Cantidad"
           disabled={soldOut}
@@ -133,7 +141,7 @@ export default function ProductBuy({ product }: Props) {
           className="size-11"
           aria-label="Aumentar cantidad"
           onClick={() => changeQty(qty + 1)}
-          disabled={soldOut || qty >= stock}
+          disabled={soldOut || qty >= MAX_QTY_PER_LINE}
         >
           +
         </Button>
@@ -143,7 +151,7 @@ export default function ProductBuy({ product }: Props) {
         type="button"
         className="btn-block h-11"
         onClick={handleAdd}
-        disabled={soldOut}
+        disabled={soldOut || !catalog}
       >
         Agregar al carrito
       </Button>

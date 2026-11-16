@@ -1,5 +1,6 @@
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
+import { getClientCatalog, type Catalog } from "@/lib/store/catalog";
 import {
   cartCount,
   getCartServerSnapshot,
@@ -14,7 +15,21 @@ export default function CartBadge() {
     getCartSnapshot,
     getCartServerSnapshot,
   );
-  const count = cartCount(resolveLines(items).lines);
+  const [catalog, setCatalog] = useState<Catalog | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getClientCatalog()
+      .then((next) => {
+        if (!cancelled) setCatalog(next);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const count = catalog ? cartCount(resolveLines(items, catalog).lines) : 0;
   const label = count > 0 ? `Carrito, ${count} ${count === 1 ? "producto" : "productos"}` : "Carrito, vacío";
 
   return (

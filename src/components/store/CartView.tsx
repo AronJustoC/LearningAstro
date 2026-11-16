@@ -1,7 +1,7 @@
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
-import { getProduct, getVariant } from "@/data/catalog";
-import { FREE_SHIPPING_THRESHOLD_CENTS } from "@/config/store";
+import { getClientCatalog, type Catalog } from "@/lib/store/catalog";
+import { FREE_SHIPPING_THRESHOLD_CENTS, MAX_QTY_PER_LINE } from "@/config/store";
 import {
   getCartServerSnapshot,
   getCartSnapshot,
@@ -41,7 +41,31 @@ export default function CartView() {
     getCartSnapshot,
     getCartServerSnapshot,
   );
-  const { lines, removed } = resolveLines(items);
+  const [catalog, setCatalog] = useState<Catalog | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getClientCatalog()
+      .then((next) => {
+        if (!cancelled) setCatalog(next);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!catalog) {
+    return (
+      <div className="space-y-3" aria-busy="true">
+        <div className="h-24 animate-pulse rounded-xl bg-muted"></div>
+        <div className="h-24 animate-pulse rounded-xl bg-muted"></div>
+        <div className="h-32 animate-pulse rounded-xl bg-muted"></div>
+      </div>
+    );
+  }
+
+  const { lines, removed } = resolveLines(items, catalog);
   const subtotal = subtotalCents(lines);
   const shipping = shippingCents(lines);
   const total = totalCents(lines);
@@ -76,56 +100,52 @@ export default function CartView() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
         <ul className="space-y-4">
-          {lines.map((line) => {
-            const product = getProduct(line.productSlug);
-            const variant = product ? getVariant(product, line.variantId) : undefined;
-            const stock = variant?.stock ?? line.qty;
-            return (
-              <li
-                key={`${line.productSlug}-${line.variantId}`}
-                className="store-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="store-title">{line.productName}</p>
-                  <p className="text-sm text-muted-foreground">{line.variantLabel}</p>
-                  <p className="store-price mt-1 text-sm tabular-nums">
-                    {formatMoney(line.unitPriceCents)} c/u
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="number"
-                    inputMode="numeric"
-                    min={1}
-                    max={Math.max(1, stock)}
-                    value={line.qty}
-                    aria-label={`Cantidad de ${line.productName}, ${line.variantLabel}`}
-                    onChange={(event) =>
-                      setQty(
-                        line.productSlug,
-                        line.variantId,
-                        clampQty(Number(event.target.value), stock),
-                      )
-                    }
-                    className="h-11 w-20 text-center"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    className="btn-glass h-11 px-3"
-                    onClick={() => removeFromCart(line.productSlug, line.variantId)}
-                  >
-                    Quitar
-                  </Button>
-                </div>
-
-                <p className="store-price text-sm tabular-nums sm:w-28 sm:text-right">
-                  {formatMoney(line.lineTotalCents)}
+          {lines.map((line) => (
+            <li
+              key={`${line.productSlug}-${line.variantId}`}
+              className="store-card flex flex-col gap-4 p-4 sm:flex-row sm:items-center"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="store-title">{line.productName}</p>
+                <p className="text-sm text-muted-foreground">{line.variantLabel}</p>
+                <p className="store-price mt-1 text-sm tabular-nums">
+                  {formatMoney(line.unitPriceCents)} c/u
                 </p>
-              </li>
-            );
-          })}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={MAX_QTY_PER_LINE}
+                  value={line.qty}
+                  aria-label={`Cantidad de ${line.productName}, ${line.variantLabel}`}
+                  onChange={(event) =>
+                    setQty(
+                      catalog,
+                      line.productSlug,
+                      line.variantId,
+                      clampQty(Number(event.target.value)),
+                    )
+                  }
+                  className="h-11 w-20 text-center"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="btn-glass h-11 px-3"
+                  onClick={() => removeFromCart(line.productSlug, line.variantId)}
+                >
+                  Quitar
+                </Button>
+              </div>
+
+              <p className="store-price text-sm tabular-nums sm:w-28 sm:text-right">
+                {formatMoney(line.lineTotalCents)}
+              </p>
+            </li>
+          ))}
         </ul>
 
         <aside className="h-fit space-y-4 rounded-xl border border-border bg-card p-5">

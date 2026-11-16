@@ -7,8 +7,11 @@ import ProductCard from "../../components/store/ProductCard.astro";
 import CategoryNav from "../../components/store/CategoryNav.astro";
 import EmptyState from "../../components/store/EmptyState.astro";
 import StoreHeader from "../../components/store/StoreHeader.astro";
-import { products } from "../../data/catalog";
+import CartBadge from "../../components/store/CartBadge";
+import { loadCatalog } from "../../lib/store/catalog";
 import { STORE_NAME } from "../../config/store";
+
+const { products, categories } = await loadCatalog();
 ---
 
 <LayoutBase title={`${STORE_NAME} | Tienda`} description="Piezas impresas en 3D: figuras, organizadores, macetas y más.">
@@ -23,7 +26,7 @@ import { STORE_NAME } from "../../config/store";
             Explora todas nuestras piezas impresas en 3D de diseño exclusivo.
           </p>
           <div class="mt-6">
-            <CategoryNav />
+            <CategoryNav categories={categories} />
           </div>
         </div>
 

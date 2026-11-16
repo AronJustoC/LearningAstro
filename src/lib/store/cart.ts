@@ -1,6 +1,6 @@
 import { STORAGE_KEYS } from "../../config/store";
 import { clampQty, type CartItem } from "./pricing";
-import { getProduct, getVariant } from "../../data/catalog";
+import { getProductBySlug, getVariant, isAvailable, type Catalog } from "./catalog";
 
 // El carrito solo guarda identificadores y cantidad. Los precios se recalculan siempre.
 // Estado compartido entre islas: caché en memoria + evento propio y evento "storage".
@@ -62,29 +62,29 @@ function commit(items: CartItem[]) {
   window.dispatchEvent(new Event(CHANGE_EVENT));
 }
 
-export function addToCart(productSlug: string, variantId: string, qty = 1) {
-  const product = getProduct(productSlug);
+export function addToCart(catalog: Catalog, productSlug: string, variantId: string, qty = 1) {
+  const product = getProductBySlug(catalog, productSlug);
   const variant = product ? getVariant(product, variantId) : undefined;
-  if (!variant || variant.stock <= 0) return;
+  if (!product || !variant || !isAvailable(product)) return;
 
   const items = [...getCartSnapshot()];
   const index = items.findIndex((i) => i.productSlug === productSlug && i.variantId === variantId);
   const current = index >= 0 ? items[index].qty : 0;
-  const next = clampQty(current + qty, variant.stock);
+  const next = clampQty(current + qty);
 
   if (index >= 0) items[index] = { ...items[index], qty: next };
   else items.push({ productSlug, variantId, qty: next });
   commit(items);
 }
 
-export function setQty(productSlug: string, variantId: string, qty: number) {
-  const product = getProduct(productSlug);
+export function setQty(catalog: Catalog, productSlug: string, variantId: string, qty: number) {
+  const product = getProductBySlug(catalog, productSlug);
   const variant = product ? getVariant(product, variantId) : undefined;
-  if (!variant) return;
+  if (!product || !variant || !isAvailable(product)) return;
 
   const items = getCartSnapshot().map((i) =>
     i.productSlug === productSlug && i.variantId === variantId
-      ? { ...i, qty: clampQty(qty, variant.stock) }
+      ? { ...i, qty: clampQty(qty) }
       : i,
   );
   commit(items);
