@@ -7,8 +7,9 @@ import Gallery from "../../../components/store/Gallery";
 import ProductBuy from "../../../components/store/ProductBuy";
 import StoreTopbar from "../../../components/store/StoreTopbar.astro";
 import EmptyState from "../../../components/store/EmptyState.astro";
-import { loadCatalog, getProductBySlug } from "../../../lib/store/catalog";
+import { isAvailable, loadCatalog, getProductBySlug } from "../../../lib/store/catalog";
 
+const siteUrl = "https://aronjusto.site";
 const { slug } = Astro.params;
 const catalog = await loadCatalog();
 const product = slug ? getProductBySlug(catalog, slug) : undefined;
@@ -16,11 +17,32 @@ if (!product) Astro.response.status = 404;
 const category = product
   ? product.category ?? catalog.categories.find((c) => c.id === product.categoryId)
   : undefined;
+
+// Datos estructurados de producto para Google (precio en soles, disponibilidad).
+const productJsonLd = product && {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: product.name,
+  description: product.description,
+  sku: product.slug,
+  image: product.images.map((src) => (src.startsWith("http") ? src : `${siteUrl}${src}`)),
+  brand: { "@type": "Brand", name: "Musuq Studio" },
+  offers: {
+    "@type": "AggregateOffer",
+    priceCurrency: "PEN",
+    lowPrice: (Math.min(...product.variants.map((v) => v.priceCents)) / 100).toFixed(2),
+    highPrice: (Math.max(...product.variants.map((v) => v.priceCents)) / 100).toFixed(2),
+    offerCount: product.variants.length,
+    availability: isAvailable(product) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+    url: `${siteUrl}/tienda/producto/${product.slug}`,
+  },
+};
 ---
 
 <LayoutBase
-  title={product ? product.name : "Producto no encontrado"}
+  title={product ? `${product.name} | Musuq Studio` : "Producto no encontrado"}
   description={product?.description ?? "Producto no encontrado"}
+  jsonLd={productJsonLd ?? undefined}
 >
   <Header />
   <main id="main" class="flex-1 tienda-brand">
