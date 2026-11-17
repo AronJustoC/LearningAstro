@@ -30,6 +30,23 @@ if (!post) {
 // El contenido se guarda en markdown; se convierte a HTML al servir la página.
 const contenidoHtml = await marked.parse(post.content ?? "");
 
+// Descripción para buscadores: texto plano, sin markdown ni enlaces, máximo 155 caracteres.
+const textoPlano = (post.content ?? "")
+  .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+  .replace(/[*_`#>!]/g, "")
+  .replace(/\s+/g, " ")
+  .trim();
+const metaDescription = textoPlano.slice(0, 155) || post.title;
+const postJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: metaDescription,
+  inLanguage: "es",
+  author: { "@id": "https://aronjusto.site/#persona" },
+  mainEntityOfPage: `https://aronjusto.site/blog/${slug}`,
+};
+
 try {
   const resComentarios = await fetch(
     `${apiBaseUrl}/posts/public/${slug}/comentarios`,
@@ -44,7 +61,7 @@ try {
 }
 ---
 
-<LayoutBase title={`${post.title} | Blog`} description={post.content?.slice(0, 150)}>
+<LayoutBase title={`${post.title} | Blog`} description={metaDescription} jsonLd={postJsonLd}>
   <Header />
   <main id="main" class="flex-1">
     <article class="py-16 lg:py-20">
