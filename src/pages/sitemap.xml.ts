@@ -28,6 +28,7 @@ export const GET: APIRoute = async () => {
     { path: "/blog" },
     { path: "/contacto" },
     { path: "/tienda" },
+    { path: "/cursos" },
     ...featuredProjects
       .filter((project) => project.slug)
       .map((project) => ({ path: `/proyectos/${project.slug}` })),
