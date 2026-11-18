@@ -58,8 +58,7 @@ const structuredData = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []
     <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-574SVVR4"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+      dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
     </script>
 
     <!-- Open Graph y Twitter: la vista previa al compartir el enlace -->
