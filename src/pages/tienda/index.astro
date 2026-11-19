@@ -8,10 +8,17 @@ import CategoryNav from "../../components/store/CategoryNav.astro";
 import EmptyState from "../../components/store/EmptyState.astro";
 import StoreHeader from "../../components/store/StoreHeader.astro";
 import StoreTopbar from "../../components/store/StoreTopbar.astro";
-import { loadCatalog } from "../../lib/store/catalog";
+import { loadCatalog, type Catalog } from "../../lib/store/catalog";
 import { STORE_NAME } from "../../config/store";
 
-const { products, categories } = await loadCatalog();
+// Si el backend no responde, la tienda muestra el estado vacío en vez de 500.
+let catalog: Catalog = { products: [], categories: [] };
+try {
+  catalog = await loadCatalog();
+} catch (error) {
+  console.error("No se pudo cargar el catálogo de la tienda:", error);
+}
+const { products, categories } = catalog;
 ---
 
 <LayoutBase title={`${STORE_NAME} | Tienda`} description="Piezas impresas en 3D: figuras, organizadores, macetas y más.">

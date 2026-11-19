@@ -7,11 +7,17 @@ import Gallery from "../../../components/store/Gallery";
 import ProductBuy from "../../../components/store/ProductBuy";
 import StoreTopbar from "../../../components/store/StoreTopbar.astro";
 import EmptyState from "../../../components/store/EmptyState.astro";
-import { isAvailable, loadCatalog, getProductBySlug } from "../../../lib/store/catalog";
+import { isAvailable, loadCatalog, getProductBySlug, type Catalog } from "../../../lib/store/catalog";
 
 const siteUrl = "https://aronjusto.site";
 const { slug } = Astro.params;
-const catalog = await loadCatalog();
+// Si el backend no responde, la página muestra el estado vacío en vez de 500.
+let catalog: Catalog = { products: [], categories: [] };
+try {
+  catalog = await loadCatalog();
+} catch (error) {
+  console.error("No se pudo cargar el catálogo de la tienda:", error);
+}
 const product = slug ? getProductBySlug(catalog, slug) : undefined;
 if (!product) Astro.response.status = 404;
 const category = product
