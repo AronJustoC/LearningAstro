@@ -9,7 +9,7 @@ export const featuredProjects: Project[] = [
     title: "Avanzik Workspace",
     description:
       "Workspace GIS/CAD para crear, organizar y exportar planos técnicos con plantillas, recursos y proyectos conectados. Fui parte del equipo de desarrollo de este proyecto, donde construí la API de Postgist, el sistema de exportación y algunas funcionalidades del editor.",
-    imageUrl: "/projects/avanzik.png",
+    imageUrl: "/projects/avanzik.webp",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const featuredProjects: Project[] = [
     title: "MBC Predictive",
     description:
       "Sitio de MBC, especialistas en mantenimiento predictivo e ingeniería en Cusco: análisis vibracional, termografía, ultrasonido y alineamiento láser.",
-    imageUrl: "/projects/mbcpredictive.png",
+    imageUrl: "/projects/mbcpredictive.webp",
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ export const featuredProjects: Project[] = [
     title: "HAD Business",
     description:
       "Tienda de hardware en Cusco: laptops, armado de PCs, repuestos de impresión y servicio técnico con envíos a todo el Perú.",
-    imageUrl: "/projects/hadbusiness.png",
+    imageUrl: "/projects/hadbusiness.webp",
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ export const featuredProjects: Project[] = [
     title: "ADN Muebles",
     description:
       "Tienda de escritorios industriales de acero y terciado hechos a mano en Cusco, con entrega a domicilio y pedido por WhatsApp.",
-    imageUrl: "/projects/adnmuebles.jpg",
+    imageUrl: "/projects/adnmuebles.webp",
     // Publicado en GitHub Pages por ahora; actualizar cuando tenga dominio propio.
     liveUrl: "https://aronjustoc.github.io/adn-muebles/",
   },
