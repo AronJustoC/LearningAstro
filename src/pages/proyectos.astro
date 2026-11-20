@@ -5,8 +5,9 @@ import Footer from "../components/sections/Footer.astro";
 import ProjectRow from "../components/shared/ProjectRow.astro";
 import type { Project } from "../types/Project";
 import { featuredProjects } from "../data/projects";
+import { apiBase } from "../lib/api";
 
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 let apiProjects: Project[] = [];
 try {
   const response = await fetch(`${apiBaseUrl}/projects/public`, {

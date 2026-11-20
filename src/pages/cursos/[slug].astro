@@ -5,9 +5,10 @@ import Footer from "../../components/sections/Footer.astro";
 import CoursePlayer from "../../components/student/CoursePlayer";
 import type { Course } from "../../types/Course";
 import { optimizedImage } from "../../lib/image";
+import { apiBase } from "../../lib/api";
 
 const { slug } = Astro.params;
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 let course: Course | null = null;
 
 try {

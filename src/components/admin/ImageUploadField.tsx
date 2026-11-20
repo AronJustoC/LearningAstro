@@ -3,8 +3,9 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { apiBase } from "../../lib/api";
 
-const API_URL = `${import.meta.env.PUBLIC_API_BASE_URL}/uploads/signature`;
+const API_URL = `${apiBase()}/uploads/signature`;
 
 function authHeaders() {
   const token = localStorage.getItem("accessToken");

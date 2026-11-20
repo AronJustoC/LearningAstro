@@ -2,8 +2,9 @@
 import type { Project } from "../../types";
 import { featuredProjects } from "../../data/projects";
 import ProjectRow from "../shared/ProjectRow.astro";
+import { apiBase } from "../../lib/api";
 
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 let projects: Project[] = [];
 try {
   const response = await fetch(`${apiBaseUrl}/projects/public`, {

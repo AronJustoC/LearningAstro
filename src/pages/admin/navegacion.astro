@@ -3,6 +3,7 @@ import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
 import PageHeader from "../../components/admin/PageHeader.astro";
 import NavToggles from "../../components/admin/NavToggles";
 import { readRole } from "../../lib/session";
+import { apiBase } from "../../lib/api";
 
 const token = Astro.cookies.get("token")?.value;
 const role = readRole(token);
@@ -12,7 +13,7 @@ if (!role) {
 if (role !== "ADMIN") {
   return Astro.redirect("/mis-cursos");
 }
-const apiBaseUrl = process.env.PUBLIC_API_BASE_URL ?? import.meta.env.PUBLIC_API_BASE_URL;
+const apiBaseUrl = apiBase();
 ---
 
 <LayoutDashboard title="Admin Navegación">

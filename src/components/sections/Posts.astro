@@ -2,13 +2,14 @@
 import type { Post } from "../../types/Post.ts";
 import { getCollection } from "astro:content";
 import { optimizedImage } from "../../lib/image";
+import { apiBase } from "../../lib/api";
 
 // Serie en video: el resumen (episodio 0) va primero; el home muestra solo 3.
 const episodios = (await getCollection("serie"))
   .sort((a, b) => a.data.episodio - b.data.episodio)
   .slice(0, 3);
 
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 let posts: Post[] = [];
 let loadFailed = false;
 try {

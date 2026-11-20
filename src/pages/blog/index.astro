@@ -6,6 +6,7 @@ import PostCard from "../../components/shared/PostCard.astro";
 import type { Post } from "../../types/Post";
 import { getCollection } from "astro:content";
 import { optimizedImage } from "../../lib/image";
+import { apiBase } from "../../lib/api";
 
 // Serie en video: un artículo por episodio, de menor a mayor.
 const episodios = (await getCollection("serie")).sort((a, b) => a.data.episodio - b.data.episodio);
@@ -22,7 +23,7 @@ const stackApp = [
   "Impeccable",
 ];
 
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 let posts: Post[] = [];
 let loadFailed = false;
 try {

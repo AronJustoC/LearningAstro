@@ -3,6 +3,7 @@ import LayoutDashboard from "../../layouts/LayoutDashboard.astro";
 import StatCard from "../../components/admin/StatCard.astro";
 import PageHeader from "../../components/admin/PageHeader.astro";
 import { readRole } from "../../lib/session";
+import { apiBase } from "../../lib/api";
 
 const token = Astro.cookies.get("token")?.value;
 const role = readRole(token);
@@ -14,7 +15,7 @@ if (role !== "ADMIN") {
 }
 
 const authHeader = { Authorization: `Bearer ${token}` };
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 const [postsRes, projectsRes, usersRes] = await Promise.all([
   fetch(`${apiBaseUrl}/posts`, { headers: authHeader }),
   fetch(`${apiBaseUrl}/projects`, { headers: authHeader }),

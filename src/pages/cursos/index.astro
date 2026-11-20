@@ -4,8 +4,9 @@ import Header from "../../components/sections/Header.astro";
 import Footer from "../../components/sections/Footer.astro";
 import type { Course } from "../../types/Course";
 import { optimizedImage } from "../../lib/image";
+import { apiBase } from "../../lib/api";
 
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 let courses: Course[] = [];
 let loadFailed = false;
 try {

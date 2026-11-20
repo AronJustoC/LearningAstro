@@ -15,7 +15,18 @@ env:
   IMAGE: localhost/adnwebs-web:latest
 
 jobs:
+  # Si el build o los tests del front fallan, no se construye ni se despliega nada.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bun test
+
   build-and-deploy:
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

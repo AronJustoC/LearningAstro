@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Post } from "../../types/Post";
+import { apiBase } from "../../lib/api";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +22,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 
-const API_URL = `${import.meta.env.PUBLIC_API_BASE_URL}/posts`;
+const API_URL = `${apiBase()}/posts`;
 
 function authHeaders() {
   const token = localStorage.getItem("accessToken");

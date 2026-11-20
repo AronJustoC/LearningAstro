@@ -1,3 +1,5 @@
+import { apiBase } from "./api";
+
 export interface NavTabs {
   proyectos: boolean;
   tienda: boolean;
@@ -19,7 +21,7 @@ let cache: { tabs: NavTabs; at: number } | null = null;
 
 async function fetchNavTabs(): Promise<NavTabs | null> {
   try {
-    const base = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+    const base = apiBase();
     const res = await fetch(`${base}/settings/nav`, {
       signal: AbortSignal.timeout(3000),
     });

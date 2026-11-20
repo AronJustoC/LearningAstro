@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import { optimizedImage } from "@/lib/image";
+import { apiBase } from "../../lib/api";
 
 interface EnrolledCourse {
   id: number;
@@ -28,7 +29,7 @@ export default function MyCourses() {
 
     async function loadMyCourses() {
       try {
-        const response = await fetch(`${import.meta.env.PUBLIC_API_BASE_URL}/me/courses`, {
+        const response = await fetch(`${apiBase()}/me/courses`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
