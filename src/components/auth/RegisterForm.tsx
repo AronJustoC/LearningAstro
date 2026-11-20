@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { apiBase } from "../../lib/api";
 
 export default function RegisterForm() {
   const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ export default function RegisterForm() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.PUBLIC_API_BASE_URL}/auth/register`,
+        `${apiBase()}/auth/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

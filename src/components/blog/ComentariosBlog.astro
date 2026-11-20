@@ -124,6 +124,8 @@ const { slug, comentarios = [] } = Astro.props;
 </section>
 
 <script>
+  import { apiBase } from "../../lib/api";
+
   function setupComentarios() {
     const form = document.getElementById("form-comentario") as HTMLFormElement | null;
     if (!form || form.dataset.bound === "true") return;
@@ -172,10 +174,10 @@ const { slug, comentarios = [] } = Astro.props;
         estado.style.color = "var(--color-text)";
       }
 
-      const apiBase = import.meta.env.PUBLIC_API_BASE_URL || "";
+      const apiBaseUrl = apiBase() || "";
 
       try {
-        const res = await fetch(`${apiBase}/posts/public/${encodeURIComponent(slug)}/comentarios`, {
+        const res = await fetch(`${apiBaseUrl}/posts/public/${encodeURIComponent(slug)}/comentarios`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

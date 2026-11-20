@@ -2,13 +2,14 @@
 import "@fontsource/jost/500.css";
 import "@fontsource/jost/700.css";
 import { whatsappUrl } from "../../lib/contact";
+import { apiBase } from "../../lib/api";
 import { optimizedImage } from "../../lib/image";
 import { featuredProjects } from "../../data/projects";
 import Icon from "../shared/Icon.astro";
 import AccentPicker from "./AccentPicker";
 
 // Abanico: hasta 3 proyectos de la portada (API); si falla, los 3 primeros destacados.
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 type Card = { title: string; imageUrl?: string | null; slug?: string };
 let fan: Card[] = [];
 try {

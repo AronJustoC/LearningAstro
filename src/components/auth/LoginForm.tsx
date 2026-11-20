@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { readRole } from "@/lib/session";
+import { apiUrl, saveSession } from "@/lib/api";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ export default function LoginForm() {
 
     try {
       const response = await fetch(
-        `${import.meta.env.PUBLIC_API_BASE_URL}/auth/login`,
+        apiUrl("/auth/login"),
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -39,13 +40,10 @@ export default function LoginForm() {
       }
 
       const data = await response.json();
-      const accessToken = data.token.token;
-
-      localStorage.setItem("accessToken", accessToken);
-      document.cookie = `token=${accessToken}; path=/; max-age=3600`;
+      saveSession(data.token);
 
       window.location.href =
-        readRole(accessToken) === "ADMIN" ? "/admin/dashboard" : "/mis-cursos";
+        readRole(data.token.token) === "ADMIN" ? "/admin/dashboard" : "/mis-cursos";
     } catch {
       setError("No se pudo conectar con el servidor. Revisa tu conexión.");
     } finally {

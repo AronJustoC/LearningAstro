@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Course, Lesson } from "../../types/Course";
+import { apiBase } from "../../lib/api";
 import { Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +15,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 
-const API_URL = `${import.meta.env.PUBLIC_API_BASE_URL}/courses`;
+const API_URL = `${apiBase()}/courses`;
 
 function authHeaders() {
   const token = localStorage.getItem("accessToken");

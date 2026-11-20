@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { marked } from "marked";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import { apiBase } from "../../lib/api";
 
 export interface Chapter {
   title: string;
@@ -127,7 +128,7 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
 
     try {
       const response = await fetch(
-        `${import.meta.env.PUBLIC_API_BASE_URL}/me/courses/${slug}`,
+        `${apiBase()}/me/courses/${slug}`,
         { headers: authHeaders() }
       );
       if (response.ok) {
@@ -167,7 +168,7 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
     setEnrolling(true);
     try {
       const response = await fetch(
-        `${import.meta.env.PUBLIC_API_BASE_URL}/courses/${course.id}/enroll`,
+        `${apiBase()}/courses/${course.id}/enroll`,
         {
           method: "POST",
           headers: authHeaders(),
@@ -197,7 +198,7 @@ export default function CoursePlayer({ course, slug }: CoursePlayerProps) {
       if (typeof completed === "boolean") body.completed = completed;
 
       const res = await fetch(
-        `${import.meta.env.PUBLIC_API_BASE_URL}/courses/${course.id}/lessons/${lessonId}/progress`,
+        `${apiBase()}/courses/${course.id}/lessons/${lessonId}/progress`,
         {
           method: "PUT",
           headers: authHeaders(),

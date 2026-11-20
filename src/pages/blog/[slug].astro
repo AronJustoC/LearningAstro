@@ -6,9 +6,10 @@ import ComentariosBlog, { type Comentario } from "../../components/blog/Comentar
 import type { Post } from "../../types/Post";
 import { marked } from "marked";
 import { optimizedImage } from "../../lib/image";
+import { apiBase } from "../../lib/api";
 
 const { slug } = Astro.params;
-const apiBaseUrl = process.env.API_BASE_URL ?? import.meta.env.API_BASE_URL;
+const apiBaseUrl = apiBase();
 let post: Post | null = null;
 let comentarios: Comentario[] = [];
 

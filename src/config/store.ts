@@ -15,13 +15,9 @@ export const FREE_SHIPPING_THRESHOLD_CENTS = 15000;
 // Máximo de unidades por línea del carrito.
 export const MAX_QTY_PER_LINE = 10;
 
-// Correo de contacto: misma fuente que el resto del portafolio (nadie importa esta constante hoy).
-export { CONTACT_EMAIL } from "../lib/contact";
 
 export const STORAGE_KEYS = {
   cart: "adn-store-cart",
   orders: "adn-store-orders",
 } as const;
 
-export const DEMO_NOTICE =
-  "Catálogo de demostración: productos y precios de ejemplo.";

@@ -5,8 +5,9 @@ import type {
   StoreCategoryInput,
   StoreProductInput,
 } from "./types";
+import { apiBase } from "../api";
 
-const BASE_URL = `${import.meta.env.PUBLIC_API_BASE_URL}/store`;
+const BASE_URL = `${apiBase()}/store`;
 
 function authHeaders() {
   const token = typeof localStorage !== "undefined" ? localStorage.getItem("accessToken") : null;

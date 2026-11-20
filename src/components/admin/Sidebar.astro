@@ -71,7 +71,8 @@ const linkActive =
 <script>
   document.getElementById("logoutBtn")?.addEventListener("click", () => {
     localStorage.removeItem("accessToken");
-    document.cookie = "token=; path=/; max-age=0";
+    localStorage.removeItem("refreshToken");
+    document.cookie = "token=; path=/; max-age=0; SameSite=Strict";
     window.location.href = "/auth/login";
   });
 </script>
